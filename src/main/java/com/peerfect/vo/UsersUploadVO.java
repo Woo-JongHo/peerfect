@@ -1,4 +1,4 @@
-package com.example.peerfect.vo;
+package com.peerfect.vo;
 
 public class UsersUploadVO {
     private int uploadNo;

@@ -1,4 +1,4 @@
-package com.example.peerfect.vo;
+package com.peerfect.vo;
 
 
 import lombok.Data;
@@ -19,3 +19,5 @@ public class AdminVO {
         this.adminEmail = adminEmail;
     }
 }
+
+
