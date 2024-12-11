@@ -1,36 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE configuration
-        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-config.dtd">
-<configuration>
-    <properties resource="db.properties"/>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-    <typeAliases>
-        <typeAlias type="com.peerfect.vo.AdminVO" alias="adminVO"/>
-        <typeAlias type="com.peerfect.vo.AdminFeedbackVO" alias="feedbackVO"/>
-        <typeAlias type="com.peerfect.vo.ChallengeVO" alias="challengeVO"/>
-        <typeAlias type="com.peerfect.vo.ChallengeMissionVO" alias="missionVO"/>
-        <typeAlias type="com.peerfect.vo.UsersVO" alias="usersVO"/>
-        <typeAlias type="com.peerfect.vo.UsersUploadVO" alias="uploadVO"/>
-        <typeAlias type="com.peerfect.vo.UsersCompleteVO" alias="completeVO"/>
-        <typeAlias type="com.peerfect.vo.UsersReviewVO" alias="reviewVO"/>
-    </typeAliases>
+<mapper namespace="mission">
 
-    <environments default="development">
-        <environment id="development">
-            <transactionManager type="JDBC"/>
-            <dataSource type="POOLED">
-                <property name="driver" value="${driver}"/>
-                <property name="url" value="${url}"/>
-                <property name="username" value="${username}"/>
-                <property name="password" value="${password}"/>
-            </dataSource>
-        </environment>
-
-    </environments>
-    <mappers>
-        <mapper resource="mapper/userMapper.xml"/>
-        <mapper resource="mapper/codeMapper.xml"/>
-        <mapper resource="mapper/studyMapper.xml"/>
-    </mappers>
-</configuration>
+</mapper>

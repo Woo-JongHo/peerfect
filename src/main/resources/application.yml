@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://peerfect-rds-instance.cdo2amggo1em.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    username: pfadmin
+    password: podofarm8848
+    driver-class-name: org.postgresql.Driver
+
+  thymeleaf:
+    prefix: classpath:/templates/
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+
+  config:
+    import: application-secret.yml
+
+application:
+  version: 1.0.0
+
+server:
+  port: 8080
+
+
