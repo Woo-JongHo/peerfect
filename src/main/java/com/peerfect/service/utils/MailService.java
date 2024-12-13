@@ -1,5 +1,7 @@
 package com.peerfect.service.utils;
 
+import com.peerfect.repository.utils.MailRepostiory;
+import com.peerfect.vo.utils.EmailVO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +10,14 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MailService {
+    private final MailRepostiory mailRepository;
     private final JavaMailSender javaMailSender;
     private static final String senderEmail = "jonghowoo33@gmail.com";
     // 랜덤으로 숫자 생성
@@ -61,5 +65,14 @@ public class MailService {
         }
 
         return number; // 생성된 인증번호 반환
+    }
+
+    public void setEmailVerify(EmailVO ev) {
+        mailRepository.setEmailVerify(ev);
+    }
+
+    public int getEmailVerify(String email, String authCode) {
+        int re =mailRepository.getEmailVerify(email, authCode);
+        return re;
     }
 }

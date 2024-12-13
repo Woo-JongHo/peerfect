@@ -1,5 +1,8 @@
 package com.peerfect.vo.users;
 
+import lombok.Data;
+
+@Data
 public class UsersUploadVO {
     private int uploadNo;
     private int userNo;

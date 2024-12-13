@@ -10,6 +10,7 @@ public class UsersVO {
     private int userNo;
     private int challengeNo;
     private String userName;
+    private String userPassword;
     private String userEmail;
     private String userImage;
     private String userNickname;
@@ -20,18 +21,11 @@ public class UsersVO {
 
     public UsersVO(){}
 
-    public UsersVO(int userNo, int challengeNo, String userName,
-                   String userEmail, String userImage, String userNickname,
-                   Date userUIstart, Date userUIend, Date userUXstart, Date userUXend) {
-        this.userNo = userNo;
-        this.challengeNo = challengeNo;
+    // 필요한 필드만 초기화하는 생성자
+    public UsersVO(String userName, String userEmail, String userPassword) {
         this.userName = userName;
         this.userEmail = userEmail;
-        this.userImage = userImage;
-        this.userNickname = userNickname;
-        this.userUIstart = userUIstart;
-        this.userUIend = userUIend;
-        this.userUXstart = userUXstart;
-        this.userUXend = userUXend;
+        this.userPassword = userPassword;
     }
+
 }
