@@ -6,14 +6,14 @@
     <properties resource="com.peerfect.db.db.properties"/>
 
     <typeAliases>
-        <typeAlias type="com.peerfect.vo.AdminVO" alias="adminVO"/>
-        <typeAlias type="com.peerfect.vo.AdminFeedbackVO" alias="feedbackVO"/>
-        <typeAlias type="com.peerfect.vo.ChallengeVO" alias="challengeVO"/>
-        <typeAlias type="com.peerfect.vo.ChallengeMissionVO" alias="missionVO"/>
-        <typeAlias type="com.peerfect.vo.UsersVO" alias="usersVO"/>
-        <typeAlias type="com.peerfect.vo.UsersUploadVO" alias="uploadVO"/>
-        <typeAlias type="com.peerfect.vo.UsersCompleteVO" alias="completeVO"/>
-        <typeAlias type="com.peerfect.vo.UsersReviewVO" alias="reviewVO"/>
+        <typeAlias type="com.peerfect.vo.admin.AdminVO" alias="adminVO"/>
+        <typeAlias type="com.peerfect.vo.admin.AdminFeedbackVO" alias="feedbackVO"/>
+        <typeAlias type="com.peerfect.vo.challenge.ChallengeVO" alias="challengeVO"/>
+        <typeAlias type="com.peerfect.vo.challenge.ChallengeMissionVO" alias="missionVO"/>
+        <typeAlias type="com.peerfect.vo.users.UsersVO" alias="usersVO"/>
+        <typeAlias type="com.peerfect.vo.users.UsersUploadVO" alias="uploadVO"/>
+        <typeAlias type="com.peerfect.vo.users.UsersCompleteVO" alias="completeVO"/>
+        <typeAlias type="com.peerfect.vo.users.UsersReviewVO" alias="reviewVO"/>
     </typeAliases>
 
     <environments default="development">
