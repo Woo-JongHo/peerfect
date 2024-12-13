@@ -18,8 +18,8 @@ public class MailRepostiory {
     }
 
     public int getEmailVerify(String email, String authCode) {
-        MailDBManger.getEmailVerify(email, authCode);
+        int re = MailDBManger.getEmailVerify(email, authCode);
 
-
+        return re;
     }
 }
