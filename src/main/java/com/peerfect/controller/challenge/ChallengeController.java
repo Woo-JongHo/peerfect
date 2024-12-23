@@ -2,26 +2,50 @@ package com.peerfect.controller.challenge;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/challenge")
+@RequestMapping("/api")
 public class ChallengeController {
 
-    //ui/preview
-    //ux/preview
+    /*Challenge - Mission으로 연결해놓았고 현재는 Mission만 만드는 상태*/
+
+    @GetMapping("/challenge")
+    public String getChallenge() {
+        return "추후 개발 예정";
+    }
 
 
-    //유저의 ux챌린지 페이지
-    /**
-     * 1. 챌린지 시작하고 몇일차인지 계산 api
-     * 2. 현재해야하는 챌린지
-     * 3. 참가하고 있는 챌린지 전체 이름
-     * 4. 참가하고 있는 챌린지 전체 소개글
-     * 5. challenge List
-     *
-     */
+    /*-------------------------------------Mission Controller ---------------------*/
+
+
+    @GetMapping("/mission")
+    public String mission() {
+        log.info("GET /api/mission 호출");
+        return "Mission API 호출됨";
+    }
+
+    @GetMapping("/mission/{challengeNo}/ui-missionlist")
+    public ResponseEntity<?> getUIMissionList(@PathVariable String challengeNo){
+
+
+
+
+        return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/mission/{challengeNo}/ux-missionlist")
+    public ResponseEntity<?> getUXMissionList(@PathVariable String challengeNo){
+
+
+
+
+        return ResponseEntity.ok("");
+    }
 }
