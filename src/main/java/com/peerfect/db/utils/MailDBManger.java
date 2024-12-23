@@ -1,17 +1,16 @@
 package com.peerfect.db.utils;
 
 import com.peerfect.db.DBManger;
-import com.peerfect.vo.utils.EmailVO;
+import com.peerfect.vo.utils.VerifyVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
 public class MailDBManger extends DBManger {
-    public static int setEmailVerify(EmailVO ev) {
+    public static int setEmailVerify(VerifyVO ev) {
 
         int re = -1;
         SqlSession session = sqlSessionFactory.openSession();

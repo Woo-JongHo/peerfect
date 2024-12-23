@@ -1,18 +1,16 @@
 package com.peerfect.repository.utils;
 
 import com.peerfect.db.utils.MailDBManger;
-import com.peerfect.vo.utils.EmailVO;
+import com.peerfect.vo.utils.VerifyVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @Repository
 @RequiredArgsConstructor
 public class MailRepostiory {
-    public void setEmailVerify(EmailVO ev) {
+    public void setEmailVerify(VerifyVO ev) {
 
         MailDBManger.setEmailVerify(ev);
     }

@@ -5,18 +5,18 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class EmailVO {
+public class VerifyVO {
     private String emailAddress;
     private String emailAuth;
     private LocalDateTime emailTime;
 
-    public EmailVO(String emailAddress, String emailAuth, LocalDateTime emailTime) {
+    public VerifyVO(String emailAddress, String emailAuth, LocalDateTime emailTime) {
         this.emailAddress = emailAddress;
         this.emailAuth = emailAuth;
         this.emailTime = emailTime;
     }
 
-    public EmailVO() {
+    public VerifyVO() {
 
     }
 }

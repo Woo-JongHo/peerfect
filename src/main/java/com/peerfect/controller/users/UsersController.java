@@ -3,7 +3,7 @@ package com.peerfect.controller.users;
 import com.peerfect.service.utils.MailService;
 import com.peerfect.service.users.UsersService;
 
-import com.peerfect.vo.users.UsersVO;
+import com.peerfect.vo.users.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,10 +35,10 @@ public class UsersController {
             log.info("Received data - Name: {}, Email: {}", name, email);
 
             // 사용자 데이터 VO 생성
-            UsersVO userVO = new UsersVO(name, email, password);
+            //MemberVO userVO = new MemberVO(name, email, password);
 
             // 사용자 정보 저장
-            usersService.insertUser(userVO);
+            //usersService.insertUser(userVO);
             response.put("status", "success");
             response.put("message", "사용자가 성공적으로 생성되었습니다.");
             return ResponseEntity.ok(response);

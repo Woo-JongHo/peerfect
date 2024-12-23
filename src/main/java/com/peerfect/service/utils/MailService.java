@@ -1,7 +1,7 @@
 package com.peerfect.service.utils;
 
 import com.peerfect.repository.utils.MailRepostiory;
-import com.peerfect.vo.utils.EmailVO;
+import com.peerfect.vo.utils.VerifyVO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Random;
 
 @Slf4j
@@ -67,7 +66,7 @@ public class MailService {
         return number; // 생성된 인증번호 반환
     }
 
-    public void setEmailVerify(EmailVO ev) {
+    public void setEmailVerify(VerifyVO ev) {
         mailRepository.setEmailVerify(ev);
     }
 

@@ -2,7 +2,7 @@ package com.peerfect.controller.utils;
 
 import com.peerfect.DTO.MailDTO;
 import com.peerfect.service.utils.MailService;
-import com.peerfect.vo.utils.EmailVO;
+import com.peerfect.vo.utils.VerifyVO;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class MailController {
             response.put("message", "인증 코드가 이메일로 발송되었습니다.");
             LocalDateTime time = LocalDateTime.now();            //이메일 디비에 저장
 
-            EmailVO ev = new EmailVO(email, authCode, time);
+            VerifyVO ev = new VerifyVO(email, authCode, time);
 
             mailService.setEmailVerify(ev);
 
