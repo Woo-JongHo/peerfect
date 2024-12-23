@@ -11,17 +11,26 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/challenge")
-public class ChallengeController {
-
-    /*Challenge - Mission으로 연결해놓았고 현재는 Mission만 만드는 상태*/
+@RequestMapping("/api/mission")
+public class MissionController {
 
 
-    /*-------------------------------Challenge Controller -----------------------*/
+    //todo get missionList 구현
+    @GetMapping("/mission/{challengeNo}/ui-missionlist")
+    public ResponseEntity<?> getUIMissionList(@PathVariable String challengeNo){
 
-    @GetMapping("/challenge")
-    public String getChallenge() {
-        return "추후 개발 예정";
+
+
+
+        return ResponseEntity.ok("");
     }
 
+    @GetMapping("/mission/{challengeNo}/ux-missionlist")
+    public ResponseEntity<?> getUXMissionList(@PathVariable String challengeNo){
+
+
+
+
+        return ResponseEntity.ok("");
+    }
 }

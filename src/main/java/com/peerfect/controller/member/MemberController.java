@@ -1,9 +1,9 @@
-package com.peerfect.controller.users;
+package com.peerfect.controller.member;
 
 import com.peerfect.service.utils.MailService;
-import com.peerfect.service.users.UsersService;
+import com.peerfect.service.member.MemberService;
 
-import com.peerfect.vo.users.MemberVO;
+import com.peerfect.vo.member.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,9 +17,9 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-public class UsersController {
+public class MemberController {
     private final MailService mailService;
-    private final UsersService usersService;
+    private final MemberService memberService;
 
 
     @PostMapping("/insertUser")
@@ -35,10 +35,10 @@ public class UsersController {
             log.info("Received data - Name: {}, Email: {}", name, email);
 
             // 사용자 데이터 VO 생성
-            //MemberVO userVO = new MemberVO(name, email, password);
+            MemberVO memberVO = new MemberVO(name, email, password);
 
             // 사용자 정보 저장
-            //usersService.insertUser(userVO);
+            memberService.insertUser(memberVO);
             response.put("status", "success");
             response.put("message", "사용자가 성공적으로 생성되었습니다.");
             return ResponseEntity.ok(response);

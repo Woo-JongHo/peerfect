@@ -10,9 +10,9 @@
         <typeAlias type="com.peerfect.vo.admin.AdminFeedbackVO" alias="feedbackVO"/>
         <typeAlias type="com.peerfect.vo.challenge.ChallengeVO" alias="challengeVO"/>
         <typeAlias type="com.peerfect.vo.challenge.MissionVO" alias="missionVO"/>
-        <typeAlias type="com.peerfect.vo.users.MemberVO" alias="usersVO"/>
-        <typeAlias type="com.peerfect.vo.users.UploadVO" alias="uploadVO"/>
-        <typeAlias type="com.peerfect.vo.users.CompleteVO" alias="completeVO"/>
+        <typeAlias type="com.peerfect.vo.member.MemberVO" alias="usersVO"/>
+        <typeAlias type="com.peerfect.vo.member.UploadVO" alias="uploadVO"/>
+        <typeAlias type="com.peerfect.vo.member.CompleteVO" alias="completeVO"/>
         <typeAlias type="com.peerfect.vo.challenge.ReviewVO" alias="reviewVO"/>
     </typeAliases>
 

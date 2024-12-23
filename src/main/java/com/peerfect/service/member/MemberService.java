@@ -1,8 +1,8 @@
-package com.peerfect.service.users;
+package com.peerfect.service.member;
 
 
-import com.peerfect.repository.users.UsersRepository;
-import com.peerfect.vo.users.MemberVO;
+import com.peerfect.repository.member.MemberRepository;
+import com.peerfect.vo.member.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UsersService{
+public class MemberService {
 
 
     public void insertUser(MemberVO userVO) {
-        UsersRepository.insertUser(userVO);
+        MemberRepository.insertUser(userVO);
     }
 }
 

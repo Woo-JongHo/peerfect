@@ -1,4 +1,4 @@
-package com.peerfect.vo.users;
+package com.peerfect.vo.member;
 
 import lombok.Data;
 

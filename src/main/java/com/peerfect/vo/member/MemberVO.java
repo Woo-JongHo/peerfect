@@ -1,4 +1,4 @@
-package com.peerfect.vo.users;
+package com.peerfect.vo.member;
 
 import lombok.Data;
 
@@ -18,4 +18,6 @@ public class MemberVO {
     private Date memberUXstart;
     private Date memberUXend;
 
+    public MemberVO(String name, String email, String password) {
+    }
 }

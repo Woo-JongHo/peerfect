@@ -1,4 +1,4 @@
-package com.peerfect.repository.users;
+package com.peerfect.repository.admin;
 
 
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class UsersUploadRepository {
-    
+public class FeedbackRepository {
 }
