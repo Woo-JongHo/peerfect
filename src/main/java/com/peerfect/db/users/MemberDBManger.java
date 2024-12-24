@@ -8,10 +8,10 @@ import static com.peerfect.db.DBManger.sqlSessionFactory;
 @Slf4j
 
 public class MemberDBManger {
-    public static int insertUser(MemberVO userVO) {
+    public static int insertUser(MemberVO memberVO) {
         int re = -1;
         SqlSession session = sqlSessionFactory.openSession();
-        re = session.insert("users.insert", userVO);
+        re = session.insert("member.insert", memberVO);
         session.commit();
         session.close();
 

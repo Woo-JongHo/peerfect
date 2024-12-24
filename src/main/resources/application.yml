@@ -1,9 +1,9 @@
 spring:
   datasource:
+    driver: org.postgresql.Driver
     url: jdbc:postgresql://peerfect-rds.cdo2amggo1em.ap-northeast-2.rds.amazonaws.com:5432/postgres
     username: peerfectadmin
     password: peerfect8848
-    driver-class-name: org.postgresql.Driver
 
   thymeleaf:
     prefix: classpath:/templates/
@@ -15,8 +15,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: travelwithme.mail@gmail.com
-    password: password
+    #username: jonghowoo33@gmail.com
+    #password: "xwlu gxnv vfrk mgyj"
     properties:
       mail:
         smtp:

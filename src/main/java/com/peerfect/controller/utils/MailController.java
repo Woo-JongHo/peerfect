@@ -62,6 +62,8 @@ public class MailController {
             if (re != 0){
                 response.put("status", "success");
                 response.put("message", "인증에 성공했습니다.");
+                
+                //todo verfiy 에서 지우는 메소드 생성
             } else {
                 response.put("status", "error");
                 response.put("message", "인증 코드가 유효하지 않거나 일치하지 않습니다.");

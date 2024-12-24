@@ -3,17 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <properties resource="com.peerfect.db.db.properties"/>
-
+    <properties resource="application.yml"/>
     <typeAliases>
         <typeAlias type="com.peerfect.vo.admin.AdminVO" alias="adminVO"/>
-        <typeAlias type="com.peerfect.vo.admin.AdminFeedbackVO" alias="feedbackVO"/>
+        <typeAlias type="com.peerfect.vo.admin.FeedbackVO" alias="feedbackVO"/>
         <typeAlias type="com.peerfect.vo.challenge.ChallengeVO" alias="challengeVO"/>
         <typeAlias type="com.peerfect.vo.challenge.MissionVO" alias="missionVO"/>
-        <typeAlias type="com.peerfect.vo.member.MemberVO" alias="usersVO"/>
+        <typeAlias type="com.peerfect.vo.member.MemberVO" alias="memberVO"/>
         <typeAlias type="com.peerfect.vo.member.UploadVO" alias="uploadVO"/>
         <typeAlias type="com.peerfect.vo.member.CompleteVO" alias="completeVO"/>
         <typeAlias type="com.peerfect.vo.challenge.ReviewVO" alias="reviewVO"/>
+        <typeAlias type="com.peerfect.vo.utils.VerifyVO" alias="verifyVO"/>
+        <typeAlias type="com.peerfect.vo.utils.TokenVO" alias="tokenVO"/>
+
+
     </typeAliases>
 
     <environments default="development">
@@ -29,8 +32,14 @@
 
     </environments>
     <mappers>
-        <mapper resource="mapper/userMapper.xml"/>
-        <mapper resource="mapper/codeMapper.xml"/>
-        <mapper resource="mapper/studyMapper.xml"/>
+        <mapper resource="mapper/adminMapper.xml"/>
+        <mapper resource="mapper/challengeMapper.xml"/>
+        <mapper resource="mapper/completeMapper.xml"/>
+        <mapper resource="mapper/emailMapper.xml"/>
+        <mapper resource="mapper/feedbackMapper.xml"/>
+        <mapper resource="mapper/memberMapper.xml"/>
+        <mapper resource="mapper/missionMapper.xml"/>
+        <mapper resource="mapper/reviewMapper.xml"/>
+        <mapper resource="mapper/uploadMapper.xml"/>
     </mappers>
 </configuration>

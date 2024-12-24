@@ -14,14 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/challenge")
 public class ChallengeController {
 
-    /*Challenge - Mission으로 연결해놓았고 현재는 Mission만 만드는 상태*/
-
-
-    /*-------------------------------Challenge Controller -----------------------*/
-
-    @GetMapping("/challenge")
+    @GetMapping("/")
     public String getChallenge() {
         return "추후 개발 예정";
     }
 
+
+    //todo challenge에 따른 missionList 구현
+    @GetMapping("/{challengeNo}/ui-missionlist")
+    public ResponseEntity<?> getUIMissionList(@PathVariable String challengeNo){
+        return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/{challengeNo}/ux-missionlist")
+    public ResponseEntity<?> getUXMissionList(@PathVariable String challengeNo){
+        return ResponseEntity.ok("");
+    }
 }

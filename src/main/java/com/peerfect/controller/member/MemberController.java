@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/api/member")
 public class MemberController {
     private final MailService mailService;
     private final MemberService memberService;
@@ -49,4 +49,28 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+    //todo 유저가 챌린지 시작한지  얼마나 됐는지
+    @GetMapping("/{userId}/ux-startday")
+    public String getUserUxStartday(@PathVariable String userId){
+        return "";
+    }
+
+    @GetMapping("/{userId}/ui-startday")
+    public String getUserUiStartday(@PathVariable String userId){
+        return "";
+    }
+
+
+    @GetMapping("{userId}/ux-complete")
+    public String getUserUxComplete(@PathVariable String userId){
+        return "";
+    }
+
+    @GetMapping("{userId}/ui-complete")
+    public String getUserUiComplete(@PathVariable String userId){
+        return "";
+    }
+
+
 }

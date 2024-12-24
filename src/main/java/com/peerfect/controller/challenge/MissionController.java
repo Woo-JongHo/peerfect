@@ -15,22 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class MissionController {
 
 
-    //todo get missionList 구현
-    @GetMapping("/mission/{challengeNo}/ui-missionlist")
-    public ResponseEntity<?> getUIMissionList(@PathVariable String challengeNo){
 
 
 
 
+    //todo member에 따른 챌린지 보여주기
+    @GetMapping("/ux/{memberId}")
+    public ResponseEntity<?> getMemberUXMission(@PathVariable String memberId){
         return ResponseEntity.ok("");
+
     }
 
-    @GetMapping("/mission/{challengeNo}/ux-missionlist")
-    public ResponseEntity<?> getUXMissionList(@PathVariable String challengeNo){
-
-
-
-
+    @GetMapping("/ui/{memberId}")
+    public ResponseEntity<?> getMemberUIMission(@PathVariable String memberId){
         return ResponseEntity.ok("");
+
     }
+
 }
