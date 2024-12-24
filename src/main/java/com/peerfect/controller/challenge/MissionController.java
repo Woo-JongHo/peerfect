@@ -16,9 +16,6 @@ public class MissionController {
 
 
 
-
-
-
     //todo member에 따른 챌린지 보여주기
     @GetMapping("/ux/{memberId}")
     public ResponseEntity<?> getMemberUXMission(@PathVariable String memberId){

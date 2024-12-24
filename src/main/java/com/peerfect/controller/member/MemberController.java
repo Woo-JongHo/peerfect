@@ -29,6 +29,8 @@ public class MemberController {
 
     private static String memberId;
 
+    //todo 토큰들 만료에 관한건 구현 아직 안함
+
     @PostMapping("/insertUser")
     public ResponseEntity<Map<String, Object>> insertUser(@RequestBody Map<String, String> userData) {
         Map<String, Object> response = new HashMap<>();
@@ -75,6 +77,8 @@ public class MemberController {
             log.info("memberId: {}" , memberId);
 
             String accessToken = jwtTokenProvider.generateAccessToken(memberId);
+            
+            //todo mebmerID에 맞는 refresh 토큰을 확인하고, 없으면 provider로 다시 제공
             String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
             TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), accessToken, refreshToken, LocalDateTime.now().plusDays(7));

@@ -3,15 +3,15 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="email">
+<mapper namespace="verify">
     <insert id="setVerify" parameterType="VerifyVO">
-        INSERT INTO email (verify_email, verify_password, verify_expire)
+        INSERT INTO verify (verify_email, verify_password, verify_expire)
         VALUES (#{verifyEmail}, #{verifyPassword}, #{verifyExpire})
     </insert>
 
     <select id="getVerify" parameterType="map" resultType="int">
         SELECT COUNT(*)
-        FROM email_verification
-        WHERE email_address = #{email} AND email_auth = #{authCode}
+        FROM verify
+        WHERE verify_email = #{email} AND verify_password = #{authCode}
     </select>
 </mapper>

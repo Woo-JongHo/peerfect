@@ -14,7 +14,7 @@ public class MailDBManger extends DBManger {
 
         int re = -1;
         SqlSession session = sqlSessionFactory.openSession();
-        re = session.insert("email.setVerify", v);
+        re = session.insert("verify.setVerify", v);
         session.commit();
         session.close();
 
@@ -30,7 +30,7 @@ public class MailDBManger extends DBManger {
             params.put("email", email);
             params.put("authCode", authCode);
 
-            re = session.selectOne("email.getVerify", params);
+            re = session.selectOne("verify.getVerify", params);
         } finally {
             session.close();
         }
