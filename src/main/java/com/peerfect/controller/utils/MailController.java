@@ -22,6 +22,9 @@ public class MailController {
 
     private final MailService mailService;
 
+    //todo time이 5분이상 지나면 저절로 삭제되는 method
+    //todo 같은 email이 들어왔을 때 체크하고 전 이메일을 삭제
+
     @PostMapping("/emailCheck")
     public ResponseEntity<Map<String, Object>> emailCheck(@RequestBody MailDTO mailDTO) throws MessagingException, UnsupportedEncodingException {
         String email = mailDTO.getEmail(); // 프론트엔드에서 전달된 이메일 데이터
@@ -35,9 +38,9 @@ public class MailController {
             response.put("message", "인증 코드가 이메일로 발송되었습니다.");
             LocalDateTime time = LocalDateTime.now();            //이메일 디비에 저장
 
-            VerifyVO ev = new VerifyVO(email, authCode, time);
+            VerifyVO v = new VerifyVO(email, authCode, time);
 
-            mailService.setEmailVerify(ev);
+            mailService.setEmailVerify(v);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -64,6 +67,8 @@ public class MailController {
                 response.put("message", "인증에 성공했습니다.");
                 
                 //todo verfiy 에서 지우는 메소드 생성
+
+
             } else {
                 response.put("status", "error");
                 response.put("message", "인증 코드가 유효하지 않거나 일치하지 않습니다.");

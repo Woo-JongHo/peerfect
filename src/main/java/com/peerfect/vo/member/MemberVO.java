@@ -18,6 +18,9 @@ public class MemberVO {
     private Date memberUXstart;
     private Date memberUXend;
 
-    public MemberVO(String name, String email, String password) {
+    public MemberVO(String memberName, String memberPassword, String memberEmail) {
+        this.memberName = memberName;
+        this.memberPassword = memberPassword;
+        this.memberEmail = memberEmail;
     }
 }

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class MailRepostiory {
-    public void setEmailVerify(VerifyVO ev) {
+    public void setEmailVerify(VerifyVO v) {
 
-        MailDBManger.setEmailVerify(ev);
+        MailDBManger.setEmailVerify(v);
     }
 
     public int getEmailVerify(String email, String authCode) {

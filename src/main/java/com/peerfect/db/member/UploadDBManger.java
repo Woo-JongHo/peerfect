@@ -1,4 +1,4 @@
-package com.peerfect.db.users;
+package com.peerfect.db.member;
 
 public class UploadDBManger {
 }

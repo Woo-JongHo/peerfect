@@ -66,8 +66,8 @@ public class MailService {
         return number; // 생성된 인증번호 반환
     }
 
-    public void setEmailVerify(VerifyVO ev) {
-        mailRepository.setEmailVerify(ev);
+    public void setEmailVerify(VerifyVO v) {
+        mailRepository.setEmailVerify(v);
     }
 
     public int getEmailVerify(String email, String authCode) {

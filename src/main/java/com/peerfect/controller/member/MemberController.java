@@ -2,16 +2,20 @@ package com.peerfect.controller.member;
 
 import com.peerfect.service.utils.MailService;
 import com.peerfect.service.member.MemberService;
-
+import com.peerfect.service.utils.TokenService;
+import com.peerfect.util.JwtTokenProvider;
 import com.peerfect.vo.member.MemberVO;
+import com.peerfect.vo.utils.TokenVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -20,28 +24,37 @@ import java.util.Map;
 public class MemberController {
     private final MailService mailService;
     private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenService tokenService;
 
+    private static String memberId;
 
     @PostMapping("/insertUser")
     public ResponseEntity<Map<String, Object>> insertUser(@RequestBody Map<String, String> userData) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // 프론트엔드에서 전달된 데이터 가져오기
-            String name = userData.get("name");
-            String email = userData.get("email");
-            String password = userData.get("password");
+            String memberName = userData.get("name");
+            String memberEmail = userData.get("email");
+            String memberPassword = userData.get("password");
 
-            log.info("Received data - Name: {}, Email: {}", name, email);
+            log.info("Received data - Name: {}, Email: {}", memberName, memberEmail);
 
-            // 사용자 데이터 VO 생성
-            MemberVO memberVO = new MemberVO(name, email, password);
+            if (memberService.isEmailExists(memberEmail)) {
+                response.put("status", "error");
+                response.put("message", "Email already exists");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            }
 
-            // 사용자 정보 저장
+            MemberVO memberVO = new MemberVO(memberName,  memberPassword,memberEmail);
             memberService.insertUser(memberVO);
+
             response.put("status", "success");
-            response.put("message", "사용자가 성공적으로 생성되었습니다.");
+            response.put("name", memberName);
+            response.put("email", memberEmail);
+
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             log.error("Error inserting user: {}", e.getMessage());
             response.put("status", "error");
@@ -50,27 +63,75 @@ public class MemberController {
         }
     }
 
-    //todo 유저가 챌린지 시작한지  얼마나 됐는지
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> loginData) {
+        String email = loginData.get("email");
+        String password = loginData.get("password");
+
+        if (memberService.authenticate(email, password)) {
+
+             memberId = memberService.getMemberId(email);
+
+            log.info("memberId: {}" , memberId);
+
+            String accessToken = jwtTokenProvider.generateAccessToken(memberId);
+            String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
+
+            TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), accessToken, refreshToken, LocalDateTime.now().plusDays(7));
+            tokenService.saveToken(tokenVO);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("memberId", memberId);
+            response.put("accessToken", accessToken);
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
+        }
+    }
+
+    /*
+    @PostMapping("/refresh")
+    public ResponseEntity<Map<String, String>> refresh(@RequestBody Map<String, String> tokenData) {
+        String refreshToken = tokenData.get("refreshToken");
+
+        if (jwtTokenProvider.validateToken(refreshToken)) {
+            String email = jwtTokenProvider.getMemberIdFromToken(refreshToken);
+
+            TokenVO tokenVO = tokenService.getTokenByMemberId(email);
+            if (tokenVO == null || !tokenVO.getRefreshToken().equals(refreshToken)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid or expired refresh token"));
+            }
+
+            String newAccessToken = jwtTokenProvider.generateAccessToken(email);
+            String newRefreshToken = jwtTokenProvider.generateRefreshToken(email);
+            tokenService.updateRefreshToken(email, newRefreshToken);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("accessToken", newAccessToken);
+            response.put("refreshToken", newRefreshToken);
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid refresh token"));
+    }*/
+
     @GetMapping("/{userId}/ux-startday")
-    public String getUserUxStartday(@PathVariable String userId){
+    public String getUserUxStartday(@PathVariable String userId) {
         return "";
     }
 
     @GetMapping("/{userId}/ui-startday")
-    public String getUserUiStartday(@PathVariable String userId){
+    public String getUserUiStartday(@PathVariable String userId) {
         return "";
     }
 
-
-    @GetMapping("{userId}/ux-complete")
-    public String getUserUxComplete(@PathVariable String userId){
+    @GetMapping("/{userId}/ux-complete")
+    public String getUserUxComplete(@PathVariable String userId) {
         return "";
     }
 
-    @GetMapping("{userId}/ui-complete")
-    public String getUserUiComplete(@PathVariable String userId){
+    @GetMapping("/{userId}/ui-complete")
+    public String getUserUiComplete(@PathVariable String userId) {
         return "";
     }
-
-
 }

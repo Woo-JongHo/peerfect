@@ -10,11 +10,11 @@ import java.util.Map;
 
 @Slf4j
 public class MailDBManger extends DBManger {
-    public static int setEmailVerify(VerifyVO ev) {
+    public static int setEmailVerify(VerifyVO v) {
 
         int re = -1;
         SqlSession session = sqlSessionFactory.openSession();
-        re = session.insert("email.setVerify", ev);
+        re = session.insert("email.setVerify", v);
         session.commit();
         session.close();
 

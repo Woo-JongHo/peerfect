@@ -41,5 +41,7 @@
         <mapper resource="mapper/missionMapper.xml"/>
         <mapper resource="mapper/reviewMapper.xml"/>
         <mapper resource="mapper/uploadMapper.xml"/>
+        <mapper resource="mapper/tokenMapper.xml"/>
+
     </mappers>
 </configuration>

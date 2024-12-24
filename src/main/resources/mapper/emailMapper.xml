@@ -5,8 +5,8 @@
 
 <mapper namespace="email">
     <insert id="setVerify" parameterType="VerifyVO">
-        INSERT INTO email (email_address, email_auth, email_time)
-        VALUES (#{emailAddress}, #{emailAuth}, #{emailTime})
+        INSERT INTO email (verify_email, verify_password, verify_expire)
+        VALUES (#{verifyEmail}, #{verifyPassword}, #{verifyExpire})
     </insert>
 
     <select id="getVerify" parameterType="map" resultType="int">

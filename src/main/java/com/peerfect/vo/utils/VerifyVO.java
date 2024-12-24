@@ -6,15 +6,17 @@ import java.time.LocalDateTime;
 
 @Data
 public class VerifyVO {
-    private String emailAddress;
-    private String emailAuth;
-    private LocalDateTime emailTime;
+    private String verifyEmail;
+    private String verifyPassword;
+    private LocalDateTime verifyExpire;
 
-    public VerifyVO(String emailAddress, String emailAuth, LocalDateTime emailTime) {
-        this.emailAddress = emailAddress;
-        this.emailAuth = emailAuth;
-        this.emailTime = emailTime;
+    public VerifyVO(String verifyEmail, String verifyPassword, LocalDateTime verifyExpire) {
+        this.verifyEmail = verifyEmail;
+        this.verifyPassword = verifyPassword;
+        this.verifyExpire = verifyExpire;
     }
+
+
 
     public VerifyVO() {
 

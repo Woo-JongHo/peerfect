@@ -8,4 +8,22 @@
         INSERT INTO member (member_name, member_email, member_password)
         VALUES (#{memberName}, #{memberEmail}, #{memberPassword})
     </insert>
+
+    <select id="isMailExists" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM member
+        WHERE member_email = #{memberEmail}
+    </select>
+
+    <select id="getMemberId" resultType="String">
+        SELECT member_id
+        FROM member
+        WHERE member_email = #{email}
+    </select>
+
+    <select id="authenticate" parameterType="map" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM member
+        WHERE member_email = #{email} AND member_password = #{password}
+    </select>
 </mapper>
