@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -129,13 +130,19 @@ public class MemberController {
         return "";
     }
 
-    @GetMapping("/{userId}/ux-complete")
-    public String getUserUxComplete(@PathVariable String userId) {
-        return "";
+    @GetMapping("/{memberId}/mission")
+    public ResponseEntity<?> getMemberMission(@PathVariable String memberId) {
+
+        List<Map<String, String>> list =  memberService.getMemberMission(memberId);
+
+        return ResponseEntity.ok(list);
+    }
+    @GetMapping("/{memberId}/complete")
+    public ResponseEntity<?> getMemberComplete(@PathVariable String memberId) {
+
+        List<Map<String, String>> list =  memberService.getMemberComplete(memberId);
+
+        return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/{userId}/ui-complete")
-    public String getUserUiComplete(@PathVariable String userId) {
-        return "";
-    }
 }

@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Member;
+import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -26,5 +30,13 @@ public class MemberRepository {
 
     public static boolean authenticate(String email, String password) {
         return MemberDBManger.authenticate(email,password);
+    }
+
+    public static List<Map<String, String>> getMemberComplete(String userId) {
+        return MemberDBManger.getMemberComplete(userId);
+    }
+
+    public static List<Map<String, String>> getMemberMission(String memberId) {
+        return MemberDBManger.getMemberMission(memberId);
     }
 }

@@ -26,4 +26,25 @@
         FROM member
         WHERE member_email = #{email} AND member_password = #{password}
     </select>
+
+    <select id="getMemberMission" parameterType="String" resultType="map">
+        SELECT
+        m.mission_title,
+        m.mission_explain
+        FROM
+        mission AS m
+        WHERE
+        m.challenge_no = 1
+        AND m.mission_no NOT IN (
+        SELECT
+        c.mission_no
+        FROM
+        member AS mem
+        INNER JOIN
+        complete AS c ON mem.member_no = c.member_no
+        WHERE
+        mem.member_id = #{memberId}::UUID
+        )
+    </select>
+
 </mapper>

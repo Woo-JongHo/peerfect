@@ -17,16 +17,15 @@ public class MissionController {
 
 
     //todo member에 따른 챌린지 보여주기
-    @GetMapping("/ux/{memberId}")
-    public ResponseEntity<?> getMemberUXMission(@PathVariable String memberId){
+    @GetMapping("/{missionNo}/review")
+    public ResponseEntity<?> getMissionReview(@PathVariable String missionNo){
+
+
+
         return ResponseEntity.ok("");
 
     }
 
-    @GetMapping("/ui/{memberId}")
-    public ResponseEntity<?> getMemberUIMission(@PathVariable String memberId){
-        return ResponseEntity.ok("");
 
-    }
 
 }

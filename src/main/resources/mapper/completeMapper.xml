@@ -4,5 +4,17 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="complete">
-
+    <select id="getMemberComplete" parameterType="String" resultType="map">
+        SELECT
+        m.mission_title,
+        m.mission_explain
+        FROM
+        member AS mem
+        INNER JOIN
+        complete AS c ON mem.member_no = c.member_no
+        INNER JOIN
+        mission AS m ON c.mission_no = m.mission_no
+        WHERE
+        mem.member_id = #{memberId}::UUID;
+    </select>
 </mapper>

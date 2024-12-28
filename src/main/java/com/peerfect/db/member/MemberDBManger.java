@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.peerfect.db.DBManger.sqlSessionFactory;
 @Slf4j
@@ -69,5 +71,34 @@ public class MemberDBManger {
         }
 
         return exists;
+    }
+    public static List<Map<String, String>> getMemberComplete(String memberId) {
+        List<Map<String, String>> result = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            result = session.selectList("complete.getMemberComplete", memberId);
+
+            log.info("result" + result);
+        } catch (Exception e) {
+            System.err.println("Error fetching UI mission list: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+        return result;
+    }
+
+    public static List<Map<String, String>> getMemberMission(String memberId) {
+        List<Map<String, String>> result = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            result = session.selectList("member.getMemberMission", memberId);
+
+            log.info("result" + result);
+        } catch (Exception e) {
+            System.err.println("Error fetching UI mission list: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+        return result;
     }
 }
