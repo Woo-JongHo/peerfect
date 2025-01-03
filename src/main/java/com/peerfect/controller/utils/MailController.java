@@ -27,21 +27,19 @@ public class MailController {
 
     @PostMapping("/emailCheck")
     public ResponseEntity<Map<String, Object>> emailCheck(@RequestBody MailDTO mailDTO) throws MessagingException, UnsupportedEncodingException {
-        String email = mailDTO.getEmail(); // 프론트엔드에서 전달된 이메일 데이터
+        String email = mailDTO.getEmail();
         log.info("Received email: {}", email);
 
         Map<String, Object> response = new HashMap<>();
         try {
+            //mailService.deletePreviousVerifyByEmail(email); // 중복 이메일 처리
             String authCode = mailService.sendSimpleMessage(email);
-            response.put("status", "success");
-            response.put("authCode", authCode);
-            response.put("message", "인증 코드가 이메일로 발송되었습니다.");
-            LocalDateTime time = LocalDateTime.now();            //이메일 디비에 저장
 
-            VerifyVO v = new VerifyVO(email, authCode, time);
-
+            VerifyVO v = new VerifyVO(email, authCode, LocalDateTime.now());
             mailService.setEmailVerify(v);
 
+            response.put("status", "success");
+            response.put("message", "인증 코드가 이메일로 발송되었습니다.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Error: {}", e.getMessage());
@@ -56,19 +54,17 @@ public class MailController {
 
     @PostMapping("/verifyCode")
     public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody Map<String, String> request) {
-        String email = request.get("email"); // 프론트엔드에서 전달된 이메일
-        String authCode = request.get("authCode"); // 프론트엔드에서 입력한 인증 코드
+        String email = request.get("email");
+        String authCode = request.get("authCode");
 
         Map<String, Object> response = new HashMap<>();
         try {
             int re = mailService.getEmailVerify(email, authCode);
-            if (re != 0){
+
+            if (re != 0) {
+                //mailService.deleteEmailVerify(email); // 인증 성공 시 데이터 삭제
                 response.put("status", "success");
                 response.put("message", "인증에 성공했습니다.");
-                
-                //todo verfiy 에서 지우는 메소드 생성
-
-
             } else {
                 response.put("status", "error");
                 response.put("message", "인증 코드가 유효하지 않거나 일치하지 않습니다.");
@@ -82,6 +78,7 @@ public class MailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
 
 
 

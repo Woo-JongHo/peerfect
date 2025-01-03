@@ -39,13 +39,28 @@ public class MailService {
     public MimeMessage createMail(String mail, String number) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
 
+        // 발신자 이메일 설정
         message.setFrom(senderEmail);
+
+        // 수신자 이메일 설정
         message.setRecipients(MimeMessage.RecipientType.TO, mail);
-        message.setSubject("이메일 인증");
+
+        // 이메일 제목 설정
+        message.setSubject("Peerfect 회원가입 이메일 인증입니다");
+
+        // 인증 링크 생성
+        String baseUrl = "http://localhost:3000/auth";
+        String link = String.format("%s?code=%s&email=%s", baseUrl, number, mail);
+
+        // 이메일 본문 작성
         String body = "";
-        body += "<h3>요청하신 인증 번호입니다.</h3>";
-        body += "<h1>" + number + "</h1>";
+        body += "<h3>이메일 인증 요청입니다.</h3>";
+        body += "<p>아래 링크를 클릭하여 이메일 인증을 완료해주세요:</p>";
+        body += "<a href='" + link + "'>" + link + "</a>";
+        body += "<p>만약 링크가 클릭되지 않으면, 위 링크를 복사하여 브라우저에 붙여넣어주세요.</p>";
         body += "<h3>감사합니다.</h3>";
+
+        // 이메일 내용 설정
         message.setText(body, "UTF-8", "html");
 
         return message;

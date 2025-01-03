@@ -1,5 +1,6 @@
 package com.peerfect.controller.challenge;
 
+import com.peerfect.service.challenge.ChallengeService;
 import com.peerfect.service.challenge.MissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +16,10 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/challenge")
+@RequestMapping("/api/challenges")
 public class ChallengeController {
 
-    private final MissionService missionService;
+    private final ChallengeService challengeService;
 
     @GetMapping("/")
     public String getChallenge() {
@@ -26,6 +27,41 @@ public class ChallengeController {
     }
 
 
+    @GetMapping("/ui-preview")
+    public ResponseEntity<?> getUIPreview(){
+
+
+        return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/ux-preview")
+    public ResponseEntity<?> getUXpreview(){
+
+        return ResponseEntity.ok("");
+    }
+    @GetMapping("/{challengeNo}/detail")
+    public ResponseEntity<?> getDetailPage(@PathVariable String challengeNo){
+
+
+        return ResponseEntity.ok("");
+    }
+
+    @GetMapping("{challengeNo}/review")
+    public ResponseEntity<?> getReview(@PathVariable String challengeNo){
+
+
+        return ResponseEntity.ok("missionList");
+    }
+
+    @GetMapping("{challengeNo}/upload")
+    public ResponseEntity<?> getUpload(@PathVariable String challengeNo){
+
+
+        return ResponseEntity.ok("missionList");
+    }
+
+
+    /*
     //todo challenge에 따른 missionList 구현
     @GetMapping("/{challengeNo}/ui-missionlist")
     public ResponseEntity<?> getUIMissionList(@PathVariable String challengeNo){
@@ -41,4 +77,6 @@ public class ChallengeController {
 
         return ResponseEntity.ok(missionList);
     }
+    */
+
 }

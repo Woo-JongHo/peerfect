@@ -8,30 +8,25 @@ import java.sql.Date;
 @Data
 public class ChallengeVO {
     private int challengeNo;
-    private String challengeId;
+    private String challengeGroup;
+    private String challengeGoal;
     private String challengeType;
     private String challengeTitle;
+    private String challengeIntro;
+    private String challengeMission;
     private String challengeLevel;
-    private Date challengeStart;
-    private String challengeContent;
-    private String challengeExplanation;
-    private String challengeRules;
 
-    public ChallengeVO(){}
-
-    public ChallengeVO(int challengeNo, String challengeId, String challengeType,
-                       String challengeTitle, String challengeLevel, Date challengeStart,
-                       String challengeContent, String challengeExplanation, String challengeRules) {
+    public ChallengeVO(int challengeNo, String challengeGroup, String challengeGoal, String challengeType, String challengeTitle, String challengeIntro, String challengeMission, String challengeLevel) {
         this.challengeNo = challengeNo;
-        this.challengeId = challengeId;
+        this.challengeGroup = challengeGroup;
+        this.challengeGoal = challengeGoal;
         this.challengeType = challengeType;
         this.challengeTitle = challengeTitle;
+        this.challengeIntro = challengeIntro;
+        this.challengeMission = challengeMission;
         this.challengeLevel = challengeLevel;
-        this.challengeStart = challengeStart;
-        this.challengeContent = challengeContent;
-        this.challengeExplanation = challengeExplanation;
-        this.challengeRules = challengeRules;
     }
+
 }
 
 
