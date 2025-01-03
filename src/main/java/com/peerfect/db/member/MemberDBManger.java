@@ -50,18 +50,17 @@ public class MemberDBManger {
             session.close();
         }
 
-        return memberId;
+        return UUID.fromString(memberId).toString(); // UUID 형식 변환
     }
 
 
-    public static boolean authenticate(String email, String password) {
+    public static boolean authenticate(String email) {
         boolean exists = false;
         SqlSession session = sqlSessionFactory.openSession();
 
         try {
             Map<String, String> params = new HashMap<>();
             params.put("email", email);
-            params.put("password", password);
 
             exists = session.selectOne("member.authenticate", params);
         } catch (Exception e) {

@@ -32,20 +32,24 @@ public class MemberController {
 
     //todo 토큰들 만료에 관한건 구현 아직 안함
 
-    @PostMapping("/insertUser")
+    @PostMapping("/checkMember")
     public ResponseEntity<Map<String, Object>> insertUser(@RequestBody Map<String, String> userData) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            String memberName = userData.get("name");
+            String memberName = "name";
             String memberEmail = userData.get("email");
-            String memberPassword = userData.get("password");
+            String memberPassword = "password";
 
             log.info("Received data - Name: {}, Email: {}", memberName, memberEmail);
 
             if (memberService.isEmailExists(memberEmail)) {
-                response.put("status", "error");
-                response.put("message", "Email already exists");
+                response.put("status", "success");
+                response.put("message", "회원가입이 되어있습니다.");
+
+                response.put("next api", "api/member/login");
+
+
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
             }
 
@@ -53,7 +57,7 @@ public class MemberController {
             memberService.insertUser(memberVO);
 
             response.put("status", "success");
-            response.put("name", memberName);
+            response.put("message", "회원가입이 완료 되었습니다.");
             response.put("email", memberEmail);
 
             return ResponseEntity.ok(response);
@@ -69,16 +73,17 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> loginData) {
         String email = loginData.get("email");
-        String password = loginData.get("password");
 
-        if (memberService.authenticate(email, password)) {
 
-             memberId = memberService.getMemberId(email);
+        log.info(email);
+        if (memberService.authenticate(email)) {
+
+            memberId = memberService.getMemberId(email);
 
             log.info("memberId: {}" , memberId);
 
             String accessToken = jwtTokenProvider.generateAccessToken(memberId);
-            
+
             //todo mebmerID에 맞는 refresh 토큰을 확인하고, 없으면 provider로 다시 제공
             String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
@@ -120,29 +125,5 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid refresh token"));
     }*/
 
-    @GetMapping("/{userId}/ux-startday")
-    public String getUserUxStartday(@PathVariable String userId) {
-        return "";
-    }
-
-    @GetMapping("/{userId}/ui-startday")
-    public String getUserUiStartday(@PathVariable String userId) {
-        return "";
-    }
-
-    @GetMapping("/{memberId}/mission")
-    public ResponseEntity<?> getMemberMission(@PathVariable String memberId) {
-
-        List<Map<String, String>> list =  memberService.getMemberMission(memberId);
-
-        return ResponseEntity.ok(list);
-    }
-    @GetMapping("/{memberId}/complete")
-    public ResponseEntity<?> getMemberComplete(@PathVariable String memberId) {
-
-        List<Map<String, String>> list =  memberService.getMemberComplete(memberId);
-
-        return ResponseEntity.ok(list);
-    }
 
 }

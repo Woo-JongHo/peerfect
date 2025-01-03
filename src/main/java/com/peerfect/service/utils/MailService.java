@@ -89,4 +89,6 @@ public class MailService {
         int re =mailRepository.getEmailVerify(email, authCode);
         return re;
     }
+
+
 }

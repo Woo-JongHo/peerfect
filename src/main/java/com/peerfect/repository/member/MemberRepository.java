@@ -28,8 +28,8 @@ public class MemberRepository {
         return MemberDBManger.getMemberId(email);
     }
 
-    public static boolean authenticate(String email, String password) {
-        return MemberDBManger.authenticate(email,password);
+    public static boolean authenticate(String email) {
+        return MemberDBManger.authenticate(email);
     }
 
     public static List<Map<String, String>> getMemberComplete(String userId) {

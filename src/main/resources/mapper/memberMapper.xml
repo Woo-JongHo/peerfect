@@ -24,7 +24,7 @@
     <select id="authenticate" parameterType="map" resultType="boolean">
         SELECT COUNT(*) > 0
         FROM member
-        WHERE member_email = #{email} AND member_password = #{password}
+        WHERE member_email = #{email}
     </select>
 
     <select id="getMemberMission" parameterType="String" resultType="map">

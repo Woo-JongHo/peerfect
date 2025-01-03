@@ -56,15 +56,18 @@ public class MailController {
     public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         String authCode = request.get("authCode");
-
         Map<String, Object> response = new HashMap<>();
         try {
             int re = mailService.getEmailVerify(email, authCode);
 
             if (re != 0) {
                 //mailService.deleteEmailVerify(email); // 인증 성공 시 데이터 삭제
-                response.put("status", "success");
                 response.put("message", "인증에 성공했습니다.");
+
+                //인환님 소통
+                response.put("next api", "/api/member/checkMember");
+                response.put("comment", "email 넘겨주셔야 됩니다!");
+
             } else {
                 response.put("status", "error");
                 response.put("message", "인증 코드가 유효하지 않거나 일치하지 않습니다.");
@@ -78,8 +81,6 @@ public class MailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
-
 
 
 }

@@ -10,7 +10,7 @@ public class MemberVO {
 
     private int memberNo;
     private int challengeNo;
-    private String memberId;
+    private UUID memberId;
     private String memberName;
     private String memberPassword;
     private String memberEmail;
