@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    driver: org.postgresql.Driver
+    url: jdbc:postgresql://peerfect-rds.cdo2amggo1em.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    username: peerfectadmin
+    password: peerfect8848
+
+  thymeleaf:
+    prefix: classpath:/templates/
+
+  config:
+    import:
+      - optional:application-secret.yml
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    #username: jonghowoo33@gmail.com
+    #password: "xwlu gxnv vfrk mgyj"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    auth-code-expiration-millis: 1800000
+
+application:
+  version: 1.0.0
+
+server:
+  port: 8008
+
+

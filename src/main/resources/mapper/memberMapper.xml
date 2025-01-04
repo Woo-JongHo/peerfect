@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+    <insert id ="insert" parameterType="memberVO">
+        INSERT INTO member (member_name, member_email, member_password)
+        VALUES (#{memberName}, #{memberEmail}, #{memberPassword})
+    </insert>
+
+    <select id="isMailExists" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM member
+        WHERE member_email = #{memberEmail}
+    </select>
+
+    <select id="getMemberId" resultType="String">
+        SELECT member_id
+        FROM member
+        WHERE member_email = #{email}
+    </select>
+
+    <select id="authenticate" parameterType="map" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM member
+        WHERE member_email = #{email}
+    </select>
+
+    <select id="getMemberMission" parameterType="String" resultType="map">
+        SELECT
+        m.mission_title,
+        m.mission_explain
+        FROM
+        mission AS m
+        WHERE
+        m.challenge_no = 1
+        AND m.mission_no NOT IN (
+        SELECT
+        c.mission_no
+        FROM
+        member AS mem
+        INNER JOIN
+        complete AS c ON mem.member_no = c.member_no
+        WHERE
+        mem.member_id = #{memberId}::UUID
+        )
+    </select>
+
+</mapper>
