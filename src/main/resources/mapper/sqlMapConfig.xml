@@ -16,6 +16,11 @@
         <typeAlias type="com.peerfect.vo.utils.VerifyVO" alias="verifyVO"/>
         <typeAlias type="com.peerfect.vo.utils.TokenVO" alias="tokenVO"/>
 
+        <typeAlias type="com.peerfect.DTO.ChallengeDetailDTO" alias="ChallengeDetailDTO" />
+        <typeAlias type="com.peerfect.DTO.PreviewDTO" alias="PreviewDTO" />
+        <typeAlias type="com.peerfect.DTO.MemberChallengeDTO" alias="MemberChallengeDTO" />
+
+
 
     </typeAliases>
 

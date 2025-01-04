@@ -1,5 +1,6 @@
 package com.peerfect.db.member;
 
+import com.peerfect.DTO.MemberChallengeDTO;
 import com.peerfect.vo.member.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
@@ -71,33 +72,32 @@ public class MemberDBManger {
 
         return exists;
     }
-    public static List<Map<String, String>> getMemberComplete(String memberId) {
-        List<Map<String, String>> result = null;
-        SqlSession session = sqlSessionFactory.openSession();
-        try {
-            result = session.selectList("complete.getMemberComplete", memberId);
 
-            log.info("result" + result);
-        } catch (Exception e) {
-            System.err.println("Error fetching UI mission list: " + e.getMessage());
-        } finally {
-            session.close();
-        }
+    public static List<MemberChallengeDTO> getMemberMain(String memberId) {
+
+        List<MemberChallengeDTO> result = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        result = session.selectList("member.getMemberMain", memberId);
+
+        session.close();
         return result;
     }
 
-    public static List<Map<String, String>> getMemberMission(String memberId) {
-        List<Map<String, String>> result = null;
+    public static List<MemberChallengeDTO> getMemberNext(String memberId) {
+        List<MemberChallengeDTO> result = null;
         SqlSession session = sqlSessionFactory.openSession();
-        try {
-            result = session.selectList("member.getMemberMission", memberId);
+        result = session.selectList("member.getMemberNext", memberId);
 
-            log.info("result" + result);
-        } catch (Exception e) {
-            System.err.println("Error fetching UI mission list: " + e.getMessage());
-        } finally {
-            session.close();
-        }
+        session.close();
         return result;
     }
+    public static List<MemberChallengeDTO> getMemberComplete(String memberId) {
+        List<MemberChallengeDTO> result = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        result = session.selectList("member.getMemberComplete", memberId);
+
+        session.close();
+        return result;
+    }
+
 }

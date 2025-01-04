@@ -27,6 +27,67 @@
         WHERE member_email = #{email}
     </select>
 
+    <select id="getMemberMain" resultType="MemberChallengeDTO">
+        SELECT
+        c.challenge_no AS challengeNo,
+        c.challenge_intro AS challengeShortIntro,
+        c.challenge_title AS challengeTitle
+        FROM
+        MEMBER m
+        INNER JOIN
+        CHALLENGE c
+        ON
+        m.challenge_no = c.challenge_no
+        WHERE
+        m.member_id = #{memberId}::UUID
+    </select>
+
+    <select id="getMemberNext" resultType="MemberChallengeDTO">
+        SELECT
+        c2.challenge_no AS challengeNo,
+        c2.challenge_intro AS challengeShortIntro,
+        c2.challenge_title AS challengeTitle
+        FROM
+        MEMBER m
+        INNER JOIN
+        CHALLENGE c1
+        ON
+        m.challenge_no = c1.challenge_no
+        INNER JOIN
+        CHALLENGE c2
+        ON
+        c1.challenge_group = c2.challenge_group
+        WHERE
+        m.member_id = #{memberId}::UUID
+        AND c2.challenge_no > c1.challenge_no
+        ORDER BY
+        c2.challenge_no ASC
+    </select>
+
+
+    <select id="getMemberComplete" resultType="MemberChallengeDTO">
+        SELECT
+        c2.challenge_no AS challengeNo,
+        c2.challenge_intro AS challengeShortIntro,
+        c2.challenge_title AS challengeTitle
+        FROM
+        MEMBER m
+        INNER JOIN
+        CHALLENGE c1
+        ON
+        m.challenge_no = c1.challenge_no
+        INNER JOIN
+        CHALLENGE c2
+        ON
+        c1.challenge_group = c2.challenge_group
+        WHERE
+        m.member_id = #{memberId}::UUID
+        AND c1.challenge_no > c2.challenge_no
+        ORDER BY
+        c2.challenge_no ASC
+    </select>
+
+
     <select id="getMemberMission" parameterType="String" resultType="map">
         SELECT
         m.mission_title,

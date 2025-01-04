@@ -5,4 +5,62 @@
 
 <mapper namespace="challenge">
 
+    <select id="getUIPreview" parameterType="String" resultType="PreviewDTO">
+        SELECT
+            c.challenge_no AS challengeNo,
+            c.challenge_intro AS challengeShortIntro,
+            c.challenge_title AS challengeTitle,
+            COUNT(m.challenge_no) AS memberCount
+        FROM
+            CHALLENGE c
+        LEFT JOIN
+            MEMBER m
+        ON
+            c.challenge_no = m.challenge_no
+        WHERE
+            c.challenge_group = #{preview}
+        GROUP BY
+            c.challenge_no, c.challenge_title, c.challenge_intro
+        ORDER BY
+            c.challenge_no ASC
+    </select>
+
+    <select id="getUXPreview" parameterType="String" resultType="PreviewDTO">
+        SELECT
+            c.challenge_no AS challengeNo,
+            c.challenge_intro AS challengeShortIntro,
+            c.challenge_title AS challengeTitle,
+            COUNT(m.challenge_no) AS memberCount
+        FROM
+            CHALLENGE c
+        LEFT JOIN
+            MEMBER m
+        ON
+            c.challenge_no = m.challenge_no
+        WHERE
+            c.challenge_group = #{preview}
+        GROUP BY
+            c.challenge_no, c.challenge_title, c.challenge_intro
+        ORDER BY
+            c.challenge_no ASC
+    </select>
+
+    <select id="getChallengeDetail" parameterType="Integer" resultType="ChallengeDetailDTO">
+        SELECT
+            c.challenge_group,
+            c.challenge_type,
+            c.challenge_intro,
+            c.challenge_mission,
+            c.challenge_level,
+            r.rule_detail
+        FROM
+            CHALLENGE c
+        LEFT JOIN
+            RULE r
+        ON
+            c.challenge_no = r.challenge_no
+        WHERE
+        c.challenge_no = #{challengeNo};
+    </select>
+
 </mapper>

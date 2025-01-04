@@ -1,6 +1,7 @@
 package com.peerfect.service.member;
 
 
+import com.peerfect.DTO.MemberChallengeDTO;
 import com.peerfect.repository.member.MemberRepository;
 import com.peerfect.vo.member.MemberVO;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +33,17 @@ public class MemberService {
         return MemberRepository.authenticate(email);
     }
 
-    public List<Map<String, String>> getMemberComplete(String userId) {
-        return MemberRepository.getMemberComplete(userId);
+    public List<MemberChallengeDTO> getMemberMain(String memberId) {
+        return MemberRepository.getMemberMain(memberId);
     }
 
-    public List<Map<String, String>> getMemberMission(String memberId) {
-        return MemberRepository.getMemberMission(memberId);
+    public List<MemberChallengeDTO> getMemberNext(String memberId) {
+        return MemberRepository.getMemberNext(memberId);
 
     }
+    public List<MemberChallengeDTO> getMemberComplete(String memberId) {
+        return MemberRepository.getMemberComplete(memberId);
+    }
+
 }
 

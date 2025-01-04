@@ -1,5 +1,8 @@
 package com.peerfect.controller.member;
 
+import com.peerfect.DTO.ChallengeDetailDTO;
+import com.peerfect.DTO.MemberChallengeDTO;
+import com.peerfect.DTO.PreviewDTO;
 import com.peerfect.service.utils.MailService;
 import com.peerfect.service.member.MemberService;
 import com.peerfect.service.utils.TokenService;
@@ -98,6 +101,27 @@ public class MemberController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
         }
+    }
+
+    @GetMapping("/{memberId}/main")
+    public ResponseEntity<List<MemberChallengeDTO>> getMemberMain(@PathVariable String memberId) {
+
+        List<MemberChallengeDTO> list = memberService.getMemberMain(memberId);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/{memberId}/next")
+    public ResponseEntity<List<MemberChallengeDTO>> getMemberNext(@PathVariable String memberId) {
+
+        List<MemberChallengeDTO> list = memberService.getMemberNext(memberId);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/{memberId}/complete")
+    public ResponseEntity<List<MemberChallengeDTO>> getChallengeComplete(@PathVariable String memberId) {
+
+        List<MemberChallengeDTO> list = memberService.getMemberComplete(memberId);
+        return ResponseEntity.ok(list);
     }
 
     /*
