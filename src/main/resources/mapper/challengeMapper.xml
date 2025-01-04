@@ -47,12 +47,12 @@
 
     <select id="getChallengeDetail" parameterType="Integer" resultType="ChallengeDetailDTO">
         SELECT
-            c.challenge_group,
-            c.challenge_type,
-            c.challenge_intro,
-            c.challenge_mission,
-            c.challenge_level,
-            r.rule_detail
+            c.challenge_group AS challengeGroup,
+            c.challenge_type AS challengeType,
+            c.challenge_intro AS challengeIntro,
+            c.challenge_mission AS challengeMission,
+            c.challenge_level AS challengeLevel,
+            r.rule_detail AS ruleDetail
         FROM
             CHALLENGE c
         LEFT JOIN
