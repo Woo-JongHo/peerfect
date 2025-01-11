@@ -51,9 +51,8 @@ public class MemberController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            String memberName = "name";
+            String memberName = userData.get("nickname");
             String memberEmail = userData.get("email");
-            String memberNickName = userData.get("nickname");
             String memberPassword = "password";
 
             log.info("Received data - Name: {}, Email: {}", memberName, memberEmail);
