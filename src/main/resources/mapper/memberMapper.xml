@@ -15,6 +15,13 @@
         WHERE member_email = #{memberEmail}
     </select>
 
+    <select id="isMailExists" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM member
+        WHERE member_name = #{name}
+    </select>
+
+
     <select id="getMemberId" resultType="String">
         SELECT member_id
         FROM member
@@ -107,5 +114,6 @@
         mem.member_id = #{memberId}::UUID
         )
     </select>
+
 
 </mapper>

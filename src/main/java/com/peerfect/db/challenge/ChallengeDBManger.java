@@ -5,6 +5,7 @@ import com.peerfect.DTO.PreviewDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,5 +42,19 @@ public class ChallengeDBManger {
         session.close();
 
         return result;
+    }
+
+    public static String startMemberChallenge(String memberId, String challengeNo) {
+
+        SqlSession session = sqlSessionFactory.openSession();
+        Map<String, Object> params = new HashMap<>();
+        params.put("memberId", memberId);
+        params.put("challengeNo", Integer.parseInt(challengeNo));
+
+        session.update("challenge.startMemberChallenge", params);
+        session.commit();
+        session.close();
+
+        return "DB update success";
     }
 }

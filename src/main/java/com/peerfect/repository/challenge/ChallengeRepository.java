@@ -26,4 +26,8 @@ public class ChallengeRepository {
     public static ChallengeDetailDTO getChallengeDetail(String challengeTitle) {
         return ChallengeDBManger.getChallengeDetail(challengeTitle);
     }
+
+    public static String startMemberChallenge(String memberId, String challengeNo) {
+        return ChallengeDBManger.startMemberChallenge(memberId, challengeNo);
+    }
 }

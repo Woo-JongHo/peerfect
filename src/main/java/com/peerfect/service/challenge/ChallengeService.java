@@ -17,6 +17,12 @@ public class ChallengeService{
 
 
 
+    public static String startMemberChallenge(String memberId, String challengeNo) {
+
+        ChallengeRepository.startMemberChallenge(memberId,challengeNo);
+        return "success";
+    }
+
     public List<PreviewDTO> getUIPreview(String preview) {
         return ChallengeRepository.getUIPreview(preview);
     }

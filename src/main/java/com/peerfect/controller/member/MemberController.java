@@ -35,6 +35,17 @@ public class MemberController {
 
     //todo 토큰들 만료에 관한건 구현 아직 안함
 
+    @GetMapping("/checkNickName")
+    public ResponseEntity<?> checkNickName(@RequestBody String name){
+
+        if(memberService.isNickNameExist(name))
+            return ResponseEntity.ok(name + "중복된 닉네임입니다");
+        else
+            return ResponseEntity.ok(name + "중복되지 않은 닉네임입니다");
+
+    }
+
+
     @PostMapping("/checkMember")
     public ResponseEntity<Map<String, Object>> insertUser(@RequestBody Map<String, String> userData) {
         Map<String, Object> response = new HashMap<>();
@@ -42,13 +53,14 @@ public class MemberController {
         try {
             String memberName = "name";
             String memberEmail = userData.get("email");
+            String memberNickName = userData.get("nickname");
             String memberPassword = "password";
 
             log.info("Received data - Name: {}, Email: {}", memberName, memberEmail);
 
             if (memberService.isEmailExists(memberEmail)) {
                 response.put("status", "success");
-                response.put("message", "회원가입이 되어있습니다.");
+                response.put("message", "이미 회원가입이 되어있습니다.");
 
                 response.put("next api", "api/member/login");
 
@@ -56,12 +68,14 @@ public class MemberController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
             }
 
-            MemberVO memberVO = new MemberVO(memberName,  memberPassword,memberEmail);
+            MemberVO memberVO = new MemberVO(memberName, memberPassword,memberEmail);
             memberService.insertUser(memberVO);
 
             response.put("status", "success");
             response.put("message", "회원가입이 완료 되었습니다.");
             response.put("email", memberEmail);
+            response.put("nickname", memberName);
+
 
             return ResponseEntity.ok(response);
 
@@ -123,6 +137,28 @@ public class MemberController {
         List<MemberChallengeDTO> list = memberService.getMemberComplete(memberId);
         return ResponseEntity.ok(list);
     }
+
+
+    @PutMapping("/{memberId}/challenges/{challengeNo}/start")
+    public ResponseEntity<?> startChallenge(@PathVariable String memberId, String challengeNo){
+
+
+
+
+
+        return ResponseEntity.ok("memberId + challengeNo로 어디에 했다를 알려줘야할듯");
+
+
+
+
+    }
+    //Start challenge
+
+    @PutMapping("/{memberId}/challenges/{challengeNo}/stop")
+    public ResponseEntity<?> stopChallenge(){
+        return ResponseEntity.ok("");
+    }
+    //Stop challenge
 
     /*
     @PostMapping("/refresh")

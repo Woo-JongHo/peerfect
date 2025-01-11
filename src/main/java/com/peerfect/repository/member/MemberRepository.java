@@ -48,4 +48,7 @@ public class MemberRepository {
     }
 
 
+    public static boolean isNickNameExist(String name) {
+        return MemberDBManger.isNickNameExist(name);
+    }
 }
