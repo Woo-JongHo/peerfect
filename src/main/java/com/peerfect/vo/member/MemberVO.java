@@ -19,6 +19,7 @@ public class MemberVO {
     private Date memberUIend;
     private Date memberUXstart;
     private Date memberUXend;
+    private boolean memberAgree;
 
     public MemberVO(String memberName, String memberPassword, String memberEmail) {
         this.memberName = memberName;

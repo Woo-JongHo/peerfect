@@ -19,6 +19,7 @@ public class MailService {
     private final MailRepostiory mailRepository;
     private final JavaMailSender javaMailSender;
     private static final String senderEmail = "jonghowoo33@gmail.com";
+
     // 랜덤으로 숫자 생성
     public String createNumber() {
         Random random = new Random();
@@ -58,6 +59,8 @@ public class MailService {
         body += "<p>아래 링크를 클릭하여 이메일 인증을 완료해주세요:</p>";
         body += "<a href='" + link + "'>" + link + "</a>";
         body += "<p>만약 링크가 클릭되지 않으면, 위 링크를 복사하여 브라우저에 붙여넣어주세요.</p>";
+        body += "<p>또는 아래 인증번호를 복사하여 입력해주세요:</p>";
+        body += "<strong>인증번호: " + number + "</strong>";
         body += "<h3>감사합니다.</h3>";
 
         // 이메일 내용 설정
@@ -86,9 +89,7 @@ public class MailService {
     }
 
     public int getEmailVerify(String email, String authCode) {
-        int re =mailRepository.getEmailVerify(email, authCode);
+        int re = mailRepository.getEmailVerify(email, authCode);
         return re;
     }
-
-
 }
