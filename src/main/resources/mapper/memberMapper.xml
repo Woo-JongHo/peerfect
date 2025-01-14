@@ -16,7 +16,7 @@
     </select>
 
     <!--
-    <select id="isMailExists" resultType="boolean">
+    <select id="isMailExists" resultTyㅎㄷㅅpe="boolean">
         SELECT COUNT(*) > 0
         FROM member
         WHERE member_name = #{name}
@@ -29,11 +29,6 @@
         WHERE member_email = #{email}
     </select>
 
-    <select id="getMemberId" resultType="String">
-        SELECT member_name
-        FROM member
-        WHERE member_email = #{email}
-    </select>
 
     <select id="authenticate" parameterType="map" resultType="boolean">
         SELECT COUNT(*) > 0
