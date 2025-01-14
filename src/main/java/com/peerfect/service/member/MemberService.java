@@ -25,9 +25,6 @@ public class MemberService {
         return MemberRepository.isMailExists(email);
     }
 
-    public String getMemberId(String email) {
-        return MemberRepository.getMemberId(email);
-    }
 
     public boolean authenticate(String email) {
         return MemberRepository.authenticate(email);
@@ -47,6 +44,13 @@ public class MemberService {
 
     public boolean isNickNameExist(String name) {
         return MemberRepository.isNickNameExist(name);
+    }
+
+    public String getMemberId(String email) {
+        return MemberRepository.getMemberId(email);
+    }
+    public String getMemberNickName(String email) {
+        return MemberRepository.getMemberNickName(email);
     }
 }
 

@@ -32,7 +32,8 @@ public class MemberController {
     private final TokenService tokenService;
 
     private static String memberId;
-
+    private static String memberNickName;
+    private static String memberAccessToken;
     //todo 토큰들 만료에 관한건 구현 아직 안함
 
     @GetMapping("/checkNickName")
@@ -42,50 +43,76 @@ public class MemberController {
             return ResponseEntity.ok(name + "중복된 닉네임입니다");
         else
             return ResponseEntity.ok(name + "중복되지 않은 닉네임입니다");
-
     }
 
+    //이메일 인증을 하고나서 멤버가 회원인지 아닌지를 구분
 
     @PostMapping("/checkMember")
-    public ResponseEntity<Map<String, Object>> insertUser(@RequestBody Map<String, String> userData) {
+    public ResponseEntity<Map<String, Object>> checkMember(@RequestBody Map<String, String> userData) {
         Map<String, Object> response = new HashMap<>();
 
-        try {
-            String memberName = userData.get("nickname");
+            //String memberName = userData.get("nickname");
             String memberEmail = userData.get("email");
-            String memberPassword = "password";
-
-            log.info("Received data - Name: {}, Email: {}", memberName, memberEmail);
+            //String memberPassword = "password";
+            //멤버가 있으니깐 userId, accessToken, nickName 전달하기
+            memberId = memberService.getMemberId(memberEmail);
+            memberNickName = memberService.getMemberNickName(memberEmail);
+            memberAccessToken = tokenService.getAccessToken(memberId);
 
             if (memberService.isEmailExists(memberEmail)) {
+
                 response.put("status", "success");
-                response.put("message", "이미 회원가입이 되어있습니다.");
+                response.put("message", "회원입니다.");
+                response.put("memberId", memberId);
+                response.put("nickName", memberNickName);
+                response.put("accessToken",memberAccessToken);
 
-                response.put("next api", "api/member/login");
-
-
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            } else {
+                response.put("message", "회원이 아닙니다");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
             }
 
-            MemberVO memberVO = new MemberVO(memberName, memberPassword,memberEmail);
-            memberService.insertUser(memberVO);
 
-            response.put("status", "success");
-            response.put("message", "회원가입이 완료 되었습니다.");
-            response.put("email", memberEmail);
-            response.put("nickname", memberName);
+    }
+    @PostMapping("/insertMember")
+    public ResponseEntity<Map<String, Object>> insertMember(@RequestBody Map<String, String> userData) {
+        Map<String, Object> response = new HashMap<>();
 
+        String memberName = userData.get("nickname");
+        String memberEmail = userData.get("email");
+        boolean memberAgree = Boolean.parseBoolean(userData.get("agree"));
 
-            return ResponseEntity.ok(response);
+        MemberVO memberVO = new MemberVO(memberName,memberEmail, memberAgree);
 
-        } catch (Exception e) {
-            log.error("Error inserting user: {}", e.getMessage());
-            response.put("status", "error");
-            response.put("message", "사용자 생성 중 오류가 발생했습니다.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
+        memberService.insertUser(memberVO);
+        memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
+
+        response.put("status", "success");
+        response.put("message", "회원가입 완료.");
+        response.put("nickname", memberName);
+        response.put("memberId", memberId);
+        response.put("accessToken",memberAccessToken);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
+
+    //todo 리프레시 확인
+
+    /*
+    @PostMapping("/regenerate-accesstoken")
+    public ResponseEntity<?> generateAccessToken(){
+
+    }
+
+
+    // 토큰
+    @PostMapping("/regenerate-refreshtoken")
+    public ResponseEntity<?> generateAccessToken(){
+
+    }
+    */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> loginData) {
         String email = loginData.get("email");

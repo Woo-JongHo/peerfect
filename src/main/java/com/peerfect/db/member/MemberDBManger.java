@@ -114,4 +114,19 @@ public class MemberDBManger {
 
         return exists;
     }
+
+    public static String getMemberNickName(String email) {
+        String nickname = "";
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            nickname = session.selectOne("member.getMemberNickName", email);
+        } catch (Exception e) {
+            log.error("Error fetching member ID: {}", e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return nickname;
+
+    }
 }

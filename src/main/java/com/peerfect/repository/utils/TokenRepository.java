@@ -13,4 +13,8 @@ public class TokenRepository {
     public static void saveToken(TokenVO tokenVO) {
         TokenDBManger.saveToken(tokenVO);
     }
+
+    public static String getAccessToken(String memberId) {
+        return TokenDBManger.getAccessToken(memberId);
+    }
 }

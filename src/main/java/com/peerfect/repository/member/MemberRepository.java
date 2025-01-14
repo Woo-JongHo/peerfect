@@ -51,4 +51,8 @@ public class MemberRepository {
     public static boolean isNickNameExist(String name) {
         return MemberDBManger.isNickNameExist(name);
     }
+
+    public static String getMemberNickName(String email) {
+        return MemberDBManger.getMemberNickName(email);
+    }
 }

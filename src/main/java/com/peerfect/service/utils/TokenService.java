@@ -13,4 +13,8 @@ public class TokenService {
     public void saveToken(TokenVO tokenVO) {
         TokenRepository.saveToken(tokenVO);
     }
+
+    public String getAccessToken(String memberId) {
+        return TokenRepository.getAccessToken(memberId);
+    }
 }

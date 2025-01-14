@@ -5,8 +5,8 @@
 
 <mapper namespace="member">
     <insert id ="insert" parameterType="memberVO">
-        INSERT INTO member (member_name, member_email, member_password)
-        VALUES (#{memberName}, #{memberEmail}, #{memberPassword})
+        INSERT INTO member (member_name, member_email, member_agree)
+        VALUES (#{memberName}, #{memberEmail}, #{memberAgree})
     </insert>
 
     <select id="isMailExists" resultType="boolean">
@@ -15,15 +15,22 @@
         WHERE member_email = #{memberEmail}
     </select>
 
+    <!--
     <select id="isMailExists" resultType="boolean">
         SELECT COUNT(*) > 0
         FROM member
         WHERE member_name = #{name}
     </select>
-
+    -->
 
     <select id="getMemberId" resultType="String">
         SELECT member_id
+        FROM member
+        WHERE member_email = #{email}
+    </select>
+
+    <select id="getMemberId" resultType="String">
+        SELECT member_name
         FROM member
         WHERE member_email = #{email}
     </select>

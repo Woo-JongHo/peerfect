@@ -21,9 +21,9 @@ public class MemberVO {
     private Date memberUXend;
     private boolean memberAgree;
 
-    public MemberVO(String memberName, String memberPassword, String memberEmail) {
+    public MemberVO(String memberName, String memberEmail, boolean memberAgree) {
         this.memberName = memberName;
-        this.memberPassword = memberPassword;
+        this.memberAgree = memberAgree;
         this.memberEmail = memberEmail;
     }
 }
