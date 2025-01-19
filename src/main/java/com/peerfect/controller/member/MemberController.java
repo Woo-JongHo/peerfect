@@ -34,6 +34,7 @@ public class MemberController {
     private static String memberId;
     private static String memberNickName;
     private static String memberAccessToken;
+    private static String memberRefreshToken;
     //todo 토큰들 만료에 관한건 구현 아직 안함
 
     @PostMapping("/checkNickName")
@@ -93,7 +94,13 @@ public class MemberController {
         memberService.insertUser(memberVO);
 
         memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
+        memberRefreshToken = jwtTokenProvider.generateRefreshToken(memberId);
+        TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), memberAccessToken, memberRefreshToken);
+        tokenService.saveToken(tokenVO);
+
+
         memberId = memberService.getMemberId(memberEmail);
+
         //todo 회원 중복체크
         response.put("status", "success");
         response.put("message", "회원가입 완료.");
@@ -139,7 +146,7 @@ public class MemberController {
             //todo mebmerID에 맞는 refresh 토큰을 확인하고, 없으면 provider로 다시 제공
             String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
-            TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), accessToken, refreshToken, LocalDateTime.now().plusDays(7));
+            TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), accessToken, refreshToken);
             tokenService.saveToken(tokenVO);
 
             Map<String, String> response = new HashMap<>();
