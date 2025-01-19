@@ -39,6 +39,7 @@ public class MemberController {
     @PostMapping("/checkNickName")
     public ResponseEntity<?> checkNickName(@RequestBody String nickname){
 
+        log.info(nickname);
         if(memberService.isNickNameExist(nickname))
             return ResponseEntity.ok("중복된 닉네임입니다");
         else
