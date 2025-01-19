@@ -12,6 +12,7 @@ public class ChallengeVO {
     private String challengeGoal;
     private String challengeType;
     private String challengeTitle;
+    private String challengeShortIntro;
     private String challengeIntro;
     private String challengeMission;
     private String challengeLevel;
