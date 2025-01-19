@@ -113,11 +113,11 @@ public class MemberDBManger {
         return result;
     }
 
-    public static boolean isNickNameExist(String name) {
+    public static boolean isNickNameExist(String nickname) {
         boolean exists = false;
         SqlSession session = sqlSessionFactory.openSession();
-        log.info(name);
-        exists = session.selectOne("member.isNickNameExist", name);
+        log.info(nickname + " 뭐야 안나와?");
+        exists = session.selectOne("member.isNickNameExist", nickname);
 
         log.info("Nickname existence check result: {}", exists);
 

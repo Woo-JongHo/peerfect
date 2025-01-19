@@ -42,8 +42,8 @@ public class MemberService {
         return MemberRepository.getMemberComplete(memberId);
     }
 
-    public boolean isNickNameExist(String name) {
-        return MemberRepository.isNickNameExist(name);
+    public boolean isNickNameExist(String nickname) {
+        return MemberRepository.isNickNameExist(nickname);
     }
 
     public String getMemberId(String email) {

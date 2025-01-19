@@ -37,8 +37,9 @@ public class MemberController {
     //todo 토큰들 만료에 관한건 구현 아직 안함
 
     @PostMapping("/checkNickName")
-    public ResponseEntity<?> checkNickName(@RequestBody String nickname){
+    public ResponseEntity<?> checkNickName(@RequestBody Map<String, String> userData){
 
+        String nickname = userData.get("nickname");
         if(memberService.isNickNameExist(nickname))
             return ResponseEntity.ok("중복된 닉네임입니다");
         else
