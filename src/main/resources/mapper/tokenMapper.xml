@@ -5,8 +5,8 @@
 
 <mapper namespace="token">
     <insert id="saveToken">
-        INSERT INTO token (member_id, access_token, refresh_token, expire_token)
-        VALUES (#{memberId}, #{accessToken}, #{refreshToken}, #{expireToken})
+        INSERT INTO token (member_id, access_token, refresh_token)
+        VALUES (#{memberId}, #{accessToken}, #{refreshToken})
     </insert>
 
     <select id="getAccessToken" resultType="String">

@@ -64,9 +64,13 @@ public class MailController {
                 //mailService.deleteEmailVerify(email); // 인증 성공 시 데이터 삭제
                 response.put("message", "인증에 성공했습니다.");
 
+
+
                 //인환님 소통
                 response.put("next api", "/api/member/checkMember");
                 response.put("comment", "email 넘겨주셔야 됩니다!");
+
+
 
             } else {
                 response.put("status", "error");
