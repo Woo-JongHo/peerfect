@@ -92,14 +92,13 @@ public class MemberController {
         MemberVO memberVO = new MemberVO(memberName,memberEmail, memberRequired, memberOptional);
 
         memberService.insertUser(memberVO);
+        memberId = memberService.getMemberId(memberEmail);
 
         memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
         memberRefreshToken = jwtTokenProvider.generateRefreshToken(memberId);
+
         TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), memberAccessToken, memberRefreshToken);
         tokenService.saveToken(tokenVO);
-
-
-        memberId = memberService.getMemberId(memberEmail);
 
         //todo 회원 중복체크
         response.put("status", "success");
