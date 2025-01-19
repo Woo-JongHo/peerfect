@@ -11,7 +11,9 @@ import com.peerfect.vo.member.MemberVO;
 import com.peerfect.vo.utils.TokenVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,29 +90,40 @@ public class MemberController {
         boolean memberRequired = Boolean.parseBoolean(userData.get("requiredterm"));
         boolean memberOptional = Boolean.parseBoolean(userData.get("optionalterm"));
 
+        MemberVO memberVO = new MemberVO(memberName, memberEmail, memberRequired, memberOptional);
 
-        MemberVO memberVO = new MemberVO(memberName,memberEmail, memberRequired, memberOptional);
-
+        // 사용자 저장 및 ID 가져오기
         memberService.insertUser(memberVO);
-        memberId = memberService.getMemberId(memberEmail);
+        String memberId = memberService.getMemberId(memberEmail);
 
-        memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
-        memberRefreshToken = jwtTokenProvider.generateRefreshToken(memberId);
+        // Access Token 및 Refresh Token 생성
+        String memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
+        String memberRefreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
+        // Refresh Token 저장
         TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), memberAccessToken, memberRefreshToken);
         tokenService.saveToken(tokenVO);
 
-        //todo 회원 중복체크
+        // 응답 데이터 설정
         response.put("status", "success");
         response.put("message", "회원가입 완료.");
         response.put("nickname", memberName);
         response.put("memberId", memberId);
 
-        // Access Token을 응답 헤더에 추가
+        // HttpOnly 쿠키로 Refresh Token 설정
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", memberRefreshToken)
+                .httpOnly(true)              // HttpOnly 속성
+                .secure(true)                // HTTPS 환경에서만 사용 (로컬 환경에서는 false로 설정 가능)
+                .path("/")                   // 쿠키의 유효 경로
+                .maxAge(7 * 24 * 60 * 60)    // 쿠키 만료 시간 (7일)
+                .sameSite("Strict")          // CSRF 보호를 위한 SameSite 설정
+                .build();
+
+        // Access Token을 헤더에 추가 및 쿠키 추가
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + memberAccessToken)
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .body(response);
-
     }
 
     //todo 리프레시 확인
