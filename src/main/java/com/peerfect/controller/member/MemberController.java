@@ -99,9 +99,12 @@ public class MemberController {
         response.put("message", "회원가입 완료.");
         response.put("nickname", memberName);
         response.put("memberId", memberId);
-        response.put("accessToken",memberAccessToken);
 
-        return ResponseEntity.ok(response);
+        // Access Token을 응답 헤더에 추가
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + memberAccessToken)
+                .body(response);
+
     }
 
     //todo 리프레시 확인
