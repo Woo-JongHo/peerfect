@@ -53,15 +53,16 @@ public class MemberController {
 
             //String memberName = userData.get("nickname");
             String memberEmail = userData.get("email");
+            String authCode = userData.get("authCode");
+
             //String memberPassword = "password";
             //멤버가 있으니깐 userId, accessToken, nickName 전달하기
-            memberId = memberService.getMemberId(memberEmail);
-            memberNickName = memberService.getMemberNickName(memberEmail);
-            memberAccessToken = tokenService.getAccessToken(memberId);
-
-
 
             if (memberService.isEmailExists(memberEmail)) {
+                memberId = memberService.getMemberId(memberEmail);
+                memberNickName = memberService.getMemberNickName(memberEmail);
+                memberAccessToken = tokenService.getAccessToken(memberId);
+
                 response.put("status", "success");
                 response.put("message", "회원입니다.");
                 response.put("memberId", memberId);
