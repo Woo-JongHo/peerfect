@@ -69,10 +69,10 @@ public class MemberController {
                 response.put("nickName", memberNickName);
                 response.put("accessToken",memberAccessToken);
 
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+                return ResponseEntity.ok(response);
             } else {
                 response.put("message", "회원이 아닙니다");
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+                return ResponseEntity.ok(response);
             }
 
 
