@@ -41,19 +41,32 @@ public class MemberDBManger {
     }
 
     public static String getMemberId(String email) {
-        String memberId = "";
+        String memberId = null;
         SqlSession session = sqlSessionFactory.openSession();
         try {
             memberId = session.selectOne("member.getMemberId", email);
+            if (memberId == null || !isValidUUID(memberId)) {
+                log.warn("Invalid or missing member ID for email: {}", email);
+                throw new IllegalArgumentException("Invalid or missing member ID");
+            }
         } catch (Exception e) {
             log.error("Error fetching member ID: {}", e.getMessage());
+            throw e; // 예외를 상위로 전달
         } finally {
             session.close();
         }
 
-        return UUID.fromString(memberId).toString(); // UUID 형식 변환
+        return UUID.fromString(memberId).toString();
     }
 
+    private static boolean isValidUUID(String str) {
+        try {
+            UUID.fromString(str);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 
     public static boolean authenticate(String email) {
         boolean exists = false;

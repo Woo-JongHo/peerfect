@@ -59,8 +59,9 @@ public class MemberController {
             memberNickName = memberService.getMemberNickName(memberEmail);
             memberAccessToken = tokenService.getAccessToken(memberId);
 
-            if (memberService.isEmailExists(memberEmail)) {
 
+
+            if (memberService.isEmailExists(memberEmail)) {
                 response.put("status", "success");
                 response.put("message", "회원입니다.");
                 response.put("memberId", memberId);
