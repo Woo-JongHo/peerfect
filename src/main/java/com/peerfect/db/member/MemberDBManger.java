@@ -116,14 +116,10 @@ public class MemberDBManger {
     public static boolean isNickNameExist(String name) {
         boolean exists = false;
         SqlSession session = sqlSessionFactory.openSession();
+        log.info(name);
+        exists = session.selectOne("member.isNickNameExist", name);
 
-        try {
-            exists = session.selectOne("member.isNickNameExist", name);
-        } catch (Exception e) {
-            log.error("Error checking email existence: {}", e.getMessage());
-        } finally {
-            session.close();
-        }
+        log.info("Nickname existence check result: {}", exists);
 
         return exists;
     }
