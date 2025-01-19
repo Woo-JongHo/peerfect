@@ -91,8 +91,10 @@ public class MemberController {
         MemberVO memberVO = new MemberVO(memberName,memberEmail, memberRequired, memberOptional);
 
         memberService.insertUser(memberVO);
-        memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
 
+        memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
+        memberId = memberService.getMemberId(memberEmail);
+        //todo 회원 중복체크
         response.put("status", "success");
         response.put("message", "회원가입 완료.");
         response.put("nickname", memberName);
@@ -174,11 +176,7 @@ public class MemberController {
 
 
 
-
-
         return ResponseEntity.ok("memberId + challengeNo로 어디에 했다를 알려줘야할듯");
-
-
 
 
     }
