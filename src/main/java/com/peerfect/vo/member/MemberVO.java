@@ -19,11 +19,13 @@ public class MemberVO {
     private Date memberUIend;
     private Date memberUXstart;
     private Date memberUXend;
-    private boolean memberAgree;
+    private boolean memberRequireTerm;
+    private boolean memberOptionalTerm;
 
-    public MemberVO(String memberName, String memberEmail, boolean memberAgree) {
+    public MemberVO(String memberName, String memberEmail, boolean memberRequireTerm, boolean memberOptionalTerm) {
         this.memberName = memberName;
-        this.memberAgree = memberAgree;
         this.memberEmail = memberEmail;
+        this.memberRequireTerm = memberRequireTerm;
+        this.memberOptionalTerm = memberOptionalTerm;
     }
 }

@@ -84,9 +84,11 @@ public class MemberController {
 
         String memberName = userData.get("nickname");
         String memberEmail = userData.get("email");
-        boolean memberAgree = Boolean.parseBoolean(userData.get("agree"));
+        boolean memberRequired = Boolean.parseBoolean(userData.get("requiredterm"));
+        boolean memberOptional = Boolean.parseBoolean(userData.get("optionalterm"));
 
-        MemberVO memberVO = new MemberVO(memberName,memberEmail, memberAgree);
+
+        MemberVO memberVO = new MemberVO(memberName,memberEmail, memberRequired, memberOptional);
 
         memberService.insertUser(memberVO);
         memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
@@ -99,7 +101,6 @@ public class MemberController {
 
         return ResponseEntity.ok(response);
     }
-
 
     //todo 리프레시 확인
 
