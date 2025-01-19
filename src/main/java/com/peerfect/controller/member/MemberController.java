@@ -37,12 +37,12 @@ public class MemberController {
     //todo 토큰들 만료에 관한건 구현 아직 안함
 
     @GetMapping("/checkNickName")
-    public ResponseEntity<?> checkNickName(@RequestBody String name){
+    public ResponseEntity<?> checkNickName(@RequestBody String nickname){
 
-        if(memberService.isNickNameExist(name))
-            return ResponseEntity.ok(name + "중복된 닉네임입니다");
+        if(memberService.isNickNameExist(nickname))
+            return ResponseEntity.ok("중복된 닉네임입니다");
         else
-            return ResponseEntity.ok(name + "중복되지 않은 닉네임입니다");
+            return ResponseEntity.ok("중복되지 않은 닉네임입니다");
     }
 
     //이메일 인증을 하고나서 멤버가 회원인지 아닌지를 구분
@@ -96,7 +96,7 @@ public class MemberController {
         response.put("memberId", memberId);
         response.put("accessToken",memberAccessToken);
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        return ResponseEntity.ok(response);
     }
 
 
