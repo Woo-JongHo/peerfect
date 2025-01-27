@@ -80,8 +80,8 @@ public class MailController {
             int re = mailService.getEmailVerify(email, authCode);
 
             if (re != 0) {
-                mailService.deleteEmailVerify(email); // 인증 성공 시 데이터 삭제
 
+                mailService.deleteEmailVerify(email); // 인증 성공 시 데이터 삭제
                 //회원일 때 아닐 때 로직
                 response.put("message", "인증에 성공했습니다.");
 
