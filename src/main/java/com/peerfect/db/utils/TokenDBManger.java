@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 public class TokenDBManger extends DBManger{
@@ -24,29 +25,27 @@ public class TokenDBManger extends DBManger{
         String token = "";
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            token = session.selectOne("token.getAccessToken", memberId);
+            token = session.selectOne("token.getAccessToken", UUID.fromString(memberId));
         } catch (Exception e) {
-            log.error("Error fetching member ID: {}", e.getMessage());
+            log.error("Error fetching access token: {}", e.getMessage());
         } finally {
             session.close();
         }
 
         return token;
-
     }
 
     public static String getRefreshToken(String memberId) {
         String token = "";
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            token = session.selectOne("token.getRefreshToken", memberId);
+            token = session.selectOne("token.getRefreshToken", UUID.fromString(memberId));
         } catch (Exception e) {
-            log.error("Error fetching member ID: {}", e.getMessage());
+            log.error("Error fetching refresh token: {}", e.getMessage());
         } finally {
             session.close();
         }
 
         return token;
-
     }
 }

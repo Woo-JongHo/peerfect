@@ -12,13 +12,13 @@
     <select id="getAccessToken" resultType="String">
         SELECT access_token
         FROM token
-        WHERE member_id = #{memberId}
+        WHERE member_id = #{memberId}::UUID;
     </select>
 
     <select id="getRefreshToken" resultType="String">
         SELECT refresh_token
         FROM token
-        WHERE member_id = #{memberId}
+        WHERE member_id = #{memberId}::UUID;
     </select>
 
 
