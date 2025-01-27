@@ -39,6 +39,15 @@ public class MemberController {
     private static String memberRefreshToken;
     //todo 토큰들 만료에 관한건 구현 아직 안함
 
+    /*
+    @GetMapping("/memberInfo")
+    public ResponseEntity<?> memberInfo(){
+        Map<String, Object> response = new HashMap<>();
+
+
+    }*/
+
+    // 멤버아이디, 토큰, 이미지,
     @PostMapping("/checkNickName")
     public ResponseEntity<?> checkNickName(@RequestBody Map<String, String> userData){
 
@@ -61,7 +70,6 @@ public class MemberController {
 
             //String memberPassword = "password";
             //멤버가 있으니깐 userId, accessToken, nickName 전달하기
-
             if (memberService.isEmailExists(memberEmail)) {
                 memberId = memberService.getMemberId(memberEmail);
                 memberNickName = memberService.getMemberNickName(memberEmail);
@@ -72,14 +80,23 @@ public class MemberController {
                 response.put("memberId", memberId);
                 response.put("nickName", memberNickName);
                 response.put("accessToken",memberAccessToken);
+                // HttpOnly 쿠키로 Refresh Token 설정
+                ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", memberRefreshToken)
+                        .httpOnly(true)              // HttpOnly 속성
+                        .secure(true)                // HTTPS 환경에서만 사용 (로컬 환경에서는 false로 설정 가능)
+                        .path("/")                   // 쿠키의 유효 경로
+                        .maxAge(7 * 24 * 60 * 60)    // 쿠키 만료 시간 (7일)
+                        .sameSite("Strict")          // CSRF 보호를 위한 SameSite 설정
+                        .build();
 
-                return ResponseEntity.ok(response);
+                return ResponseEntity.ok()
+                        .header("Authorization", "Bearer " + memberAccessToken)
+                        .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                        .body(response);
             } else {
                 response.put("message", "회원이 아닙니다");
                 return ResponseEntity.ok(response);
             }
-
-
     }
     @PostMapping("/insertMember")
     public ResponseEntity<Map<String, Object>> insertMember(@RequestBody Map<String, String> userData) {

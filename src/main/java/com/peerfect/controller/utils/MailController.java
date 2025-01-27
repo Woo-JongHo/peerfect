@@ -2,6 +2,7 @@ package com.peerfect.controller.utils;
 
 import com.peerfect.DTO.MailDTO;
 import com.peerfect.service.utils.MailService;
+import com.peerfect.service.utils.TokenService;
 import com.peerfect.vo.utils.VerifyVO;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class MailController {
 
     private final MailService mailService;
+    private final TokenService tokenService;
 
     //todo time이 5분이상 지나면 저절로 삭제되는 method
     //todo 같은 email이 들어왔을 때 체크하고 전 이메일을 삭제
@@ -62,14 +64,11 @@ public class MailController {
 
             if (re != 0) {
                 //mailService.deleteEmailVerify(email); // 인증 성공 시 데이터 삭제
+
+                //회원일 때 아닐 때 로직
                 response.put("message", "인증에 성공했습니다.");
 
-
-
-                //인환님 소통
-                response.put("next api", "/api/member/checkMember");
-                response.put("comment", "email 넘겨주셔야 됩니다!");
-
+                //회원인지 아닌지 판단
 
 
             } else {
