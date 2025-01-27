@@ -79,7 +79,6 @@ public class MemberController {
                 response.put("message", "회원입니다.");
                 response.put("memberId", memberId);
                 response.put("nickName", memberNickName);
-                response.put("accessToken",memberAccessToken);
                 // HttpOnly 쿠키로 Refresh Token 설정
                 ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", memberRefreshToken)
                         .httpOnly(true)              // HttpOnly 속성
