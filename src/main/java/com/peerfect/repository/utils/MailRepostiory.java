@@ -20,4 +20,8 @@ public class MailRepostiory {
 
         return re;
     }
+
+    public void deleteEmailVerify(String email) {
+        MailDBManger.deleteEmailVerify(email);
+    }
 }

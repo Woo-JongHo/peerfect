@@ -15,6 +15,11 @@
         WHERE member_email = #{memberEmail}
     </select>
 
+    <select id="getMemberNickName" resultType="String">
+        SELECT member_name
+        FROM member
+        WHERE member_email = #{email}
+    </select>
 
     <select id="isNickNameExist" resultType="boolean">
         SELECT COUNT(*) > 0

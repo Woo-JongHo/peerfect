@@ -14,4 +14,9 @@
         FROM verify
         WHERE verify_email = #{email} AND verify_password = #{authCode}
     </select>
+
+    <delete id="deleteVerify" parameterType="String">
+        DELETE FROM verify_email WHERE email = #{email}
+    </delete>
+
 </mapper>
