@@ -9,17 +9,17 @@
         VALUES (#{memberId}, #{accessToken}, #{refreshToken})
     </insert>
 
-    <select id="getAccessToken" resultType="String">
+    <select id="getAccessToken" resultType="String" >
         SELECT access_token
         FROM token
-        WHERE member_id = #{memberId}::UUID;
+        WHERE member_id = #{memberId}::UUID
     </select>
 
-    <select id="getRefreshToken" resultType="String">
+
+    <select id="getRefreshToken" resultType="String" >
         SELECT refresh_token
         FROM token
-        WHERE member_id = #{memberId}::UUID;
+        WHERE member_id = #{memberId}::UUID
     </select>
-
 
 </mapper>

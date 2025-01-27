@@ -28,4 +28,6 @@ public class MemberVO {
         this.memberRequiredTerm = memberRequiredTerm;
         this.memberOptionalTerm = memberOptionalTerm;
     }
+
+
 }

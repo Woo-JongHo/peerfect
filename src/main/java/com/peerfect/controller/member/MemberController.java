@@ -73,6 +73,7 @@ public class MemberController {
             if (memberService.isEmailExists(memberEmail)) {
                 memberId = memberService.getMemberId(memberEmail);
                 memberNickName = memberService.getMemberNickName(memberEmail);
+
                 memberAccessToken = tokenService.getAccessToken(memberId);
                 memberRefreshToken = tokenService.getRefreshToken(memberId);
 
@@ -80,8 +81,6 @@ public class MemberController {
                 response.put("message", "회원입니다.");
                 response.put("memberId", memberId);
                 response.put("nickName", memberNickName);
-
-
 
                 // HttpOnly 쿠키로 Refresh Token 설정
                 ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", memberRefreshToken)
@@ -120,7 +119,6 @@ public class MemberController {
         String memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
         String memberRefreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
-        // Refresh Token 저장
         TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), memberAccessToken, memberRefreshToken);
         tokenService.saveToken(tokenVO);
 

@@ -25,27 +25,29 @@ public class TokenDBManger extends DBManger{
         String token = "";
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            token = session.selectOne("token.getAccessToken", UUID.fromString(memberId));
+            token = session.selectOne("token.getAccessToken", memberId);
         } catch (Exception e) {
-            log.error("Error fetching access token: {}", e.getMessage());
+            log.error("Error fetching member ID: {}", e.getMessage());
         } finally {
             session.close();
         }
 
         return token;
+
     }
 
     public static String getRefreshToken(String memberId) {
         String token = "";
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            token = session.selectOne("token.getRefreshToken", UUID.fromString(memberId));
+            token = session.selectOne("token.getRefreshToken",memberId);
         } catch (Exception e) {
-            log.error("Error fetching refresh token: {}", e.getMessage());
+            log.error("Error fetching member ID: {}", e.getMessage());
         } finally {
             session.close();
         }
 
         return token;
+
     }
 }
