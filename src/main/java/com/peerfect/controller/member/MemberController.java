@@ -58,17 +58,25 @@ public class MemberController {
             return ResponseEntity.ok("중복되지 않은 닉네임입니다");
     }
 
+    //01 access token refresh 토큰을 timer를 이용해서 시간이 되면, 삭제하는 로직을 추가
+    //02 accesstoken을 이용한 userInfo 를 가지고 오는 api 개발
+
+    @PostMapping("/UserInfo")
+    public ResponseEntity<?> userInfo(@RequestBody Map<String, String> userData){
+
+        String accessToken = userData.get("access-token");
+        String refreshToken = userData.get("refresh-token");
+
+        return ResponseEntity.ok("");
+    }
 
     //이메일 인증을 하고나서 멤버가 회원인지 아닌지를 구분
     @PostMapping("/checkMember")
     public ResponseEntity<Map<String, Object>> checkMember(@RequestBody Map<String, String> userData) {
         Map<String, Object> response = new HashMap<>();
 
-            //String memberName = userData.get("nickname");
             String memberEmail = userData.get("email");
-            String authCode = userData.get("authCode");
 
-            //String memberPassword = "password";
             //멤버가 있으니깐 userId, accessToken, nickName 전달하기
             if (memberService.isEmailExists(memberEmail)) {
                 memberId = memberService.getMemberId(memberEmail);
@@ -121,6 +129,7 @@ public class MemberController {
 
         TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), memberAccessToken, memberRefreshToken);
         tokenService.saveToken(tokenVO);
+
 
         // 응답 데이터 설정
         response.put("status", "success");
