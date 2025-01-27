@@ -17,4 +17,9 @@ public class TokenService {
     public String getAccessToken(String memberId) {
         return TokenRepository.getAccessToken(memberId);
     }
+
+    public String getRefreshToken(String memberId) {
+        return TokenRepository.getRefreshToken(memberId);
+
+    }
 }

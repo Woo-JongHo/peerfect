@@ -34,4 +34,19 @@ public class TokenDBManger extends DBManger{
         return token;
 
     }
+
+    public static String getRefreshToken(String memberId) {
+        String token = "";
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            token = session.selectOne("token.getRefreshToken", memberId);
+        } catch (Exception e) {
+            log.error("Error fetching member ID: {}", e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return token;
+
+    }
 }

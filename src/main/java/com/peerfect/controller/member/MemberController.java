@@ -74,6 +74,7 @@ public class MemberController {
                 memberId = memberService.getMemberId(memberEmail);
                 memberNickName = memberService.getMemberNickName(memberEmail);
                 memberAccessToken = tokenService.getAccessToken(memberId);
+                memberRefreshToken = tokenService.getRefreshToken(memberId);
 
                 response.put("status", "success");
                 response.put("message", "회원입니다.");

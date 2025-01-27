@@ -14,4 +14,12 @@
         FROM token
         WHERE member_id = #{memberId}
     </select>
+
+    <select id="getRefreshToken" resultType="String">
+        SELECT refresh_token
+        FROM token
+        WHERE member_id = #{memberId}
+    </select>
+
+
 </mapper>

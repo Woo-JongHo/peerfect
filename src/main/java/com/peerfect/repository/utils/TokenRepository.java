@@ -17,4 +17,9 @@ public class TokenRepository {
     public static String getAccessToken(String memberId) {
         return TokenDBManger.getAccessToken(memberId);
     }
+
+    public static String getRefreshToken(String memberId) {
+        return TokenDBManger.getRefreshToken(memberId);
+
+    }
 }
