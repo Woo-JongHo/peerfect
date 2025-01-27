@@ -16,7 +16,7 @@
     </select>
 
     <delete id="deleteVerify" parameterType="String">
-        DELETE FROM verify WHERE email = #{email}
+        DELETE FROM verify WHERE verify_email = #{email}
     </delete>
 
 </mapper>
