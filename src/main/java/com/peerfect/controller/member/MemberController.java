@@ -244,7 +244,9 @@ public class MemberController {
     }
 
     @DeleteMapping("/{memberId}/delete")
-    public ResponseEntity<?> deleteMember(){
+    public ResponseEntity<?> deleteMember(@PathVariable String memberId){
+
+        log.info(memberId + " member Id ");
 
         memberService.deleteMember(memberId);
 

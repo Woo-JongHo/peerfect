@@ -122,7 +122,7 @@
     </select>
 
     <delete id="deleteMember" parameterType="String">
-        DELETE FROM member WHERE member_id = #{memberId}
+        DELETE FROM member WHERE member_id = #{memberId}::UUID
     </delete>
 
 
