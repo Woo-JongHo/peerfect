@@ -156,4 +156,39 @@ public class MemberDBManger {
 
         return re;
     }
+    public static void updateUIStart(String memberId, String challengeNo) {
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            Map<String, String> params = new HashMap<>();
+            params.put("memberId", memberId);
+            params.put("challengeNo", challengeNo);
+
+            int re = session.update("member.updateUIStart", params);
+            session.commit();
+            log.info("UI 챌린지 시작 시간 업데이트 완료: memberId={}, challengeNo={}", memberId, challengeNo);
+        } catch (Exception e) {
+            log.error("UI 챌린지 시작 시간 업데이트 실패: {}", e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+    public static void updateUXStart(String memberId, String challengeNo) {
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            Map<String, String> params = new HashMap<>();
+            params.put("memberId", memberId);
+            params.put("challengeNo", challengeNo);
+
+            int re = session.update("member.updateUXStart", params);
+            session.commit();
+            log.info("UX 챌린지 시작 시간 업데이트 완료: memberId={}, challengeNo={}", memberId, challengeNo);
+        } catch (Exception e) {
+            log.error("UX 챌린지 시작 시간 업데이트 실패: {}", e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
+    }
 }

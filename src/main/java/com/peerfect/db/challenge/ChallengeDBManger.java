@@ -57,4 +57,19 @@ public class ChallengeDBManger {
 
         return "DB update success";
     }
+
+    public static String getChallengeTypeByNo(String challengeNo) {
+        String type = "";
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            type = session.selectOne("challenge.ChallengeTypeByNo", challengeNo);
+        } catch (Exception e) {
+            log.error("Error fetching member ID: {}", e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return type;
+
+    }
 }

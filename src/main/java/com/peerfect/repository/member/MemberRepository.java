@@ -59,4 +59,14 @@ public class MemberRepository {
     public static void deleteById(String memberId) {
         MemberDBManger.deleteById(memberId);
     }
+
+    public static void updateUIStart(String memberId, String ChallengeNo) {
+        MemberDBManger.updateUIStart(memberId, ChallengeNo);
+
+    }
+
+    public static void updateUXStart(String memberId, String ChallengeNO) {
+        MemberDBManger.updateUXStart(memberId, ChallengeNO);
+
+    }
 }

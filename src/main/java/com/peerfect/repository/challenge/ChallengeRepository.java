@@ -30,4 +30,8 @@ public class ChallengeRepository {
     public static String startMemberChallenge(String memberId, String challengeNo) {
         return ChallengeDBManger.startMemberChallenge(memberId, challengeNo);
     }
+
+    public static String getChallengeTypeByNo(String challengeNo) {
+        return ChallengeDBManger.getChallengeTypeByNo(challengeNo);
+    }
 }

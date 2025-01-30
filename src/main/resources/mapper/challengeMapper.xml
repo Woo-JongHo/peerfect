@@ -64,9 +64,9 @@
         c.challenge_no = #{challengeNo};
     </select>
 
-    <update id="updateMemberChallenge">
-        UPDATE member
-        SET challenge_no = #{challengeNo}
-        WHERE member_id = #{memberId}
-    </update>
+
+    <select id = "ChallengeTypeByNo" resultType="String">
+        SELECT challenge_type FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengeNo}::bigint
+    </select>
 </mapper>

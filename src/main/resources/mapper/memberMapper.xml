@@ -125,5 +125,18 @@
         DELETE FROM member WHERE member_id = #{memberId}::UUID
     </delete>
 
+    <update id = "updateUIStart">
+        UPDATE member
+        SET member_uistart = NOW(),
+        challenge_no = #{challengeNo}::bigint
+        WHERE member_id = #{memberId}::UUID;
+    </update>
+
+    <update id = "updateUXStart">
+        UPDATE member
+        SET member_uxstart = NOW(),
+        challenge_no = #{challengeNo}::bigint
+        WHERE member_id = #{memberId}::UUID;
+    </update>
 
 </mapper>

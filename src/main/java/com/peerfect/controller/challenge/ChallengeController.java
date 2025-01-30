@@ -68,7 +68,8 @@ public class ChallengeController {
     public ResponseEntity<String> startMemberChallenge(
             @PathVariable String memberId,
             @PathVariable String challengeNo) {
-        ChallengeService.startMemberChallenge(memberId, challengeNo);
+        challengeService.startMemberChallenge(memberId, challengeNo);
+
         return ResponseEntity.ok("챌린지 참가 완료");
     }
 

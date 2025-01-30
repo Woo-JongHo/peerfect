@@ -46,13 +46,14 @@ public class MemberController {
     //04 토큰 재발급 api
 
 
-    /*
-    @GetMapping("/memberInfo")
+
+    @GetMapping("/{memberId}/memberInfo")
     public ResponseEntity<?> memberInfo(){
         Map<String, Object> response = new HashMap<>();
 
 
-    }*/
+        return ResponseEntity.ok(response);
+    }
 
     // 멤버아이디, 토큰, 이미지,
     @PostMapping("/checkNickName")
