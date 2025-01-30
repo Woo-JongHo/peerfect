@@ -143,9 +143,16 @@ public class MemberDBManger {
         int re = -1;
 
         SqlSession session = sqlSessionFactory.openSession();
-        re = session.delete("member.deleteMember", memberId);
-        session.commit();
-        session.close();
+        try {
+            re = session.delete("member.deleteMember", memberId);
+            session.commit();
+            System.out.println("삭제된 행 개수: " + re);
+        } catch (Exception e) {
+            System.err.println("삭제 실패: " + e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
 
         return re;
     }
