@@ -39,6 +39,13 @@ public class MemberController {
     private static String memberRefreshToken;
     //todo 토큰들 만료에 관한건 구현 아직 안함
 
+    //01 멤버 info 환성
+    //02 로그아웃 api
+    //03 회원탈퇴 api
+    //04 참여하기 api
+    //04 토큰 재발급 api
+
+
     /*
     @GetMapping("/memberInfo")
     public ResponseEntity<?> memberInfo(){
@@ -235,6 +242,17 @@ public class MemberController {
     public ResponseEntity<?> stopChallenge(){
         return ResponseEntity.ok("");
     }
+
+    @DeleteMapping("/{memberId}/delete")
+    public ResponseEntity<?> deleteMember(){
+
+        memberService.deleteMember(memberId);
+
+        return ResponseEntity.ok("delete member Successful");
+    }
+
+
+
     //Stop challenge
 
     /*

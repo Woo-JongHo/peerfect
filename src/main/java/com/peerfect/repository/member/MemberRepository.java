@@ -55,4 +55,8 @@ public class MemberRepository {
     public static String getMemberNickName(String email) {
         return MemberDBManger.getMemberNickName(email);
     }
+
+    public static void deleteById(String memberId) {
+        MemberDBManger.deleteById(memberId);
+    }
 }

@@ -52,5 +52,10 @@ public class MemberService {
     public String getMemberNickName(String email) {
         return MemberRepository.getMemberNickName(email);
     }
+
+    public void deleteMember(String memberId) {
+        MemberRepository.deleteById(memberId);
+
+    }
 }
 

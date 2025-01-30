@@ -138,4 +138,15 @@ public class MemberDBManger {
         return nickname;
 
     }
+
+    public static int deleteById(String memberId) {
+        int re = -1;
+
+        SqlSession session = sqlSessionFactory.openSession();
+        re = session.delete("member.deleteMember", memberId);
+        session.commit();
+        session.close();
+
+        return re;
+    }
 }
