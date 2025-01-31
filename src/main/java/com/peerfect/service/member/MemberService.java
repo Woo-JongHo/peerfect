@@ -75,6 +75,7 @@ public class MemberService {
         response.put("memberId", memberData.get("member_id"));
         response.put("nickName", memberData.getOrDefault("member_name", "Unknown"));
         response.put("memberImg", memberData.getOrDefault("member_img", ""));
+        response.put("memberEmail", memberData.getOrDefault("member_email", ""));
 
         // 4️⃣ Timestamp → LocalDateTime 변환
         LocalDateTime uiStart = convertToLocalDateTime(memberData.get("member_uistart"));
