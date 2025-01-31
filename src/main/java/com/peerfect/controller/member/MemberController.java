@@ -37,12 +37,8 @@ public class MemberController {
     private static String memberNickName;
     private static String memberAccessToken;
     private static String memberRefreshToken;
-    //todo 토큰들 만료에 관한건 구현 아직 안함
-
-    //01 멤버 info 환성
     //02 로그아웃 api
-    //03 회원탈퇴 api
-    //04 참여하기 api
+
     //04 토큰 재발급 api
 
 
@@ -51,7 +47,6 @@ public class MemberController {
     public ResponseEntity<?> memberInfo(@PathVariable String memberId){
 
         Map<String, Object> response = memberService.getMemberInfo(memberId);
-
 
         return ResponseEntity.ok(response);
     }
@@ -65,18 +60,6 @@ public class MemberController {
             return ResponseEntity.ok("중복된 닉네임입니다");
         else
             return ResponseEntity.ok("중복되지 않은 닉네임입니다");
-    }
-
-    //01 access token refresh 토큰을 timer를 이용해서 시간이 되면, 삭제하는 로직을 추가
-    //02 accesstoken을 이용한 userInfo 를 가지고 오는 api 개발
-
-    @PostMapping("/UserInfo")
-    public ResponseEntity<?> userInfo(@RequestBody Map<String, String> userData){
-
-        String accessToken = userData.get("access-token");
-        String refreshToken = userData.get("refresh-token");
-
-        return ResponseEntity.ok("");
     }
 
     //이메일 인증을 하고나서 멤버가 회원인지 아닌지를 구분
@@ -151,7 +134,7 @@ public class MemberController {
                 .httpOnly(true)              // HttpOnly 속성
                 .secure(true)                // HTTPS 환경에서만 사용 (로컬 환경에서는 false로 설정 가능)
                 .path("/")                   // 쿠키의 유효 경로
-                .maxAge(7 * 24 * 60 * 60)    // 쿠키 만료 시간 (7일)
+                .maxAge(30 * 24 * 60 * 60)    // 쿠키 만료 시간 (30일)
                 .sameSite("Strict")          // CSRF 보호를 위한 SameSite 설정
                 .build();
 
@@ -162,21 +145,20 @@ public class MemberController {
                 .body(response);
     }
 
-    //todo 리프레시 확인
 
-    /*
+
     @PostMapping("/regenerate-accesstoken")
-    public ResponseEntity<?> generateAccessToken(){
-
+    public ResponseEntity<?> generateAccessToken(@RequestBody Map<String, String> data){
+        return ResponseEntity.ok("");
     }
 
 
     // 토큰
     @PostMapping("/regenerate-refreshtoken")
-    public ResponseEntity<?> generateAccessToken(){
-
+    public ResponseEntity<?> generateRefreshToken(@RequestBody Map<String, String> data){
+        return ResponseEntity.ok("");
     }
-    */
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> loginData) {
         String email = loginData.get("email");

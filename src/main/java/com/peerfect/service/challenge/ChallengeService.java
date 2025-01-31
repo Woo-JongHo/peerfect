@@ -4,11 +4,13 @@ import com.peerfect.DTO.ChallengeDetailDTO;
 import com.peerfect.DTO.PreviewDTO;
 import com.peerfect.repository.challenge.ChallengeRepository;
 import com.peerfect.repository.member.MemberRepository;
+import com.peerfect.service.member.MemberService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,33 +18,28 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class ChallengeService{
+    private final MemberService memberService;
 
 
 
     @Transactional
-    public String startMemberChallenge(String memberId, String challengeNo) {
-        // 1. challenge_no로 challenge_type 조회
+    public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo) {
+        HashMap<String, Object> map = new HashMap<>();
+
+        if (!MemberRepository.isMemberExists(memberId)) {
+            log.info("여기로들어와야함");
+            map.put("status", "fail");
+            map.put("message", "해당 유저가 존재하지 않습니다: " + memberId);
+            return map;
+        }
+
         String challengeType = ChallengeRepository.getChallengeTypeByNo(challengeNo);
+        map.put("status", "참여하기 완료");
+        map.put("userId", memberId);
 
-        log.info("challengeType" + challengeType);
-
-        if (challengeType == null) {
-            throw new IllegalArgumentException("해당 챌린지가 존재하지 않습니다: " + challengeNo);
-        }
-
-
-        // 2. challenge_type에 따라 member 테이블의 특정 컬럼 업데이트
-        if ("UI".equalsIgnoreCase(challengeType)) {
-            MemberRepository.updateUIStart(memberId,challengeNo);
-        } else if ("UX".equalsIgnoreCase(challengeType)) {
-            MemberRepository.updateUXStart(memberId,challengeNo);
-
-        } else {
-            throw new IllegalArgumentException("지원되지 않는 챌린지 타입입니다: " + challengeType);
-        }
-
-        return "";
+        return map;
     }
+
 
     public List<PreviewDTO> getUIPreview(String preview) {
         return ChallengeRepository.getUIPreview(preview);

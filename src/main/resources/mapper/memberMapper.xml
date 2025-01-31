@@ -15,6 +15,12 @@
         WHERE member_email = #{memberEmail}
     </select>
 
+    <select id ="isMemberExist" resultType="boolean">
+        SELECT count(*) > 0
+        from member
+        where member_id = #{memberId}::UUID
+    </select>
+
     <select id="getMemberNickName" resultType="String">
         SELECT member_name
         FROM member

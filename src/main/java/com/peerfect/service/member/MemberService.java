@@ -62,26 +62,26 @@ public class MemberService {
     }
 
     public Map<String, Object> getMemberInfo(String memberId) {
-        // 1️⃣ DB에서 원본 데이터 가져오기
+        //  DB에서 원본 데이터 가져오기
         Map<String, Object> memberData = memberRepository.getMemberInfo(memberId);
 
-        // 2️⃣ 회원이 존재하지 않으면 예외 처리
+        // 회원이 존재하지 않으면 예외 처리
         if (memberData == null || memberData.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않는 회원 ID입니다: " + memberId);
         }
 
-        // 3️⃣ 응답 데이터 정리
+        //  응답 데이터 정리
         Map<String, Object> response = new HashMap<>();
         response.put("memberId", memberData.get("member_id"));
         response.put("nickName", memberData.getOrDefault("member_name", "Unknown"));
         response.put("memberImg", memberData.getOrDefault("member_img", ""));
         response.put("memberEmail", memberData.getOrDefault("member_email", ""));
 
-        // 4️⃣ Timestamp → LocalDateTime 변환
+        //  Timestamp → LocalDateTime 변환
         LocalDateTime uiStart = convertToLocalDateTime(memberData.get("member_uistart"));
         LocalDateTime uxStart = convertToLocalDateTime(memberData.get("member_uxstart"));
 
-        // 5️⃣ 현재 챌린지 설정
+        // 현재 챌린지 설정
         String currentChallenge = null;
         String currentDay = null;
 
@@ -107,9 +107,7 @@ public class MemberService {
         return response;
     }
 
-    /**
-     * 🔥 `Timestamp` → `LocalDateTime` 변환
-     */
+
     private LocalDateTime convertToLocalDateTime(Object timestampObj) {
         if (timestampObj instanceof Timestamp) {
             return ((Timestamp) timestampObj).toLocalDateTime();
@@ -117,9 +115,6 @@ public class MemberService {
         return null; // 값이 없을 경우 null 반환
     }
 
-    /**
-     * 🔥 챌린지 시작일부터 현재까지 `day-*` 변환
-     */
     private String calculateChallengeDay(LocalDateTime startDate) {
         if (startDate == null) {
             return null; // 챌린지가 시작되지 않은 경우

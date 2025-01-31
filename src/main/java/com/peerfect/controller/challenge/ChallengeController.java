@@ -3,13 +3,14 @@ package com.peerfect.controller.challenge;
 import com.peerfect.DTO.ChallengeDetailDTO;
 import com.peerfect.DTO.PreviewDTO;
 import com.peerfect.service.challenge.ChallengeService;
+import com.peerfect.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -19,6 +20,7 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
     String preview;
+
 
     @GetMapping("/")
     public String getChallenge() {
@@ -65,12 +67,13 @@ public class ChallengeController {
 
     //Start Challenge
     @PutMapping("/{challengeNo}/member/{memberId}/start")
-    public ResponseEntity<String> startMemberChallenge(
+    public ResponseEntity<?> startMemberChallenge(
             @PathVariable String memberId,
             @PathVariable String challengeNo) {
-        challengeService.startMemberChallenge(memberId, challengeNo);
+        HashMap<String, Object> map;
+        map = challengeService.startMemberChallenge(memberId, challengeNo);
 
-        return ResponseEntity.ok("챌린지 참가 완료");
+        return ResponseEntity.ok(map);
     }
 
 }

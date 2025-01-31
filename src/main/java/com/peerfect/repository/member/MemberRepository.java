@@ -79,4 +79,8 @@ public class MemberRepository {
 
         return memberData;
     }
+
+    public static boolean isMemberExists(String memberId) {
+        return MemberDBManger.isMemberExist(memberId);
+    }
 }

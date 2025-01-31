@@ -207,4 +207,14 @@ public class MemberDBManger {
 
         return memberData;
     }
+
+    public static boolean isMemberExist(String memberId) {
+        boolean exists = false;
+        SqlSession session = sqlSessionFactory.openSession();
+        exists = session.selectOne("member.isMemberExist", memberId);
+
+        log.info("Nickname existence check result: {}", exists);
+
+        return exists;
+    }
 }
