@@ -48,8 +48,9 @@ public class MemberController {
 
 
     @GetMapping("/{memberId}/memberInfo")
-    public ResponseEntity<?> memberInfo(){
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<?> memberInfo(@PathVariable String memberId){
+
+        Map<String, Object> response = memberService.getMemberInfo(memberId);
 
 
         return ResponseEntity.ok(response);

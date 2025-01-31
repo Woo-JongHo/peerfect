@@ -69,4 +69,14 @@ public class MemberRepository {
         MemberDBManger.updateUXStart(memberId, ChallengeNO);
 
     }
+
+    public static Map<String, Object> getMemberInfo(String memberId) {
+
+        Map<String, Object> memberData = MemberDBManger.getMemberInfo(memberId);
+
+        log.info("조회된 회원 데이터: {}", memberData);
+
+
+        return memberData;
+    }
 }

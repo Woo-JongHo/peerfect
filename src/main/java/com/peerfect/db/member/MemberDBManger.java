@@ -191,4 +191,20 @@ public class MemberDBManger {
             session.close();
         }
     }
+
+    public static Map<String, Object> getMemberInfo(String memberId) {
+        SqlSession session = sqlSessionFactory.openSession();
+        log.info("여기 db memberId={}", memberId);
+        Map<String, Object> memberData = null;
+
+        try {
+            memberData = session.selectOne("member.getMemberInfo", memberId);
+        } catch (Exception e) {
+            System.err.println("회원 정보 조회 실패: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return memberData;
+    }
 }

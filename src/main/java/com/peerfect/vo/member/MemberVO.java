@@ -29,6 +29,10 @@ public class MemberVO {
         this.memberOptionalTerm = memberOptionalTerm;
     }
 
+    public MemberVO(UUID memberId) {
+        this.memberId = memberId;
+    }
+
     public UUID getMemberId() {
         return memberId;
     }

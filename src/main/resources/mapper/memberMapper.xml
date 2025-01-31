@@ -139,4 +139,8 @@
         WHERE member_id = #{memberId}::UUID;
     </update>
 
+    <select id = "getMemberInfo" resultType="map">
+        SELECT * FROM member where member_id = #{member_id}::UUID
+    </select>
+
 </mapper>
