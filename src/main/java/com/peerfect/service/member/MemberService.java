@@ -1,6 +1,7 @@
 package com.peerfect.service.member;
 
 import com.peerfect.DTO.MemberChallengeDTO;
+import com.peerfect.repository.challenge.ChallengeRepository;
 import com.peerfect.repository.member.MemberRepository;
 import com.peerfect.vo.member.MemberVO;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ import java.util.Map;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final ChallengeRepository challengeRepository;
+
 
     public void insertUser(MemberVO userVO) {
         memberRepository.insertUser(userVO);

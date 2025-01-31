@@ -39,7 +39,6 @@
         WHERE member_email = #{email}
     </select>
 
-
     <select id="authenticate" parameterType="map" resultType="boolean">
         SELECT COUNT(*) > 0
         FROM member
@@ -48,37 +47,40 @@
 
     <select id="getMemberMain" resultType="MemberChallengeDTO">
         SELECT
-        c.challenge_no AS challengeNo,
-        c.challenge_intro AS challengeShortIntro,
-        c.challenge_title AS challengeTitle
+            c.challenge_no AS challengeNo,
+            c.challenge_shortintro AS challengeShortIntro,
+            c.challenge_title AS challengeTitle,
+            COUNT(m.member_id) AS memberCount
         FROM
-        MEMBER m
-        INNER JOIN
-        CHALLENGE c
-        ON
-        m.challenge_no = c.challenge_no
+            MEMBER m
+        INNER JOIN CHALLENGE c
+        ON m.challenge_no = c.challenge_no
         WHERE
-        m.member_id = #{memberId}::UUID
+            m.challenge_no IN (
+            SELECT challenge_no FROM MEMBER WHERE member_id = #{memberId}::UUID
+            )
+        GROUP BY
+            c.challenge_no, c.challenge_shortintro, c.challenge_title
     </select>
 
-    <select id="getMemberNext" resultType="MemberChallengeDTO">
-        SELECT
+    <select id="getMemberNext" resultType="MemberChallengeDTO">    SELECT
         c2.challenge_no AS challengeNo,
-        c2.challenge_intro AS challengeShortIntro,
-        c2.challenge_title AS challengeTitle
+        c2.challenge_shortintro AS challengeShortIntro,
+        c2.challenge_title AS challengeTitle,
+        COUNT(m2.member_id) AS memberCount
         FROM
         MEMBER m
-        INNER JOIN
-        CHALLENGE c1
-        ON
-        m.challenge_no = c1.challenge_no
-        INNER JOIN
-        CHALLENGE c2
-        ON
-        c1.challenge_group = c2.challenge_group
+        INNER JOIN CHALLENGE c1
+        ON m.challenge_no = c1.challenge_no
+        INNER JOIN CHALLENGE c2
+        ON c1.challenge_group = c2.challenge_group
+        AND c2.challenge_no > c1.challenge_no
+        LEFT JOIN MEMBER m2
+        ON c2.challenge_no = m2.challenge_no
         WHERE
         m.member_id = #{memberId}::UUID
-        AND c2.challenge_no > c1.challenge_no
+        GROUP BY
+        c2.challenge_no, c2.challenge_shortintro, c2.challenge_title
         ORDER BY
         c2.challenge_no ASC
     </select>
@@ -87,7 +89,7 @@
     <select id="getMemberComplete" resultType="MemberChallengeDTO">
         SELECT
         c2.challenge_no AS challengeNo,
-        c2.challenge_intro AS challengeShortIntro,
+        c2.challenge_shortintro AS challengeShortIntro,
         c2.challenge_title AS challengeTitle
         FROM
         MEMBER m
@@ -101,7 +103,8 @@
         c1.challenge_group = c2.challenge_group
         WHERE
         m.member_id = #{memberId}::UUID
-        AND c1.challenge_no > c2.challenge_no
+        AND
+        c1.challenge_no > c2.challenge_no
         ORDER BY
         c2.challenge_no ASC
     </select>
