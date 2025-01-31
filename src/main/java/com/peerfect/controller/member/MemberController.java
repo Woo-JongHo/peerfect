@@ -148,12 +148,27 @@ public class MemberController {
 
 
     @PostMapping("/regenerate-access")
-    public ResponseEntity<?> regenerateAccessToken(@RequestBody Map<String, String> request) {
-        String refreshToken = request.get("refreshToken");
-        String newAccessToken = tokenService.regenerateAccessToken(refreshToken);
-        return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
-    }
+    public ResponseEntity<?> regenerateAccessToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            log.error("❌ RefreshToken이 쿠키에 없음!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token missing");
+        }
 
+        log.info("🔹 Received RefreshToken from Cookie: {}", refreshToken);
+
+        if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
+            log.error("❌ RefreshToken이 유효하지 않음!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+        }
+
+        String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
+        String newAccessToken = jwtTokenProvider.generateAccessToken(memberId);
+
+        log.info("✅ 새로운 AccessToken 발급 완료: {}", newAccessToken);
+        return  ResponseEntity.ok()
+                .header("Authorization", "Bearer " + memberAccessToken)
+                .body("accessToken 재발급완료" + memberAccessToken);
+    }
     @PostMapping("/regenerate-refresh")
     public ResponseEntity<?> regenerateRefreshToken(@RequestBody Map<String, String> request) {
         String refreshToken = request.get("refreshToken");
@@ -173,8 +188,6 @@ public class MemberController {
             log.info("memberId: {}" , memberId);
 
             String accessToken = jwtTokenProvider.generateAccessToken(memberId);
-
-            //todo mebmerID에 맞는 refresh 토큰을 확인하고, 없으면 provider로 다시 제공
             String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
             TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), accessToken, refreshToken);

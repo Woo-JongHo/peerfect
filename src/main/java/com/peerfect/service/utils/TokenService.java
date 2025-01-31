@@ -37,6 +37,9 @@ public class TokenService {
 
 
     public String regenerateAccessToken(String refreshToken) {
+
+        log.info("Received refreshToken: {}", refreshToken);
+
         String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
 
         // DB에서 저장된 refreshToken 가져오기
@@ -55,9 +58,11 @@ public class TokenService {
     }
 
     public Map<String, String> regenerateRefreshToken(String refreshToken) {
-        if (!jwtTokenProvider.validateToken(refreshToken)) {
+        if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
             throw new RuntimeException("Invalid or expired refresh token");
         }
+
+        log.info("Received refreshToken: {}", refreshToken);
 
         String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
 
