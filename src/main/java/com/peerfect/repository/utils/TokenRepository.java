@@ -27,4 +27,12 @@ public class TokenRepository {
     public Optional<TokenVO> findByRefreshToken(String refreshToken) {
         return Optional.ofNullable(TokenDBManger.findByRefreshToken(refreshToken));
     }
+
+    public boolean checkRefreshByToken(String refreshToken) {
+        return TokenDBManger.checkRefreshToken(refreshToken);
+    }
+
+    public String getMemberIdByToken(String refreshToken) {
+        return TokenDBManger.getMemberIdByToken(refreshToken);
+    }
 }

@@ -44,7 +44,7 @@ public class JwtTokenProvider {
     }
 
     // Refresh Token 검증 (Spring MVC 방식)
-    public boolean validateRefreshToken(@CookieValue(value = "refresh", required = false) String refreshToken) {
+    public boolean validateRefreshToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
         if (refreshToken == null || refreshToken.isEmpty()) {
             log.error("❌ Refresh token is missing in cookies!");
             return false;

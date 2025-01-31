@@ -2,11 +2,13 @@ package com.peerfect.service.utils;
 
 import ch.qos.logback.core.subst.Token;
 import com.peerfect.db.utils.TokenDBManger;
+import com.peerfect.repository.member.MemberRepository;
 import com.peerfect.repository.utils.TokenRepository;
 import com.peerfect.util.JwtTokenProvider;
 import com.peerfect.vo.utils.TokenVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,33 +22,29 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TokenService {
     private final JwtTokenProvider jwtTokenProvider;
-
-    TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
     public void saveToken(TokenVO tokenVO) {
-        TokenRepository.saveToken(tokenVO);
+        tokenRepository.saveToken(tokenVO);
     }
 
     public String getAccessToken(String memberId) {
-        return TokenRepository.getAccessToken(memberId);
+        return tokenRepository.getAccessToken(memberId);
     }
 
     public String getRefreshToken(String memberId) {
-        return TokenRepository.getRefreshToken(memberId);
+        return tokenRepository.getRefreshToken(memberId);
 
     }
 
 
     public String regenerateAccessToken(String refreshToken) {
 
-        log.info("Received refreshToken: {}", refreshToken);
-
-        String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
-
-        // DB에서 저장된 refreshToken 가져오기
-        String storedRefreshToken = TokenDBManger.getRefreshToken(memberId);
-        if (!refreshToken.equals(storedRefreshToken)) {
+        log.info("refreshToken Access " + refreshToken);
+        if (!tokenRepository.checkRefreshByToken(refreshToken)) {
             throw new RuntimeException("Refresh token mismatch");
         }
+
+        String memberId = tokenRepository.getMemberIdByToken(refreshToken);
 
         // 새로운 accessToken 생성
         String newAccessToken = jwtTokenProvider.generateAccessToken(memberId);
@@ -57,14 +55,16 @@ public class TokenService {
         return newAccessToken;
     }
 
+
     public Map<String, String> regenerateRefreshToken(String refreshToken) {
+        /*
         if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
             throw new RuntimeException("Invalid or expired refresh token");
         }
-
+           */
         log.info("Received refreshToken: {}", refreshToken);
 
-        String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
+        String memberId = tokenRepository.getMemberIdByToken(refreshToken);
 
         // DB에서 저장된 refreshToken 가져오기
         String storedRefreshToken = TokenDBManger.getRefreshToken(memberId);
@@ -85,4 +85,5 @@ public class TokenService {
 
         return Map.of("accessToken", newAccessToken, "refreshToken", newRefreshToken);
     }
+
 }

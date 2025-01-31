@@ -23,7 +23,7 @@
         SELECT refresh_token FROM token WHERE member_id = #{memberId}
     </select>
 
-    <select id="findByRefreshToken" resultType="com.peerfect.vo.utils.TokenVO">
+    <select id="findByRefreshToken" resultType="TokenVO">
         SELECT member_id, access_token, refresh_token
         FROM token
         WHERE refresh_token = #{refreshToken}
@@ -32,7 +32,18 @@
     <update id="updateAccessToken">
         UPDATE token
         SET access_token = #{accessToken}
-        WHERE member_id = #{memberId}
+        WHERE member_id = #{memberId}::UUID
     </update>
 
+    <select id ="isRefreshExist" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM TOKEN
+        WHERE REFRESH_TOKEN = #{refreshToken}
+    </select>
+
+    <select id ="getMemberIdByToken" resultType="String">
+        SELECT member_id
+        from token
+        where refresh_token = #{refreshtoken}
+    </select>
 </mapper>

@@ -95,4 +95,28 @@ public class TokenDBManger extends DBManger{
             session.close();
         }
     }
+
+    public static boolean checkRefreshToken(String refreshToken) {
+        boolean exists = false;
+        SqlSession session = sqlSessionFactory.openSession();
+        exists = session.selectOne("token.isRefreshExist", refreshToken);
+
+        log.info("Nickname existence check result: {}", exists);
+
+        return exists;
+    }
+
+    public static String getMemberIdByToken(String refreshToken) {
+        String memberId = "";
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            memberId = session.selectOne("token.getMemberIdByToken",refreshToken);
+        } catch (Exception e) {
+            log.error("Error fetching member ID: {}", e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return memberId;
+    }
 }

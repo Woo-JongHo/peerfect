@@ -156,18 +156,18 @@ public class MemberController {
 
         log.info("🔹 Received RefreshToken from Cookie: {}", refreshToken);
 
-        if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
+        /*
+        if (!tokenService.checkRefreshToken(refreshToken)) {
             log.error("❌ RefreshToken이 유효하지 않음!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
-        }
+        }*/
+        //String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
+        memberAccessToken = tokenService.regenerateAccessToken(refreshToken);
 
-        String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
-        String newAccessToken = jwtTokenProvider.generateAccessToken(memberId);
-
-        log.info("✅ 새로운 AccessToken 발급 완료: {}", newAccessToken);
+        log.info("✅ 새로운 AccessToken 발급 완료: {}", memberAccessToken);
         return  ResponseEntity.ok()
                 .header("Authorization", "Bearer " + memberAccessToken)
-                .body("accessToken 재발급완료" + memberAccessToken);
+                .body("accessToken 재발급완료 : " + memberAccessToken);
     }
     @PostMapping("/regenerate-refresh")
     public ResponseEntity<?> regenerateRefreshToken(@RequestBody Map<String, String> request) {
