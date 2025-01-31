@@ -9,17 +9,30 @@
         VALUES (#{memberId}, #{accessToken}, #{refreshToken})
     </insert>
 
-    <select id="getAccessToken" resultType="String" >
-        SELECT access_token
-        FROM token
-        WHERE member_id = #{memberId}::UUID
+    <update id="updateToken">
+        UPDATE token
+        SET access_token = #{accessToken}, refresh_token = #{refreshToken}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <select id="getAccessToken" resultType="String">
+        SELECT access_token FROM token WHERE member_id = #{memberId}
     </select>
 
-
-    <select id="getRefreshToken" resultType="String" >
-        SELECT refresh_token
-        FROM token
-        WHERE member_id = #{memberId}::UUID
+    <select id="getRefreshToken" resultType="String">
+        SELECT refresh_token FROM token WHERE member_id = #{memberId}
     </select>
+
+    <select id="findByRefreshToken" resultType="com.peerfect.vo.utils.TokenVO">
+        SELECT member_id, access_token, refresh_token
+        FROM token
+        WHERE refresh_token = #{refreshToken}
+    </select>
+
+    <update id="updateAccessToken">
+        UPDATE token
+        SET access_token = #{accessToken}
+        WHERE member_id = #{memberId}
+    </update>
 
 </mapper>

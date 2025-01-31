@@ -4,7 +4,6 @@ import com.peerfect.DTO.ChallengeDetailDTO;
 import com.peerfect.DTO.PreviewDTO;
 import com.peerfect.repository.challenge.ChallengeRepository;
 import com.peerfect.repository.member.MemberRepository;
-import com.peerfect.service.member.MemberService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,15 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChallengeService{
-    private final MemberService memberService;
-
-
 
     @Transactional
     public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo) {

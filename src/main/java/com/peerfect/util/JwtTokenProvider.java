@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    public static final String SECRET_KEY = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded());
+    public static final String SECRET_KEY = "GPvh5BzbvJifIdI5sfW8YhRB/XfW5HX9R5PQo7g6U2Mlk8ncHB4CY0SAH9ktg0/9k/GBUrGxNxBWuqmv1cbwVA==";
     public static final String REFRESH_TOKEN_SECRET_KEY = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded());
 
     private final long ACCESS_TOKEN_VALIDITY = 1000 * 60 * 15; // 15분
@@ -21,8 +21,8 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(memberId)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1시간 후 만료
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY) // 서명
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY)) // 1시간 후 만료
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY) // 서명
                 .compact();
     }
 

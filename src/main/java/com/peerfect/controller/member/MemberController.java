@@ -147,22 +147,23 @@ public class MemberController {
 
 
 
-    @PostMapping("/regenerate-accesstoken")
-    public ResponseEntity<?> generateAccessToken(@RequestBody Map<String, String> data){
-        return ResponseEntity.ok("");
+    @PostMapping("/regenerate-access")
+    public ResponseEntity<?> regenerateAccessToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        String newAccessToken = tokenService.regenerateAccessToken(refreshToken);
+        return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 
-
-    // 토큰
-    @PostMapping("/regenerate-refreshtoken")
-    public ResponseEntity<?> generateRefreshToken(@RequestBody Map<String, String> data){
-        return ResponseEntity.ok("");
+    @PostMapping("/regenerate-refresh")
+    public ResponseEntity<?> regenerateRefreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        Map<String, String> tokens = tokenService.regenerateRefreshToken(refreshToken);
+        return ResponseEntity.ok(tokens);
     }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> loginData) {
         String email = loginData.get("email");
-
 
         log.info(email);
         if (memberService.authenticate(email)) {
