@@ -53,7 +53,8 @@
             c.challenge_shortIntro AS challengeShortIntro,
             c.challenge_mission AS challengeMission,
             c.challenge_level AS challengeLevel,
-            r.rule_detail AS ruleDetail
+            r.rule_detail AS ruleDetail,
+            c.challenge_title AS challengeTitle
         FROM
             CHALLENGE c
         LEFT JOIN
