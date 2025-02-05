@@ -19,10 +19,25 @@ public class MemberVO {
     private Date memberUIend;
     private Date memberUXstart;
     private Date memberUXend;
+    private boolean memberRequiredTerm;
+    private boolean memberOptionalTerm;
 
-    public MemberVO(String memberName, String memberPassword, String memberEmail) {
+    public MemberVO(String memberName, String memberEmail, boolean memberRequiredTerm, boolean memberOptionalTerm) {
         this.memberName = memberName;
-        this.memberPassword = memberPassword;
         this.memberEmail = memberEmail;
+        this.memberRequiredTerm = memberRequiredTerm;
+        this.memberOptionalTerm = memberOptionalTerm;
+    }
+
+    public MemberVO(UUID memberId) {
+        this.memberId = memberId;
+    }
+
+    public UUID getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(UUID memberId) {
+        this.memberId = memberId;
     }
 }

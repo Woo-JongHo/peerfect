@@ -1,5 +1,6 @@
 package com.peerfect.db.member;
 
+import com.peerfect.DTO.MemberChallengeDTO;
 import com.peerfect.vo.member.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
@@ -40,19 +41,32 @@ public class MemberDBManger {
     }
 
     public static String getMemberId(String email) {
-        String memberId = "";
+        String memberId = null;
         SqlSession session = sqlSessionFactory.openSession();
         try {
             memberId = session.selectOne("member.getMemberId", email);
+            if (memberId == null || !isValidUUID(memberId)) {
+                log.warn("Invalid or missing member ID for email: {}", email);
+                throw new IllegalArgumentException("Invalid or missing member ID");
+            }
         } catch (Exception e) {
             log.error("Error fetching member ID: {}", e.getMessage());
+            throw e; // 예외를 상위로 전달
         } finally {
             session.close();
         }
 
-        return UUID.fromString(memberId).toString(); // UUID 형식 변환
+        return UUID.fromString(memberId).toString();
     }
 
+    private static boolean isValidUUID(String str) {
+        try {
+            UUID.fromString(str);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 
     public static boolean authenticate(String email) {
         boolean exists = false;
@@ -71,33 +85,139 @@ public class MemberDBManger {
 
         return exists;
     }
-    public static List<Map<String, String>> getMemberComplete(String memberId) {
-        List<Map<String, String>> result = null;
-        SqlSession session = sqlSessionFactory.openSession();
-        try {
-            result = session.selectList("complete.getMemberComplete", memberId);
 
-            log.info("result" + result);
-        } catch (Exception e) {
-            System.err.println("Error fetching UI mission list: " + e.getMessage());
-        } finally {
-            session.close();
-        }
+    public static List<MemberChallengeDTO> getMemberMain(String memberId) {
+
+        List<MemberChallengeDTO> result = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        result = session.selectList("member.getMemberMain", memberId);
+
+        session.close();
         return result;
     }
 
-    public static List<Map<String, String>> getMemberMission(String memberId) {
-        List<Map<String, String>> result = null;
+    public static List<MemberChallengeDTO> getMemberNext(String memberId) {
+        List<MemberChallengeDTO> result = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        result = session.selectList("member.getMemberNext", memberId);
+
+        session.close();
+        return result;
+    }
+    public static List<MemberChallengeDTO> getMemberComplete(String memberId) {
+        List<MemberChallengeDTO> result = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        result = session.selectList("member.getMemberComplete", memberId);
+
+        session.close();
+        return result;
+    }
+
+    public static boolean isNickNameExist(String nickname) {
+        boolean exists = false;
+        SqlSession session = sqlSessionFactory.openSession();
+        log.info(nickname + " 뭐야 안나와?");
+        exists = session.selectOne("member.isNickNameExist", nickname);
+
+        log.info("Nickname existence check result: {}", exists);
+
+        return exists;
+    }
+
+    public static String getMemberNickName(String email) {
+        String nickname = "";
         SqlSession session = sqlSessionFactory.openSession();
         try {
-            result = session.selectList("member.getMemberMission", memberId);
-
-            log.info("result" + result);
+            nickname = session.selectOne("member.getMemberNickName", email);
         } catch (Exception e) {
-            System.err.println("Error fetching UI mission list: " + e.getMessage());
+            log.error("Error fetching member ID: {}", e.getMessage());
         } finally {
             session.close();
         }
-        return result;
+
+        return nickname;
+
     }
+
+    public static int deleteById(String memberId) {
+        int re = -1;
+
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            re = session.delete("member.deleteMember", memberId);
+            session.commit();
+            System.out.println("삭제된 행 개수: " + re);
+        } catch (Exception e) {
+            System.err.println("삭제 실패: " + e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
+
+        return re;
+    }
+    public static void updateUIStart(String memberId, String challengeNo) {
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            Map<String, String> params = new HashMap<>();
+            params.put("memberId", memberId);
+            params.put("challengeNo", challengeNo);
+
+            int re = session.update("member.updateUIStart", params);
+            session.commit();
+            log.info("UI 챌린지 시작 시간 업데이트 완료: memberId={}, challengeNo={}", memberId, challengeNo);
+        } catch (Exception e) {
+            log.error("UI 챌린지 시작 시간 업데이트 실패: {}", e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+    public static void updateUXStart(String memberId, String challengeNo) {
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            Map<String, String> params = new HashMap<>();
+            params.put("memberId", memberId);
+            params.put("challengeNo", challengeNo);
+
+            int re = session.update("member.updateUXStart", params);
+            session.commit();
+            log.info("UX 챌린지 시작 시간 업데이트 완료: memberId={}, challengeNo={}", memberId, challengeNo);
+        } catch (Exception e) {
+            log.error("UX 챌린지 시작 시간 업데이트 실패: {}", e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+    public static Map<String, Object> getMemberInfo(String memberId) {
+        SqlSession session = sqlSessionFactory.openSession();
+        log.info("여기 db memberId={}", memberId);
+        Map<String, Object> memberData = null;
+
+        try {
+            memberData = session.selectOne("member.getMemberInfo", memberId);
+        } catch (Exception e) {
+            System.err.println("회원 정보 조회 실패: " + e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return memberData;
+    }
+
+    public static boolean isMemberExist(String memberId) {
+        boolean exists = false;
+        SqlSession session = sqlSessionFactory.openSession();
+        exists = session.selectOne("member.isMemberExist", memberId);
+
+        log.info("Nickname existence check result: {}", exists);
+
+        return exists;
+    }
+
+
+
 }

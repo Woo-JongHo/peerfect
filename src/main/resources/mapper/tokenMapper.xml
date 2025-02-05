@@ -5,7 +5,49 @@
 
 <mapper namespace="token">
     <insert id="saveToken">
-        INSERT INTO token (member_id, access_token, refresh_token, expire_token)
-        VALUES (#{memberId}, #{accessToken}, #{refreshToken}, #{expireToken})
+        INSERT INTO token (member_id, access_token, refresh_token)
+        VALUES (#{memberId}, #{accessToken}, #{refreshToken})
     </insert>
+
+    <update id="updateToken">
+        UPDATE token
+        SET access_token = #{accessToken}, refresh_token = #{refreshToken}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <select id="getAccessToken" resultType="String">
+        SELECT access_token FROM token WHERE member_id = #{memberId}
+    </select>
+
+    <select id="getRefreshToken" resultType="String">
+        SELECT refresh_token FROM token WHERE member_id = #{memberId}
+    </select>
+
+    <select id="findByRefreshToken" resultType="TokenVO">
+        SELECT member_id, access_token, refresh_token
+        FROM token
+        WHERE refresh_token = #{refreshToken}
+    </select>
+
+    <update id="updateAccessToken">
+        UPDATE token
+        SET access_token = #{accessToken}
+        WHERE member_id = #{memberId}::UUID
+    </update>
+
+    <select id ="isRefreshExist" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM TOKEN
+        WHERE REFRESH_TOKEN = #{refreshToken}
+    </select>
+
+    <select id ="getMemberIdByToken" resultType="String">
+        SELECT member_id
+        from token
+        where refresh_token = #{refreshtoken}
+    </select>
+
+    <delete id="deleteTokensByMemberId">
+        DELETE FROM token WHERE member_id = #{memberId}
+    </delete>
 </mapper>

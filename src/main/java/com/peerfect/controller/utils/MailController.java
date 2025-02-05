@@ -2,6 +2,7 @@ package com.peerfect.controller.utils;
 
 import com.peerfect.DTO.MailDTO;
 import com.peerfect.service.utils.MailService;
+import com.peerfect.service.utils.TokenService;
 import com.peerfect.vo.utils.VerifyVO;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,9 +24,11 @@ import java.util.Map;
 public class MailController {
 
     private final MailService mailService;
+    private final TokenService tokenService;
 
     //todo time이 5분이상 지나면 저절로 삭제되는 method
     //todo 같은 email이 들어왔을 때 체크하고 전 이메일을 삭제
+
 
     @PostMapping("/emailCheck")
     public ResponseEntity<Map<String, Object>> emailCheck(@RequestBody MailDTO mailDTO) throws MessagingException, UnsupportedEncodingException {
@@ -38,8 +43,22 @@ public class MailController {
             VerifyVO v = new VerifyVO(email, authCode, LocalDateTime.now());
             mailService.setEmailVerify(v);
 
+            // 10분 후 deleteVerifyCode(email) 호출을 위한 Timer 설정
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        log.info("Deleting verification code for email: {}", email);
+                        mailService.deleteEmailVerify(email);
+                    } catch (Exception e) {
+                        log.error("Failed to delete verification code for email: {}", email, e);
+                    }
+                }
+            }, 10 * 60 * 1000); // 10분 (밀리초 단위)
+
             response.put("status", "success");
             response.put("message", "인증 코드가 이메일로 발송되었습니다.");
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Error: {}", e.getMessage());
@@ -61,12 +80,10 @@ public class MailController {
             int re = mailService.getEmailVerify(email, authCode);
 
             if (re != 0) {
-                //mailService.deleteEmailVerify(email); // 인증 성공 시 데이터 삭제
-                response.put("message", "인증에 성공했습니다.");
 
-                //인환님 소통
-                response.put("next api", "/api/member/checkMember");
-                response.put("comment", "email 넘겨주셔야 됩니다!");
+                mailService.deleteEmailVerify(email); // 인증 성공 시 데이터 삭제
+                //회원일 때 아닐 때 로직
+                response.put("message", "인증에 성공했습니다.");
 
             } else {
                 response.put("status", "error");

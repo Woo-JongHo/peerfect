@@ -1,6 +1,7 @@
 package com.peerfect.repository.member;
 
 
+import com.peerfect.DTO.MemberChallengeDTO;
 import com.peerfect.db.member.MemberDBManger;
 import com.peerfect.vo.member.MemberVO;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +33,55 @@ public class MemberRepository {
         return MemberDBManger.authenticate(email);
     }
 
-    public static List<Map<String, String>> getMemberComplete(String userId) {
-        return MemberDBManger.getMemberComplete(userId);
+
+    public static List<MemberChallengeDTO> getMemberMain(String memberId) {
+        return MemberDBManger.getMemberMain(memberId);
     }
 
-    public static List<Map<String, String>> getMemberMission(String memberId) {
-        return MemberDBManger.getMemberMission(memberId);
+
+    public static List<MemberChallengeDTO> getMemberNext(String memberId) {
+        return MemberDBManger.getMemberNext(memberId);
     }
+
+    public static List<MemberChallengeDTO> getMemberComplete(String memberId) {
+        return MemberDBManger.getMemberComplete(memberId);
+    }
+
+
+    public static boolean isNickNameExist(String nickname) {
+        return MemberDBManger.isNickNameExist(nickname);
+    }
+
+    public static String getMemberNickName(String email) {
+        return MemberDBManger.getMemberNickName(email);
+    }
+
+    public static void deleteById(String memberId) {
+        MemberDBManger.deleteById(memberId);
+    }
+
+    public static void updateUIStart(String memberId, String ChallengeNo) {
+        MemberDBManger.updateUIStart(memberId, ChallengeNo);
+
+    }
+
+    public static void updateUXStart(String memberId, String ChallengeNO) {
+        MemberDBManger.updateUXStart(memberId, ChallengeNO);
+
+    }
+
+    public static Map<String, Object> getMemberInfo(String memberId) {
+
+        Map<String, Object> memberData = MemberDBManger.getMemberInfo(memberId);
+
+        log.info("조회된 회원 데이터: {}", memberData);
+
+
+        return memberData;
+    }
+
+    public static boolean isMemberExists(String memberId) {
+        return MemberDBManger.isMemberExist(memberId);
+    }
+
 }

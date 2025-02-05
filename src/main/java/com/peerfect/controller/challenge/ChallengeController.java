@@ -1,17 +1,16 @@
 package com.peerfect.controller.challenge;
 
+import com.peerfect.DTO.ChallengeDetailDTO;
+import com.peerfect.DTO.PreviewDTO;
 import com.peerfect.service.challenge.ChallengeService;
-import com.peerfect.service.challenge.MissionService;
+import com.peerfect.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -20,34 +19,40 @@ import java.util.Map;
 public class ChallengeController {
 
     private final ChallengeService challengeService;
+    String preview;
+
 
     @GetMapping("/")
     public String getChallenge() {
-        return "추후 개발 예정";
+        return "Test";
     }
 
 
     @GetMapping("/ui-preview")
-    public ResponseEntity<?> getUIPreview(){
+    public ResponseEntity<List<PreviewDTO>> getUIPreview() {
+        String preview = "UI: 한걸음부터";
 
-
-        return ResponseEntity.ok("");
+        List<PreviewDTO> list = challengeService.getUIPreview(preview);
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/ux-preview")
-    public ResponseEntity<?> getUXpreview(){
-
-        return ResponseEntity.ok("");
+    public ResponseEntity<List<PreviewDTO>> getUXpreview(){
+        preview = "UX 초심자를 위한 2주 챌린지";
+        List<PreviewDTO> list = challengeService.getUXPreview(preview);
+        log.info(list + "list");
+        return ResponseEntity.ok(list);
     }
+
     @GetMapping("/{challengeNo}/detail")
-    public ResponseEntity<?> getDetailPage(@PathVariable String challengeNo){
+    public ResponseEntity<ChallengeDetailDTO> getChallengeDetail(@PathVariable String challengeNo) {
+        ChallengeDetailDTO list = challengeService.getChallengeDetail(challengeNo);
 
-
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("{challengeNo}/review")
-    public ResponseEntity<?> getReview(@PathVariable String challengeNo){
+    public ResponseEntity<?> getReview(@PathVariable int challengeNo){
 
 
         return ResponseEntity.ok("missionList");
@@ -60,23 +65,15 @@ public class ChallengeController {
         return ResponseEntity.ok("missionList");
     }
 
+    //Start Challenge
+    @PutMapping("/{challengeNo}/member/{memberId}/start")
+    public ResponseEntity<?> startMemberChallenge(
+            @PathVariable String memberId,
+            @PathVariable String challengeNo) {
+        HashMap<String, Object> map;
+        map = challengeService.startMemberChallenge(memberId, challengeNo);
 
-    /*
-    //todo challenge에 따른 missionList 구현
-    @GetMapping("/{challengeNo}/ui-missionlist")
-    public ResponseEntity<?> getUIMissionList(@PathVariable String challengeNo){
-
-        List<Map<String, String>> missionList = missionService.getUIMissionList(challengeNo);
-
-        return ResponseEntity.ok(missionList);
+        return ResponseEntity.ok(map);
     }
-
-    @GetMapping("/{challengeNo}/ux-missionlist")
-    public ResponseEntity<?> getUXMissionList(@PathVariable String challengeNo){
-        List<Map<String, String>> missionList = missionService.getUXMissionList(challengeNo);
-
-        return ResponseEntity.ok(missionList);
-    }
-    */
 
 }

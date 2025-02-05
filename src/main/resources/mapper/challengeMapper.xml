@@ -5,4 +5,69 @@
 
 <mapper namespace="challenge">
 
+    <select id="getUIPreview" parameterType="String" resultType="PreviewDTO">
+        SELECT
+            c.challenge_no AS challengeNo,
+            c.challenge_intro AS challengeShortIntro,
+            c.challenge_title AS challengeTitle,
+            COUNT(m.challenge_no) AS memberCount
+        FROM
+            CHALLENGE c
+        LEFT JOIN
+            MEMBER m
+        ON
+            c.challenge_no = m.challenge_no
+        WHERE
+            c.challenge_group = #{preview}
+        GROUP BY
+            c.challenge_no, c.challenge_title, c.challenge_intro
+        ORDER BY
+            c.challenge_no ASC
+    </select>
+
+    <select id="getUXPreview" parameterType="String" resultType="PreviewDTO">
+        SELECT
+            c.challenge_no AS challengeNo,
+            c.challenge_intro AS challengeShortIntro,
+            c.challenge_title AS challengeTitle,
+            COUNT(m.challenge_no) AS memberCount
+        FROM
+            CHALLENGE c
+        LEFT JOIN
+            MEMBER m
+        ON
+            c.challenge_no = m.challenge_no
+        WHERE
+            c.challenge_group = #{preview}
+        GROUP BY
+            c.challenge_no, c.challenge_title, c.challenge_intro
+        ORDER BY
+            c.challenge_no ASC
+    </select>
+
+    <select id="getChallengeDetail" parameterType="Integer" resultType="ChallengeDetailDTO">
+        SELECT
+            c.challenge_group AS challengeGroup,
+            c.challenge_type AS challengeType,
+            c.challenge_intro AS challengeIntro,
+            c.challenge_shortIntro AS challengeShortIntro,
+            c.challenge_mission AS challengeMission,
+            c.challenge_level AS challengeLevel,
+            r.rule_detail AS ruleDetail,
+            c.challenge_title AS challengeTitle
+        FROM
+            CHALLENGE c
+        LEFT JOIN
+            RULE r
+        ON
+            c.challenge_no = r.challenge_no
+        WHERE
+        c.challenge_no = #{challengeNo};
+    </select>
+
+
+    <select id = "ChallengeTypeByNo" resultType="String">
+        SELECT challenge_type FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengeNo}::bigint
+    </select>
 </mapper>

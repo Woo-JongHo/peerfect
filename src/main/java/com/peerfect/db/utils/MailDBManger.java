@@ -37,4 +37,18 @@ public class MailDBManger extends DBManger {
         return re;
     }
 
+    public static void deleteEmailVerify(String email) {
+        SqlSession session = sqlSessionFactory.openSession();
+
+        try {
+            session.delete("verify.deleteVerify", email);
+            session.commit();
+        } catch (Exception e) {
+            e.printStackTrace(); // 에러 출력
+            session.rollback(); // 에러 발생 시 롤백
+        } finally {
+            session.close(); // 세션 닫기
+        }
+
+    }
 }
