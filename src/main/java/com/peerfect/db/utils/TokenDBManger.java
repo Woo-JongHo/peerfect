@@ -119,4 +119,18 @@ public class TokenDBManger extends DBManger{
 
         return memberId;
     }
+
+    public static void deleteTokensByMemberId(String memberId) {
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            int re = session.delete("token.deleteTokensByMemberId", memberId);
+            session.commit();
+            log.info("Member ID {} 의 모든 토큰 삭제 완료 (삭제된 개수: {})", memberId, re);
+        } catch (Exception e) {
+            log.error("Member ID {} 의 토큰 삭제 실패: {}", memberId, e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
+    }
 }

@@ -9,6 +9,7 @@ import com.peerfect.service.utils.TokenService;
 import com.peerfect.util.JwtTokenProvider;
 import com.peerfect.vo.member.MemberVO;
 import com.peerfect.vo.utils.TokenVO;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -146,7 +147,6 @@ public class MemberController {
     }
 
 
-
     @PostMapping("/regenerate-access")
     public ResponseEntity<?> regenerateAccessToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
         if (refreshToken == null || refreshToken.isEmpty()) {
@@ -251,6 +251,37 @@ public class MemberController {
         return ResponseEntity.ok("delete member Successful");
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token, HttpServletResponse response) {
+        if (token != null && token.startsWith("Bearer ")) {
+            String accessToken = token.substring(7); // "Bearer " 제거
+            tokenService.logout(accessToken);
+
+            // Access Token 쿠키 삭제
+            ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", null)
+                    .httpOnly(true)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(0) // 쿠키 즉시 삭제
+                    .sameSite("Strict")
+                    .build();
+
+            // Refresh Token 쿠키 삭제
+            ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", null)
+                    .httpOnly(true)
+                    .secure(true)
+                    .path("/")
+                    .maxAge(0) // 쿠키 즉시 삭제
+                    .sameSite("Strict")
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
+                    .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                    .body(Map.of("message", "로그아웃 성공, refresh, access 삭제"));
+        }
+        return ResponseEntity.badRequest().body("유효하지 않은 토큰");
+    }
 
 
     //Stop challenge

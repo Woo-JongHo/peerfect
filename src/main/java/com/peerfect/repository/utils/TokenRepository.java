@@ -35,4 +35,8 @@ public class TokenRepository {
     public String getMemberIdByToken(String refreshToken) {
         return TokenDBManger.getMemberIdByToken(refreshToken);
     }
+
+    public void deleteTokensByMemberId(String memberId) {
+        TokenDBManger.deleteTokensByMemberId(memberId);
+    }
 }

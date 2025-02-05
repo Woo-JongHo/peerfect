@@ -83,4 +83,5 @@ public class MemberRepository {
     public static boolean isMemberExists(String memberId) {
         return MemberDBManger.isMemberExist(memberId);
     }
+
 }

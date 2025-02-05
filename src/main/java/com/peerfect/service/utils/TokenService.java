@@ -86,4 +86,8 @@ public class TokenService {
         return Map.of("accessToken", newAccessToken, "refreshToken", newRefreshToken);
     }
 
+    public void logout(String accessToken) {
+        String memberId = jwtTokenProvider.getMemberIdFromToken(accessToken);
+        tokenRepository.deleteTokensByMemberId(memberId);
+    }
 }

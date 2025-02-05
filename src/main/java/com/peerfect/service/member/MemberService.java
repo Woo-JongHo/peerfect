@@ -3,6 +3,7 @@ package com.peerfect.service.member;
 import com.peerfect.DTO.MemberChallengeDTO;
 import com.peerfect.repository.challenge.ChallengeRepository;
 import com.peerfect.repository.member.MemberRepository;
+import com.peerfect.util.JwtTokenProvider;
 import com.peerfect.vo.member.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final ChallengeRepository challengeRepository;
-
+    private final JwtTokenProvider jwtTokenProvider;
 
     public void insertUser(MemberVO userVO) {
         memberRepository.insertUser(userVO);
@@ -84,7 +85,7 @@ public class MemberService {
         LocalDateTime uiStart = convertToLocalDateTime(memberData.get("member_uistart"));
         LocalDateTime uxStart = convertToLocalDateTime(memberData.get("member_uxstart"));
 
-        // 현재 챌린지 설정
+        // 현재 챌린지 설정member_img
         String currentChallenge = null;
         String currentDay = null;
 
@@ -132,4 +133,6 @@ public class MemberService {
 
         return "day-" + (daysBetween + 1); // 현재 진행 중인 day 값 반환 (day-1부터 시작)
     }
+
+
 }
