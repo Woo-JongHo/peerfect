@@ -78,7 +78,7 @@ public class TokenService {
 
         // DB에 새로운 refreshToken 저장
         TokenVO tokenVO = new TokenVO();
-        tokenVO.setMemberId(UUID.fromString(memberId));
+        tokenVO.setMemberId(memberId);
         tokenVO.setAccessToken(newAccessToken);
         tokenVO.setRefreshToken(newRefreshToken);
         TokenDBManger.saveToken(tokenVO);

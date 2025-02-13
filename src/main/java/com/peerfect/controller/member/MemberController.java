@@ -125,7 +125,7 @@ public class MemberController {
         String memberRefreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
         log.info("토큰생성확인");
-        TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), memberAccessToken, memberRefreshToken);
+            TokenVO tokenVO = new TokenVO(memberId, memberAccessToken, memberRefreshToken);
         tokenService.saveToken(tokenVO);
 
 
@@ -197,7 +197,7 @@ public class MemberController {
             String accessToken = jwtTokenProvider.generateAccessToken(memberId);
             String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
-            TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), accessToken, refreshToken);
+            TokenVO tokenVO = new TokenVO(memberId, accessToken, refreshToken);
             tokenService.saveToken(tokenVO);
 
             Map<String, String> response = new HashMap<>();

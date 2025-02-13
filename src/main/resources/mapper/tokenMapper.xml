@@ -6,21 +6,21 @@
 <mapper namespace="token">
     <insert id="saveToken">
         INSERT INTO token (member_id, access_token, refresh_token)
-        VALUES (#{memberId}, #{accessToken}, #{refreshToken})
+        VALUES (#{memberId}::UUID, #{accessToken}, #{refreshToken})
     </insert>
 
     <update id="updateToken">
         UPDATE token
         SET access_token = #{accessToken}, refresh_token = #{refreshToken}
-        WHERE member_id = #{memberId}
+        WHERE member_id = #{memberId}::UUID
     </update>
 
     <select id="getAccessToken" resultType="String">
-        SELECT access_token FROM token WHERE member_id = #{memberId}
+        SELECT access_token FROM token WHERE member_id = #{memberId}::UUID
     </select>
 
     <select id="getRefreshToken" resultType="String">
-        SELECT refresh_token FROM token WHERE member_id = #{memberId}
+        SELECT refresh_token FROM token WHERE member_id = #{memberId}::UUID
     </select>
 
     <select id="findByRefreshToken" resultType="TokenVO">
