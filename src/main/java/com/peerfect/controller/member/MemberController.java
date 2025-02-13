@@ -124,6 +124,7 @@ public class MemberController {
         String memberAccessToken = jwtTokenProvider.generateAccessToken(memberId);
         String memberRefreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
+        log.info("토큰생성확인");
         TokenVO tokenVO = new TokenVO(UUID.fromString(memberId), memberAccessToken, memberRefreshToken);
         tokenService.saveToken(tokenVO);
 
@@ -153,6 +154,8 @@ public class MemberController {
 
     @PostMapping("/regenerate-access")
     public ResponseEntity<?> regenerateAccessToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
+
+
         if (refreshToken == null || refreshToken.isEmpty()) {
             log.error("❌ RefreshToken이 쿠키에 없음!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token missing");
