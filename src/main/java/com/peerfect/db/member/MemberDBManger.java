@@ -141,7 +141,7 @@ public class MemberDBManger {
 
     public static int deleteById(String memberId) {
         int re = -1;
-
+        log.info("여기가 실행되는지 확인");
         SqlSession session = sqlSessionFactory.openSession();
         try {
             re = session.delete("member.deleteMember", memberId);

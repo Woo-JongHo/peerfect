@@ -129,13 +129,11 @@ public class MemberService {
         long daysBetween = ChronoUnit.DAYS.between(startDate, now); // 시작일부터 현재일까지 일수 계산
 
         if (daysBetween < 0) {
-            return "day-1"; // 시작일이 미래일 경우 (예외 처리)
+            return "1"; // 시작일이 미래일 경우 (예외 처리)
         }
 
-        return "day-" + (daysBetween + 1); // 현재 진행 중인 day 값 반환 (day-1부터 시작)
+        return String.valueOf(daysBetween + 1); // day 값을 String으로 변환하여 반환
     }
-
-
     public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo) {
 
         return memberRepository.startMemberChallenge(memberId,challengeNo);
