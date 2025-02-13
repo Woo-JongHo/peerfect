@@ -71,7 +71,9 @@ public class MemberService {
 
         // 회원이 존재하지 않으면 예외 처리
         if (memberData == null || memberData.isEmpty()) {
-            throw new IllegalArgumentException("존재하지 않는 회원 ID입니다: " + memberId);
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "존재하지 않는 회원 ID입니다.");
+            return errorResponse;
         }
 
         //  응답 데이터 정리
@@ -97,17 +99,16 @@ public class MemberService {
             currentDay = calculateChallengeDay(uxStart);
         }
 
-        // 6️⃣ 챌린지 정보 추가
         Map<String, Object> challengeInfo = new HashMap<>();
         if (currentChallenge != null) {
             challengeInfo.put("currentChallenge", currentChallenge);
             challengeInfo.put("currentDay", currentDay);
+            challengeInfo.put("challengeNo", memberData.get("challenge_no"));
         } else {
             challengeInfo = null;
         }
         response.put("challengeInfo", challengeInfo);
 
-        // 7️⃣ 정제된 데이터 반환
         return response;
     }
 
@@ -135,4 +136,8 @@ public class MemberService {
     }
 
 
+    public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo) {
+
+        return memberRepository.startMemberChallenge(memberId,challengeNo);
+    }
 }

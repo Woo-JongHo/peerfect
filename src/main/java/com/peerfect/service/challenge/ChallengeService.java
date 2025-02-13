@@ -30,7 +30,7 @@ public class ChallengeService{
 
         String challengeType = ChallengeRepository.getChallengeTypeByNo(challengeNo);
         map.put("status", "참여하기 완료");
-        map.put("userId", memberId);
+        map.put("memberId", memberId);
 
         return map;
     }

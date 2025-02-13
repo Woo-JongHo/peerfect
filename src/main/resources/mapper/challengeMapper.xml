@@ -10,6 +10,7 @@
             c.challenge_no AS challengeNo,
             c.challenge_intro AS challengeShortIntro,
             c.challenge_title AS challengeTitle,
+            c.challenge_day AS challengeDay,
             COUNT(m.challenge_no) AS memberCount
         FROM
             CHALLENGE c
@@ -20,7 +21,7 @@
         WHERE
             c.challenge_group = #{preview}
         GROUP BY
-            c.challenge_no, c.challenge_title, c.challenge_intro
+            c.challenge_no, c.challenge_title, c.challenge_intro, c.challenge_day
         ORDER BY
             c.challenge_no ASC
     </select>
@@ -30,6 +31,7 @@
             c.challenge_no AS challengeNo,
             c.challenge_intro AS challengeShortIntro,
             c.challenge_title AS challengeTitle,
+            c.challenge_day AS challengeDay,
             COUNT(m.challenge_no) AS memberCount
         FROM
             CHALLENGE c
@@ -40,7 +42,7 @@
         WHERE
             c.challenge_group = #{preview}
         GROUP BY
-            c.challenge_no, c.challenge_title, c.challenge_intro
+            c.challenge_no, c.challenge_title, c.challenge_intro, c.challenge_day
         ORDER BY
             c.challenge_no ASC
     </select>

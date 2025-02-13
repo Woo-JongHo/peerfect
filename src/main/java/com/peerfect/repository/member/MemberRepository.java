@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Member;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,4 +85,7 @@ public class MemberRepository {
         return MemberDBManger.isMemberExist(memberId);
     }
 
+    public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo) {
+        return MemberDBManger.startMemberChallenge(memberId, challengeNo);
+    }
 }

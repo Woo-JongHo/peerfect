@@ -65,15 +65,5 @@ public class ChallengeController {
         return ResponseEntity.ok("missionList");
     }
 
-    //Start Challenge
-    @PutMapping("/{challengeNo}/member/{memberId}/start")
-    public ResponseEntity<?> startMemberChallenge(
-            @PathVariable String memberId,
-            @PathVariable String challengeNo) {
-        HashMap<String, Object> map;
-        map = challengeService.startMemberChallenge(memberId, challengeNo);
-
-        return ResponseEntity.ok(map);
-    }
 
 }

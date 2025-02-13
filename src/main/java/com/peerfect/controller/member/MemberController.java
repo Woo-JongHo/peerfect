@@ -45,13 +45,17 @@ public class MemberController {
 
 
     @GetMapping("/{memberId}/memberInfo")
-    public ResponseEntity<?> memberInfo(@PathVariable String memberId){
-
+    public ResponseEntity<?> memberInfo(@PathVariable String memberId) {
         Map<String, Object> response = memberService.getMemberInfo(memberId);
+
+        if (response == null || response.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "없는 회원입니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
 
         return ResponseEntity.ok(response);
     }
-
     // 멤버아이디, 토큰, 이미지,
     @PostMapping("/checkNickName")
     public ResponseEntity<?> checkNickName(@RequestBody Map<String, String> userData){
@@ -226,13 +230,14 @@ public class MemberController {
 
 
     @PutMapping("/{memberId}/challenges/{challengeNo}/start")
-    public ResponseEntity<?> startChallenge(@PathVariable String memberId, String challengeNo){
+    public ResponseEntity<?> startChallenge(@PathVariable String memberId, @PathVariable String challengeNo) {
+        HashMap<String, Object> map = memberService.startMemberChallenge(memberId, challengeNo);
 
-
-
-        return ResponseEntity.ok("memberId + challengeNo로 어디에 했다를 알려줘야할듯");
-
-
+        // 추가 정보 memberId와 challengeStart 반환
+        map.put("memberId", memberId);
+        map.put("challengeStart", LocalDateTime.now().toString()); // 현재 시간을 challengeStart로 설정
+        map.put("challengeNo", challengeNo);
+        return ResponseEntity.ok(map);
     }
     //Start challenge
 
@@ -310,6 +315,9 @@ public class MemberController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid refresh token"));
     }*/
+    @PostMapping("{memberId}/challenge/{challengeNo}/upload")
+    public ResponseEntity<?> uploadChallenge(@PathVariable String memberid, String challengeNo){
 
-
+        return ResponseEntity.ok("");
+    }
 }

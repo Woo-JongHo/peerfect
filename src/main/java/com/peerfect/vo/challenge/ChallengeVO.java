@@ -16,8 +16,9 @@ public class ChallengeVO {
     private String challengeIntro;
     private String challengeMission;
     private String challengeLevel;
+    private String challengeDay;
 
-    public ChallengeVO(int challengeNo, String challengeGroup, String challengeGoal, String challengeType, String challengeTitle, String challengeIntro, String challengeMission, String challengeLevel) {
+    public ChallengeVO(int challengeNo, String challengeGroup, String challengeGoal, String challengeType, String challengeTitle, String challengeIntro, String challengeMission, String challengeLevel, String challengeDay) {
         this.challengeNo = challengeNo;
         this.challengeGroup = challengeGroup;
         this.challengeGoal = challengeGoal;
@@ -26,6 +27,7 @@ public class ChallengeVO {
         this.challengeIntro = challengeIntro;
         this.challengeMission = challengeMission;
         this.challengeLevel = challengeLevel;
+        this.challengeDay = challengeDay;
     }
 
 }

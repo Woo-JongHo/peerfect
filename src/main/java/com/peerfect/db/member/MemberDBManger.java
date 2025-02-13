@@ -218,6 +218,36 @@ public class MemberDBManger {
         return exists;
     }
 
+    public static HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo) {
+        SqlSession session = sqlSessionFactory.openSession();
+        HashMap<String, Object> response = new HashMap<>();
+        int updatedRows = 0;
+        int number = Integer.parseInt(challengeNo);
 
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("memberId", memberId);
+            params.put("challengeNo", number);
+
+            updatedRows = session.update("member.updateMemberChallenge", params);
+            session.commit();
+
+            if (updatedRows > 0) {
+                response.put("message", "챌린지가 성공적으로 시작되었습니다.");
+                response.put("status", "success");
+            } else {
+                response.put("message", "존재하지 않는 회원 ID입니다.");
+                response.put("status", "fail");
+            }
+        } catch (Exception e) {
+            session.rollback();
+            response.put("message", "챌린지 시작 중 오류가 발생했습니다: " + e.getMessage());
+            response.put("status", "error");
+        } finally {
+            session.close();
+        }
+
+        return response;
+    }
 
 }
