@@ -17,5 +17,9 @@ public class ReviewService {
     public List<ReviewVO> getReviews(String challengeNo) {
         return reviewRepository.getReviews(challengeNo);
     }
+
+    public int insertReview(ReviewVO reviewVO) {
+        return reviewRepository.insertReview(reviewVO);
+    }
 }
 

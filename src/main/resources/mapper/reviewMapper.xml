@@ -4,17 +4,26 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="review">
-    <select id="getReviews" parameterType="String" resultMap="reviewResultMap">
-        SELECT * FROM review WHERE challenge_no = #{challengeNo}::bigint
-    </select>
+
 
     <resultMap id="reviewResultMap" type="com.peerfect.vo.challenge.ReviewVO">
         <result property="reviewNo" column="review_no"/>
-        <result property="memberNo" column="member_no"/>
+        <result property="memberId" column="member_id"/>
         <result property="challengeNo" column="challenge_no"/>
         <result property="reviewLevel" column="review_level"/>
         <result property="reviewText" column="review_text"/>
         <result property="reviewDate" column="review_date"/>
         <result property="reviewWaste" column="review_waste"/>
     </resultMap>
+
+
+    <select id="getReviews" parameterType="String" resultMap="reviewResultMap">
+        SELECT * FROM review WHERE challenge_no = #{challengeNo}::bigint
+    </select>
+
+    <insert id="insertReview" parameterType="com.peerfect.vo.challenge.ReviewVO">
+        INSERT INTO review (member_id, challenge_no, review_level, review_text, review_date, review_waste)
+        VALUES (#{memberId}::UUID, #{challengeNo}::bigint, #{reviewLevel}::bigint, #{reviewText}, #{reviewDate}, #{reviewWaste}::bigint)
+    </insert>
+
 </mapper>

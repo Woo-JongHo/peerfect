@@ -3,10 +3,12 @@ package com.peerfect.controller.member;
 import com.peerfect.DTO.ChallengeDetailDTO;
 import com.peerfect.DTO.MemberChallengeDTO;
 import com.peerfect.DTO.PreviewDTO;
+import com.peerfect.service.member.ReviewService;
 import com.peerfect.service.utils.MailService;
 import com.peerfect.service.member.MemberService;
 import com.peerfect.service.utils.TokenService;
 import com.peerfect.util.JwtTokenProvider;
+import com.peerfect.vo.challenge.ReviewVO;
 import com.peerfect.vo.member.MemberVO;
 import com.peerfect.vo.utils.TokenVO;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.sql.Timestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -33,6 +36,7 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenService tokenService;
+    private final ReviewService reviewService;
 
     private static String memberId;
     private static String memberNickName;
@@ -324,9 +328,29 @@ public class MemberController {
 
         return ResponseEntity.ok("");
     }
+    @PostMapping("/review-upload")
+    public ResponseEntity<?> uploadReview(@RequestBody Map<String, Object> request) {
 
-    @PostMapping("{memberId}/challenge{challengeNo}/review-upload")
-    public ResponseEntity<?> uploadReview(@PathVariable String memberId, String challengeNo){
-        return ResponseEntity.ok("");
+        // data 키에서 리뷰 데이터를 추출
+        Map<String, Object> data = (Map<String, Object>) request.get("data");
+
+        // ReviewVO 객체 생성 후 데이터 매핑
+        ReviewVO reviewVO = new ReviewVO();
+        reviewVO.setMemberId(data.get("memberId").toString());
+        reviewVO.setChallengeNo(Long.parseLong(data.get("challengeNo").toString()));
+        reviewVO.setReviewLevel(Long.valueOf(data.get("reviewLevel").toString()));
+        reviewVO.setReviewText(data.get("reviewText").toString());
+        reviewVO.setReviewDate(Timestamp.valueOf(data.get("reviewDate").toString()));
+        reviewVO.setReviewWaste(Long.valueOf(data.get("reviewWaste").toString()));
+
+        // DB 저장 로직 호출
+        int result = reviewService.insertReview(reviewVO);
+
+        if (result > 0) {
+            return ResponseEntity.ok("Review uploaded successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload review.");
+        }
     }
+
 }

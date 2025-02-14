@@ -18,4 +18,7 @@ public class ReviewRepository {
     }
 
 
+    public int insertReview(ReviewVO reviewVO) {
+        return ReviewDBManger.insertReview(reviewVO);
+    }
 }
