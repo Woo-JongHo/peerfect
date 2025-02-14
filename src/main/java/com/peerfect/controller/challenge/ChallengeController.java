@@ -3,13 +3,13 @@ package com.peerfect.controller.challenge;
 import com.peerfect.DTO.ChallengeDetailDTO;
 import com.peerfect.DTO.PreviewDTO;
 import com.peerfect.service.challenge.ChallengeService;
-import com.peerfect.service.member.MemberService;
+import com.peerfect.service.member.ReviewService;
+import com.peerfect.vo.challenge.ReviewVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -19,6 +19,7 @@ import java.util.List;
 public class ChallengeController {
 
     private final ChallengeService challengeService;
+    private final ReviewService reviewService;
     String preview;
 
 
@@ -51,19 +52,16 @@ public class ChallengeController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("{challengeNo}/review")
-    public ResponseEntity<?> getReview(@PathVariable int challengeNo){
-
-
-        return ResponseEntity.ok("missionList");
-    }
 
     @GetMapping("{challengeNo}/upload")
     public ResponseEntity<?> getUpload(@PathVariable String challengeNo){
-
-
         return ResponseEntity.ok("missionList");
     }
 
+    @GetMapping("{challengeNo}/review")
+    public ResponseEntity<List<ReviewVO>> getReview(@PathVariable String challengeNo) {
+        List<ReviewVO> reviewList = reviewService.getReviews(challengeNo);
+        return ResponseEntity.ok(reviewList);
+    }
 
 }

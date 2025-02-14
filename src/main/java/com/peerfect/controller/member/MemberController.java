@@ -318,9 +318,15 @@ public class MemberController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid refresh token"));
     }*/
+
     @PostMapping("{memberId}/challenge/{challengeNo}/upload")
     public ResponseEntity<?> uploadChallenge(@PathVariable String memberid, String challengeNo){
 
+        return ResponseEntity.ok("");
+    }
+
+    @PostMapping("{memberId}/challenge{challengeNo}/review-upload")
+    public ResponseEntity<?> uploadReview(@PathVariable String memberId, String challengeNo){
         return ResponseEntity.ok("");
     }
 }
