@@ -5,6 +5,7 @@ import com.peerfect.vo.member.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -218,17 +219,32 @@ public class MemberDBManger {
         return exists;
     }
 
-    public static HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo) {
+    public static HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo, String type) {
         SqlSession session = sqlSessionFactory.openSession();
         HashMap<String, Object> response = new HashMap<>();
         int updatedRows = 0;
         int number = Integer.parseInt(challengeNo);
+        LocalDateTime now = LocalDateTime.now();
 
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("memberId", memberId);
             params.put("challengeNo", number);
 
+            // 타입에 따라 ui 또는 ux 시작 시간 업데이트
+            if (type.equals("ui")) {
+                params.put("field", "member_uistart");
+            } else if (type.equals("ux")) {
+                params.put("field", "member_uxstart");
+            } else {
+                throw new IllegalArgumentException("유효하지 않은 타입입니다. (ui 또는 ux만 허용)");
+            }
+            params.put("startTime", now.toString());  // LocalDateTime -> String 변환
+
+            // 동적 SQL로 필드 업데이트 (ui 또는 ux)
+            session.update("member.dynamicUpdateStart", params);
+
+            // challengeNo 업데이트
             updatedRows = session.update("member.updateMemberChallenge", params);
             session.commit();
 

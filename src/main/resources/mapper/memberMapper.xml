@@ -4,7 +4,8 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="member">
-    <insert id ="insert" parameterType="memberVO">
+
+    <insert id="insert" parameterType="memberVO">
         INSERT INTO member (member_name, member_email, member_requiredterm, member_optionalterm)
         VALUES (#{memberName}, #{memberEmail}, #{memberRequiredTerm}, #{memberOptionalTerm})
     </insert>
@@ -15,10 +16,10 @@
         WHERE member_email = #{memberEmail}
     </select>
 
-    <select id ="isMemberExist" resultType="boolean">
-        SELECT count(*) > 0
-        from member
-        where member_id = #{memberId}::UUID
+    <select id="isMemberExist" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM member
+        WHERE member_id = #{memberId}::UUID
     </select>
 
     <select id="getMemberNickName" resultType="String">
@@ -47,89 +48,55 @@
 
     <select id="getMemberMain" resultType="MemberChallengeDTO">
         SELECT
-            c.challenge_no AS challengeNo,
-            c.challenge_shortintro AS challengeShortIntro,
-            c.challenge_title AS challengeTitle,
-            c.challenge_day AS challengeDay,
-            COUNT(m.member_id) AS memberCount
-        FROM
-            MEMBER m
-        INNER JOIN CHALLENGE c
-        ON m.challenge_no = c.challenge_no
-        WHERE
-            m.challenge_no IN (
-            SELECT challenge_no FROM MEMBER WHERE member_id = #{memberId}::UUID
-            )
-        GROUP BY
-            c.challenge_no, c.challenge_shortintro, c.challenge_title, challenge_day
+        c.challenge_no AS challengeNo,
+        c.challenge_shortintro AS challengeShortIntro,
+        c.challenge_title AS challengeTitle,
+        c.challenge_day AS challengeDay,
+        COUNT(m.member_id) AS memberCount
+        FROM MEMBER m
+        INNER JOIN CHALLENGE c ON m.challenge_no = c.challenge_no
+        WHERE m.challenge_no IN (
+        SELECT challenge_no FROM MEMBER WHERE member_id = #{memberId}::UUID
+        )
+        GROUP BY c.challenge_no, c.challenge_shortintro, c.challenge_title, c.challenge_day
     </select>
 
-    <select id="getMemberNext" resultType="MemberChallengeDTO">    SELECT
+    <select id="getMemberNext" resultType="MemberChallengeDTO">
+        SELECT
         c2.challenge_no AS challengeNo,
         c2.challenge_shortintro AS challengeShortIntro,
         c2.challenge_title AS challengeTitle,
-        c2.challenge_title AS challengeDay,
+        c2.challenge_day AS challengeDay,
         COUNT(m2.member_id) AS memberCount
-        FROM
-            MEMBER m
-        INNER JOIN CHALLENGE c1
-        ON m.challenge_no = c1.challenge_no
-        INNER JOIN CHALLENGE c2
-        ON c1.challenge_group = c2.challenge_group
-        AND c2.challenge_no > c1.challenge_no
-        LEFT JOIN MEMBER m2
-        ON c2.challenge_no = m2.challenge_no
-        WHERE
-        m.member_id = #{memberId}::UUID
-        GROUP BY
-        c2.challenge_no, c2.challenge_shortintro, c2.challenge_title, c2.challenge_day
-        ORDER BY
-        c2.challenge_no ASC
+        FROM MEMBER m
+        INNER JOIN CHALLENGE c1 ON m.challenge_no = c1.challenge_no
+        INNER JOIN CHALLENGE c2 ON c1.challenge_group = c2.challenge_group AND c2.challenge_no > c1.challenge_no
+        LEFT JOIN MEMBER m2 ON c2.challenge_no = m2.challenge_no
+        WHERE m.member_id = #{memberId}::UUID
+        GROUP BY c2.challenge_no, c2.challenge_shortintro, c2.challenge_title, c2.challenge_day
+        ORDER BY c2.challenge_no ASC
     </select>
-
 
     <select id="getMemberComplete" resultType="MemberChallengeDTO">
         SELECT
         c2.challenge_no AS challengeNo,
         c2.challenge_shortintro AS challengeShortIntro,
-        c2.challenge_title AS challengeTitle,
-
-        FROM
-        MEMBER m
-        INNER JOIN
-        CHALLENGE c1
-        ON
-        m.challenge_no = c1.challenge_no
-        INNER JOIN
-        CHALLENGE c2
-        ON
-        c1.challenge_group = c2.challenge_group
-        WHERE
-        m.member_id = #{memberId}::UUID
-        AND
-        c1.challenge_no > c2.challenge_no
-        ORDER BY
-        c2.challenge_no ASC
+        c2.challenge_title AS challengeTitle
+        FROM MEMBER m
+        INNER JOIN CHALLENGE c1 ON m.challenge_no = c1.challenge_no
+        INNER JOIN CHALLENGE c2 ON c1.challenge_group = c2.challenge_group
+        WHERE m.member_id = #{memberId}::UUID AND c1.challenge_no > c2.challenge_no
+        ORDER BY c2.challenge_no ASC
     </select>
 
-
     <select id="getMemberMission" parameterType="String" resultType="map">
-        SELECT
-            m.mission_title,
-            m.mission_explain
-        FROM
-            mission AS m
-        WHERE
-            m.challenge_no = 1
-            AND m.mission_no NOT IN (
-        SELECT
-        c.mission_no
-        FROM
-        member AS mem
-        INNER JOIN
-        complete AS c ON mem.member_no = c.member_no
-        WHERE
-        mem.member_id = #{memberId}::UUID
+        SELECT m.mission_title, m.mission_explain
+        FROM mission AS m
+        WHERE m.challenge_no = 1 AND m.mission_no NOT IN (
+        SELECT c.mission_no
+        FROM member AS mem
+        INNER JOIN complete AS c ON mem.member_no = c.member_no
+        WHERE mem.member_id = #{memberId}::UUID
         )
     </select>
 
@@ -137,28 +104,32 @@
         DELETE FROM member WHERE member_id = #{memberId}::UUID
     </delete>
 
-    <update id = "updateUIStart">
+    <update id="updateUIStart">
         UPDATE member
-        SET member_uistart = NOW(),
-        challenge_no = #{challengeNo}::bigint
-        WHERE member_id = #{memberId}::UUID;
+        SET member_uistart = #{startTime}
+        WHERE member_id = #{memberId}::UUID
     </update>
 
-    <update id = "updateUXStart">
+    <update id="updateUXStart">
         UPDATE member
-        SET member_uxstart = NOW(),
-        challenge_no = #{challengeNo}::bigint
-        WHERE member_id = #{memberId}::UUID;
+        SET member_uxstart = #{startTime}
+        WHERE member_id = #{memberId}::UUID
     </update>
 
-    <select id = "getMemberInfo" resultType="map">
-        SELECT * FROM member where member_id = #{member_id}::UUID
+    <select id="getMemberInfo" resultType="map">
+        SELECT * FROM member WHERE member_id = #{memberId}::UUID
     </select>
 
     <update id="updateMemberChallenge" parameterType="map">
         UPDATE member
         SET challenge_no = #{challengeNo}
         WHERE member_id = #{memberId}::UUID
+    </update>
+
+    <update id="dynamicUpdateStart">
+        UPDATE member
+        SET ${field} = #{startTime}::timestamp
+        WHERE member_id = #{memberId}::UUID;
     </update>
 
 </mapper>

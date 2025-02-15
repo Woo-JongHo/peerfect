@@ -85,7 +85,7 @@ public class MemberRepository {
         return MemberDBManger.isMemberExist(memberId);
     }
 
-    public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo) {
-        return MemberDBManger.startMemberChallenge(memberId, challengeNo);
+    public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo, String type) {
+        return MemberDBManger.startMemberChallenge(memberId, challengeNo, type);
     }
 }

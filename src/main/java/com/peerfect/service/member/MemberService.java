@@ -89,7 +89,6 @@ public class MemberService {
         LocalDateTime uiStart = convertToLocalDateTime(memberData.get("member_uistart"));
         LocalDateTime uxStart = convertToLocalDateTime(memberData.get("member_uxstart"));
 
-        // 현재 챌린지 설정member_img
         String currentChallenge = null;
         String currentDay = null;
 
@@ -137,7 +136,21 @@ public class MemberService {
         return String.valueOf(daysBetween + 1); // day 값을 String으로 변환하여 반환
     }
     public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo) {
+        int challengeNoInt = Integer.parseInt(challengeNo);
+        LocalDateTime now = LocalDateTime.now();
+        String type;  // 변수 선언을 조건문 외부에서 수행
 
-        return memberRepository.startMemberChallenge(memberId,challengeNo);
+        // challengeNo에 따라 type 값 할당
+        if (challengeNoInt >= 1 && challengeNoInt <= 14) {
+            type = "ui";
+        } else if (challengeNoInt >= 15 && challengeNoInt <= 28) {
+            type = "ux";
+        } else {
+            throw new IllegalArgumentException("유효하지 않은 챌린지 번호입니다.");
+        }
+
+        // Repository 호출
+        return memberRepository.startMemberChallenge(memberId, challengeNo, type);
     }
+
 }
