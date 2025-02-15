@@ -5,6 +5,7 @@ import com.peerfect.repository.challenge.ChallengeRepository;
 import com.peerfect.repository.member.MemberRepository;
 import com.peerfect.util.JwtTokenProvider;
 import com.peerfect.vo.member.MemberVO;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,7 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
+    @Transactional(readOnly = true)  // readOnly는 성능 최적화를 위해 사용
     public Map<String, Object> getMemberInfo(String memberId) {
         //  DB에서 원본 데이터 가져오기
         Map<String, Object> memberData = memberRepository.getMemberInfo(memberId);
