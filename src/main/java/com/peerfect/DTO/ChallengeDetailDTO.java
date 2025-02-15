@@ -12,5 +12,5 @@ public class ChallengeDetailDTO {
     private String challengeLevel;
     private String ruleDetail;
     private String challengeTitle;
-    private String challengeDay;
+    private String challengeReg;
 }

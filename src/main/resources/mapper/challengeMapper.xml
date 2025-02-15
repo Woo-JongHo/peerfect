@@ -47,25 +47,27 @@
             c.challenge_no ASC
     </select>
 
-    <select id="getChallengeDetail" parameterType="Integer" resultType="ChallengeDetailDTO">
+    <select id="getChallengeDetail" resultType="ChallengeDetailDTO">
         SELECT
-            c.challenge_group AS challengeGroup,
-            c.challenge_type AS challengeType,
-            c.challenge_intro AS challengeIntro,
-            c.challenge_shortIntro AS challengeShortIntro,
-            c.challenge_mission AS challengeMission,
-            c.challenge_level AS challengeLevel,
-            r.rule_detail AS ruleDetail,
-            c.challenge_title AS challengeTitle
+        c.challenge_group AS challengeGroup,
+        c.challenge_type AS challengeType,
+        c.challenge_intro AS challengeIntro,
+        c.challenge_shortIntro AS challengeShortIntro,
+        c.challenge_mission AS challengeMission,
+        c.challenge_level AS challengeLevel,
+        r.rule_detail AS ruleDetail,
+        c.challenge_title AS challengeTitle,  <!-- 쉼표 추가 -->
+        c.challenge_reg AS challengeReg
         FROM
-            CHALLENGE c
+        CHALLENGE c
         LEFT JOIN
-            RULE r
+        RULE r
         ON
-            c.challenge_no = r.challenge_no
+        c.challenge_no = r.challenge_no
         WHERE
-        c.challenge_no = #{challengeNo};
+        c.challenge_no = #{challengeNo}
     </select>
+
 
 
     <select id = "ChallengeTypeByNo" resultType="String">
