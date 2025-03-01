@@ -385,7 +385,6 @@ public class MemberController {
         }
 
         try {
-            // 1️⃣ S3 업로드 및 DB 업데이트
             List<String> uploadedUrls = s3Service.challengeFileUpload(memberId, challengeNo, files);
 
             return ResponseEntity.ok(Map.of(

@@ -20,7 +20,7 @@ public class JwtTokenProvider {
     private static final byte[] SECRET_KEY_BYTES = Base64.getDecoder().decode(SECRET_KEY);
     private static final byte[] REFRESH_TOKEN_SECRET_KEY_BYTES = Base64.getDecoder().decode(REFRESH_TOKEN_SECRET_KEY);
 
-    private static final long ACCESS_TOKEN_VALIDITY = 1000 * 60 * 15; // 15분
+    private static final long ACCESS_TOKEN_VALIDITY = 3600000; // 15분
     private static final long REFRESH_TOKEN_VALIDITY = 1000 * 60 * 60 * 24 * 7; // 7일
 
     // Access Token 생성
