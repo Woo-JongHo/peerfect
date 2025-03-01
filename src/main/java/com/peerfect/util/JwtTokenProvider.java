@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CookieValue;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Date;
 
@@ -20,30 +22,38 @@ public class JwtTokenProvider {
     private static final byte[] SECRET_KEY_BYTES = Base64.getDecoder().decode(SECRET_KEY);
     private static final byte[] REFRESH_TOKEN_SECRET_KEY_BYTES = Base64.getDecoder().decode(REFRESH_TOKEN_SECRET_KEY);
 
-    private static final long ACCESS_TOKEN_VALIDITY = 3600000; // 15분
-    private static final long REFRESH_TOKEN_VALIDITY = 1000 * 60 * 60 * 24 * 7; // 7일
+    private static final long ACCESS_TOKEN_VALIDITY = 3600;
+    private static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60; // 7일 (초 단위)
 
-    // Access Token 생성
+    private static final ZoneId KOREA_ZONE = ZoneId.of("Asia/Seoul");
+
+    // Access Token 생성 (한국 시간 기준)
     public String generateAccessToken(String memberId) {
+        ZonedDateTime now = ZonedDateTime.now(KOREA_ZONE);
+        ZonedDateTime expiry = now.plusSeconds(ACCESS_TOKEN_VALIDITY);
+
         return Jwts.builder()
                 .setSubject(memberId)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY))
+                .setIssuedAt(Date.from(now.toInstant()))
+                .setExpiration(Date.from(expiry.toInstant()))
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY_BYTES), SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    // Refresh Token 생성
+    // Refresh Token 생성 (한국 시간 기준)
     public String generateRefreshToken(String memberId) {
+        ZonedDateTime now = ZonedDateTime.now(KOREA_ZONE);
+        ZonedDateTime expiry = now.plusSeconds(REFRESH_TOKEN_VALIDITY);
+
         return Jwts.builder()
                 .setSubject(memberId)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_VALIDITY))
+                .setIssuedAt(Date.from(now.toInstant()))
+                .setExpiration(Date.from(expiry.toInstant()))
                 .signWith(Keys.hmacShaKeyFor(REFRESH_TOKEN_SECRET_KEY_BYTES), SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    // Refresh Token 검증 (Spring MVC 방식)
+    // Refresh Token 검증
     public boolean validateRefreshToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
         if (refreshToken == null || refreshToken.isEmpty()) {
             log.error("❌ Refresh token is missing in cookies!");
@@ -52,12 +62,11 @@ public class JwtTokenProvider {
 
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(Keys.hmacShaKeyFor(REFRESH_TOKEN_SECRET_KEY_BYTES)) // 올바른 키 사용
+                    .setSigningKey(Keys.hmacShaKeyFor(REFRESH_TOKEN_SECRET_KEY_BYTES))
                     .build()
                     .parseClaimsJws(refreshToken);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            log.error("❌ Invalid refresh token: {}", e.getMessage());
             return false;
         }
     }
@@ -72,7 +81,6 @@ public class JwtTokenProvider {
                     .getBody()
                     .getSubject();
         } catch (JwtException | IllegalArgumentException e) {
-            log.error("❌ Invalid token: {}", e.getMessage());
             throw new RuntimeException("Invalid token", e);
         }
     }
