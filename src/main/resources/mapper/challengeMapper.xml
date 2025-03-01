@@ -56,7 +56,7 @@
         c.challenge_level AS challengeLevel,
         c.challenge_title AS challengeTitle,
         c.challenge_reg AS challengeReg,
-        c.challenge_day AS challengeDay
+        c.challenge_day AS challengeDay,
         (
         SELECT COUNT(*)
         FROM member m

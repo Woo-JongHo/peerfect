@@ -11,5 +11,6 @@ public class ChallengeDetailDTO {
     private String challengeLevel;
     private String challengeTitle;
     private String challengeReg;
+    private String challengeDay;
     private int challengeCountMember;
 }

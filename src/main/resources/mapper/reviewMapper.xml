@@ -14,11 +14,17 @@
         <result property="reviewText" column="review_text"/>
         <result property="reviewDate" column="review_date"/>
         <result property="reviewWaste" column="review_waste"/>
+        <result property="memberName" column="member_name"/>
     </resultMap>
 
 
     <select id="getReviews" parameterType="String" resultMap="reviewResultMap">
-        SELECT * FROM review WHERE challenge_no = #{challengeNo}::bigint
+        SELECT
+        r.*,
+        m.member_name
+        FROM review r
+        LEFT JOIN member m ON r.member_id = m.member_id
+        WHERE r.challenge_no = #{challengeNo}::bigint
     </select>
 
     <insert id="insertReview" parameterType="com.peerfect.vo.challenge.ReviewVO">
