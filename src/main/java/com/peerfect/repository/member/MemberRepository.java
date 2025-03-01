@@ -85,11 +85,23 @@ public class MemberRepository {
         return MemberDBManger.isMemberExist(memberId);
     }
 
+    public static int updateChallengeFiles(String challengeNo, String memberId, List<String> fileUrls) {
+        return MemberDBManger.updateChallengeFiles(challengeNo, memberId, fileUrls);
+    }
+
     public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo, String type) {
         return MemberDBManger.startMemberChallenge(memberId, challengeNo, type);
     }
 
     public String stopMemberChallenge(String memberId) {
         return MemberDBManger.stopMemberChallenge(memberId);
+    }
+
+    public int updateMemberImage(String memberId, String imageUrl) {
+        return MemberDBManger.updateMemberImage(memberId, imageUrl);
+    }
+
+    public int saveCompleteRecord(String memberId, Long challengeNo, String completeUrl) {
+        return MemberDBManger.insertCompleteRecord(memberId, challengeNo, completeUrl);
     }
 }

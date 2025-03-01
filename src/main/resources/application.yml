@@ -47,8 +47,8 @@ cloud:
     s3:
       bucket: peerfect.kr
     credentials:
-      accessKey: AKIAVT43SNS4O47IXCKG
-      secretKey: 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
+      access-key : AKIAVT43SNS4O47IXCKG
+      secret-key: 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
     region:
       static: ap-northeast-2
     stack:

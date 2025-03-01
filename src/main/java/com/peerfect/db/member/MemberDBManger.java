@@ -286,4 +286,75 @@ public class MemberDBManger {
 
         return result;
     }
+
+    public static int updateMemberImage(String memberId, String imageUrl) {
+        int result = -1;
+        SqlSession session = sqlSessionFactory.openSession();
+
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("memberId", memberId);
+            params.put("memberImg", imageUrl);
+
+            result = session.update("member.updateMemberImage", params);
+            session.commit();
+            log.info("회원 이미지 업데이트 완료: memberId={}, imageUrl={}", memberId, imageUrl);
+        } catch (Exception e) {
+            log.error("회원 이미지 업데이트 실패: {}", e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
+
+        return result;
+    }
+
+    public static int insertCompleteRecord(String memberId, Long challengeNo, String completeUrl) {
+        int result = -1;
+        SqlSession session = sqlSessionFactory.openSession();
+
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("memberId", memberId);
+            params.put("challengeNo", challengeNo);
+            params.put("completeUrl", completeUrl);
+
+            result = session.insert("complete.insertCompleteRecord", params);
+            session.commit();
+            log.info(" 완료 기록 추가: memberId={}, challengeNo={}, completeUrl={}", memberId, challengeNo, completeUrl);
+        } catch (Exception e) {
+            log.error(" 완료 기록 추가 실패: {}", e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
+
+        return result;
+    }
+    public static int updateChallengeFiles(String challengeNo, String memberId, List<String> fileUrls) {
+        int result = 0;
+        SqlSession session = sqlSessionFactory.openSession();
+
+        try {
+            for (String fileUrl : fileUrls) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("memberId", memberId);
+                params.put("challengeNo", challengeNo);
+                params.put("completeUrl", fileUrl);
+
+                session.insert("member.insertCompleteRecord", params);
+                result++;
+            }
+            session.commit();
+            log.info("챌린지 파일 업데이트 완료: challengeNo={}, memberId={}, files={}", challengeNo, memberId, fileUrls);
+        } catch (Exception e) {
+            log.error("챌린지 파일 업데이트 실패: {}", e.getMessage());
+            session.rollback();
+        } finally {
+            session.close();
+        }
+
+        return result;
+    }
+
 }

@@ -4,6 +4,7 @@ import com.peerfect.DTO.MemberChallengeDTO;
 import com.peerfect.service.member.ReviewService;
 import com.peerfect.service.utils.MailService;
 import com.peerfect.service.member.MemberService;
+import com.peerfect.service.utils.S3Service;
 import com.peerfect.service.utils.TokenService;
 import com.peerfect.util.JwtTokenProvider;
 import com.peerfect.vo.challenge.ReviewVO;
@@ -16,10 +17,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3Client;
+
 import java.sql.Timestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +40,7 @@ public class MemberController {
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenService tokenService;
     private final ReviewService reviewService;
-
+    private final S3Service s3Service;
     private static String memberId;
     private static String memberNickName;
     private static String memberAccessToken;
@@ -42,7 +48,6 @@ public class MemberController {
     //02 로그아웃 api
 
     //04 토큰 재발급 api
-
 
 
     @GetMapping("/{memberId}/memberInfo")
@@ -57,12 +62,13 @@ public class MemberController {
 
         return ResponseEntity.ok(response);
     }
+
     // 멤버아이디, 토큰, 이미지,
     @PostMapping("/checkNickName")
-    public ResponseEntity<?> checkNickName(@RequestBody Map<String, String> userData){
+    public ResponseEntity<?> checkNickName(@RequestBody Map<String, String> userData) {
 
         String nickname = userData.get("nickname");
-        if(memberService.isNickNameExist(nickname))
+        if (memberService.isNickNameExist(nickname))
             return ResponseEntity.ok("중복된 닉네임입니다");
         else
             return ResponseEntity.ok("중복되지 않은 닉네임입니다");
@@ -73,39 +79,40 @@ public class MemberController {
     public ResponseEntity<Map<String, Object>> checkMember(@RequestBody Map<String, String> userData) {
         Map<String, Object> response = new HashMap<>();
 
-            String memberEmail = userData.get("email");
+        String memberEmail = userData.get("email");
 
-            //멤버가 있으니깐 userId, accessToken, nickName 전달하기
-            if (memberService.isEmailExists(memberEmail)) {
-                memberId = memberService.getMemberId(memberEmail);
-                memberNickName = memberService.getMemberNickName(memberEmail);
+        //멤버가 있으니깐 userId, accessToken, nickName 전달하기
+        if (memberService.isEmailExists(memberEmail)) {
+            memberId = memberService.getMemberId(memberEmail);
+            memberNickName = memberService.getMemberNickName(memberEmail);
 
-                memberAccessToken = tokenService.getAccessToken(memberId);
-                memberRefreshToken = tokenService.getRefreshToken(memberId);
+            memberAccessToken = tokenService.getAccessToken(memberId);
+            memberRefreshToken = tokenService.getRefreshToken(memberId);
 
-                response.put("status", "success");
-                response.put("message", "회원입니다.");
-                response.put("memberId", memberId);
-                response.put("nickName", memberNickName);
+            response.put("status", "success");
+            response.put("message", "회원입니다.");
+            response.put("memberId", memberId);
+            response.put("nickName", memberNickName);
 
-                // HttpOnly 쿠키로 Refresh Token 설정
-                ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", memberRefreshToken)
-                        .httpOnly(true)              // HttpOnly 속성
-                        .secure(true)                // HTTPS 환경에서만 사용 (로컬 환경에서는 false로 설정 가능)
-                        .path("/")                   // 쿠키의 유효 경로
-                        .maxAge(7 * 24 * 60 * 60)    // 쿠키 만료 시간 (7일)
-                        .sameSite("Strict")          // CSRF 보호를 위한 SameSite 설정
-                        .build();
+            // HttpOnly 쿠키로 Refresh Token 설정
+            ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", memberRefreshToken)
+                    .httpOnly(true)              // HttpOnly 속성
+                    .secure(true)                // HTTPS 환경에서만 사용 (로컬 환경에서는 false로 설정 가능)
+                    .path("/")                   // 쿠키의 유효 경로
+                    .maxAge(7 * 24 * 60 * 60)    // 쿠키 만료 시간 (7일)
+                    .sameSite("Strict")          // CSRF 보호를 위한 SameSite 설정
+                    .build();
 
-                return ResponseEntity.ok()
-                        .header("Authorization", "Bearer " + memberAccessToken)
-                        .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                        .body(response);
-            } else {
-                response.put("message", "회원이 아닙니다");
-                return ResponseEntity.ok(response);
-            }
+            return ResponseEntity.ok()
+                    .header("Authorization", "Bearer " + memberAccessToken)
+                    .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                    .body(response);
+        } else {
+            response.put("message", "회원이 아닙니다");
+            return ResponseEntity.ok(response);
+        }
     }
+
     @PostMapping("/insertMember")
     public ResponseEntity<Map<String, Object>> insertMember(@RequestBody Map<String, String> userData) {
         Map<String, Object> response = new HashMap<>();
@@ -126,7 +133,7 @@ public class MemberController {
         String memberRefreshToken = jwtTokenProvider.generateRefreshToken(memberId);
 
         log.info("토큰생성확인");
-            TokenVO tokenVO = new TokenVO(memberId, memberAccessToken, memberRefreshToken);
+        TokenVO tokenVO = new TokenVO(memberId, memberAccessToken, memberRefreshToken);
         tokenService.saveToken(tokenVO);
 
 
@@ -173,10 +180,11 @@ public class MemberController {
         memberAccessToken = tokenService.regenerateAccessToken(refreshToken);
 
         log.info("✅ 새로운 AccessToken 발급 완료: {}", memberAccessToken);
-        return  ResponseEntity.ok()
+        return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + memberAccessToken)
                 .body("accessToken 재발급완료 : " + memberAccessToken);
     }
+
     @PostMapping("/regenerate-refresh")
     public ResponseEntity<?> regenerateRefreshToken(@RequestBody Map<String, String> request) {
         String refreshToken = request.get("refreshToken");
@@ -193,7 +201,7 @@ public class MemberController {
 
             memberId = memberService.getMemberId(email);
 
-            log.info("memberId: {}" , memberId);
+            log.info("memberId: {}", memberId);
 
             String accessToken = jwtTokenProvider.generateAccessToken(memberId);
             String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
@@ -246,14 +254,14 @@ public class MemberController {
     //Start challenge
 
     @PutMapping("/{memberId}/challenges/stop")
-    public ResponseEntity<?> stopChallenge(@PathVariable String memberId){
+    public ResponseEntity<?> stopChallenge(@PathVariable String memberId) {
         String result = memberService.stopMemberChallenge(memberId);
 
         return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/{memberId}/delete")
-    public ResponseEntity<?> deleteMember(@PathVariable String memberId){
+    public ResponseEntity<?> deleteMember(@PathVariable String memberId) {
 
         log.info(memberId + " member Id ");
 
@@ -323,10 +331,11 @@ public class MemberController {
     }*/
 
     @PostMapping("{memberId}/challenge/{challengeNo}/upload")
-    public ResponseEntity<?> uploadChallenge(@PathVariable String memberid, String challengeNo){
+    public ResponseEntity<?> uploadChallenge(@PathVariable String memberid, String challengeNo) {
 
         return ResponseEntity.ok("");
     }
+
     @PostMapping("/review-upload")
     public ResponseEntity<?> uploadReview(@RequestBody Map<String, Object> request) {
 
@@ -349,6 +358,43 @@ public class MemberController {
             return ResponseEntity.ok("Review uploaded successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload review.");
+        }
+    }
+
+    @PostMapping("/img-upload")
+    public ResponseEntity<?> uploadMemberImg(@RequestParam("file") MultipartFile file,
+                                             @RequestParam("memberId") String memberId) {
+        String imageUrl = s3Service.uploadFile(file, "profile-images");
+        int updateResult = s3Service.updateMemberImage(memberId, imageUrl);
+
+        if (updateResult > 0) {
+            return ResponseEntity.ok(Map.of("memberId", memberId, "imageUrl", imageUrl, "status", "success"));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("message", "이미지 업데이트 실패", "status", "fail"));
+        }
+    }
+
+    @PostMapping("/challenge-upload")
+    public ResponseEntity<?> uploadMemberChallenge(
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("challenge_no") String challengeNo,
+            @RequestParam("member_id") String memberId) {
+
+        if (files.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "파일이 업로드되지 않았습니다.", "status", "fail"));
+        }
+
+        try {
+            // 1️⃣ S3 업로드 및 DB 업데이트
+            List<String> uploadedUrls = s3Service.challengeFileUpload(memberId, challengeNo, files);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "업로드 완료",
+                    "uploadedUrls", uploadedUrls,
+                    "status", "success"
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.internalServerError().body(Map.of("message", e.getMessage(), "status", "error"));
         }
     }
 

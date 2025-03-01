@@ -28,6 +28,7 @@ public class MemberService {
 
 
 
+
     public void insertUser(MemberVO userVO) {
         memberRepository.insertUser(userVO);
     }
@@ -158,5 +159,8 @@ public class MemberService {
     public  String stopMemberChallenge(String memberId) {
         return memberRepository.stopMemberChallenge(memberId);
     }
+
+
+
 
 }

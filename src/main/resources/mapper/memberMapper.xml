@@ -138,4 +138,15 @@
         SET challenge_no = NULL
         WHERE member_id = #{memberId}::UUID;
     </update>
+
+    <update id="member.updateMemberImage">
+        UPDATE member
+        SET member_img = #{memberImg}
+        WHERE member_id = #{memberId}::UUID
+    </update>
+
+    <insert id="insertCompleteRecord">
+        INSERT INTO complete (challenge_no, member_id, complete_url)
+        VALUES (#{challengeNo}, #{memberId}, #{completeUrl})
+    </insert>
 </mapper>
