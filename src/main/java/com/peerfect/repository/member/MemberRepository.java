@@ -88,4 +88,8 @@ public class MemberRepository {
     public HashMap<String, Object> startMemberChallenge(String memberId, String challengeNo, String type) {
         return MemberDBManger.startMemberChallenge(memberId, challengeNo, type);
     }
+
+    public String stopMemberChallenge(String memberId) {
+        return MemberDBManger.stopMemberChallenge(memberId);
+    }
 }

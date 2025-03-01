@@ -266,4 +266,24 @@ public class MemberDBManger {
         return response;
     }
 
+    public static String stopMemberChallenge(String memberId) {
+        String result = "fail";
+
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("memberId", memberId);
+
+            int updatedRows = session.update("member.stopMemberChallenge", params);
+
+            session.commit(); // 트랜잭션 커밋
+
+            result = (updatedRows > 0) ? "success" : "fail";
+
+        } catch (Exception e) {
+            log.error("챌린지 중지 중 오류 발생: {}", e.getMessage());
+        }
+
+        return result;
+    }
 }

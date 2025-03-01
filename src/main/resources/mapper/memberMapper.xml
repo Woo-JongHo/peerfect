@@ -132,4 +132,10 @@
         WHERE member_id = #{memberId}::UUID;
     </update>
 
+
+    <update id="stopMemberChallenge" parameterType="map">
+        UPDATE member
+        SET challenge_no = NULL
+        WHERE member_id = #{memberId}::UUID;
+    </update>
 </mapper>

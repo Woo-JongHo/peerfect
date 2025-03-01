@@ -8,9 +8,8 @@ public class ChallengeDetailDTO {
     private String challengeType;
     private String challengeIntro;
     private String challengeShortIntro;
-    private String challengeMission;
     private String challengeLevel;
-    private String ruleDetail;
     private String challengeTitle;
     private String challengeReg;
+    private int challengeCountMember;
 }

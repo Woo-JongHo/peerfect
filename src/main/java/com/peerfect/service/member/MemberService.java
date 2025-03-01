@@ -26,6 +26,8 @@ public class MemberService {
     private final ChallengeRepository challengeRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+
+
     public void insertUser(MemberVO userVO) {
         memberRepository.insertUser(userVO);
     }
@@ -151,6 +153,10 @@ public class MemberService {
 
         // Repository 호출
         return memberRepository.startMemberChallenge(memberId, challengeNo, type);
+    }
+
+    public  String stopMemberChallenge(String memberId) {
+        return memberRepository.stopMemberChallenge(memberId);
     }
 
 }

@@ -1,8 +1,6 @@
 package com.peerfect.controller.member;
 
-import com.peerfect.DTO.ChallengeDetailDTO;
 import com.peerfect.DTO.MemberChallengeDTO;
-import com.peerfect.DTO.PreviewDTO;
 import com.peerfect.service.member.ReviewService;
 import com.peerfect.service.utils.MailService;
 import com.peerfect.service.member.MemberService;
@@ -25,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -248,9 +245,11 @@ public class MemberController {
     }
     //Start challenge
 
-    @PutMapping("/{memberId}/challenges/{challengeNo}/stop")
-    public ResponseEntity<?> stopChallenge(){
-        return ResponseEntity.ok("");
+    @PutMapping("/{memberId}/challenges/stop")
+    public ResponseEntity<?> stopChallenge(@PathVariable String memberId){
+        String result = memberService.stopMemberChallenge(memberId);
+
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/{memberId}/delete")
