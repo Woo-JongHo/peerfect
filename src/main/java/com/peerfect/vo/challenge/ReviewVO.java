@@ -8,12 +8,13 @@ import java.util.UUID;
 
 @Data
 public class ReviewVO {
-
     private Long reviewNo;
-    private String memberId;
+    private Long memberId;
     private Long challengeNo;
-    private Long reviewLevel;
+    private Integer reviewLevel;
     private String reviewText;
-    private Timestamp reviewDate;
-    private Long reviewWaste;
+    private String reviewDate;
+    private Integer reviewWaste;
+    private String memberName;
+
 }
