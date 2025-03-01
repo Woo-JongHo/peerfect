@@ -16,4 +16,5 @@ public class ReviewVO {
     private String reviewText;
     private Timestamp reviewDate;
     private Long reviewWaste;
+    private String memberName;
 }
