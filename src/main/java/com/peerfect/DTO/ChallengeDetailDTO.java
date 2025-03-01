@@ -7,6 +7,7 @@ public class ChallengeDetailDTO {
     private String challengeGroup;
     private String challengeType;
     private String challengeIntro;
+    private String challengeMission;
     private String challengeShortIntro;
     private String challengeLevel;
     private String challengeTitle;

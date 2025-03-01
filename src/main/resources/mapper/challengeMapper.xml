@@ -52,6 +52,7 @@
         c.challenge_group AS challengeGroup,
         c.challenge_type AS challengeType,
         c.challenge_intro AS challengeIntro,
+        c,challenge_mission AS challengeMission,
         c.challenge_shortIntro AS challengeShortIntro,
         c.challenge_level AS challengeLevel,
         c.challenge_title AS challengeTitle,
