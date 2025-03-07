@@ -9,13 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -161,6 +160,23 @@ public class MemberService {
     }
 
 
+    public List<Map<String, String>> getCompletedChallenges(String memberId) {
+        List<Map<String, Object>> resultList = memberRepository.findCompletedChallenges(memberId);
+
+        List<Map<String, String>> completedChallenges = new ArrayList<>();
+        for (Map<String, Object> row : resultList) {
+            Map<String, String> challengeData = new LinkedHashMap<>();
+            challengeData.put("challengeNo", String.valueOf(row.get("challengeno")));
+            challengeData.put("date", (String) row.get("date"));
+
+            completedChallenges.add(challengeData);
+        }
+        return completedChallenges;
+    }
 
 
+    public boolean editMemberName(String memberId, String newName) {
+        int updatedRows = memberRepository.updateMemberName(memberId, newName);
+        return updatedRows > 0;
+    }
 }

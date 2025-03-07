@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.lang.reflect.Member;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,5 +103,13 @@ public class MemberRepository {
 
     public int saveCompleteRecord(String memberId, Long challengeNo, String completeUrl) {
         return MemberDBManger.insertCompleteRecord(memberId, challengeNo, completeUrl);
+    }
+
+    public List<Map<String, Object>> findCompletedChallenges(String memberId) {
+        return MemberDBManger.findCompletedChallenges(memberId);
+    }
+
+    public int updateMemberName(String memberId, String newName) {
+        return MemberDBManger.updateMemberName(memberId, newName);
     }
 }

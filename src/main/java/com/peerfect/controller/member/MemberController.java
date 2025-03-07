@@ -25,10 +25,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import java.sql.Timestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -176,6 +173,7 @@ public class MemberController {
             log.error("❌ RefreshToken이 유효하지 않음!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
         }*/
+
         //String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
         memberAccessToken = tokenService.regenerateAccessToken(refreshToken);
 
@@ -387,6 +385,7 @@ public class MemberController {
         try {
             List<String> uploadedUrls = s3Service.challengeFileUpload(memberId, challengeNo, files);
 
+
             return ResponseEntity.ok(Map.of(
                     "message", "업로드 완료",
                     "uploadedUrls", uploadedUrls,
@@ -394,6 +393,25 @@ public class MemberController {
             ));
         } catch (RuntimeException e) {
             return ResponseEntity.internalServerError().body(Map.of("message", e.getMessage(), "status", "error"));
+        }
+    }
+
+    @GetMapping("/roadmap-info/{memberId}")
+    public ResponseEntity<?> roadMapInfo(@PathVariable String memberId) {
+        List<Map<String, String>> roadmapData = memberService.getCompletedChallenges(memberId);
+        return ResponseEntity.ok(roadmapData);
+    }
+
+    @PatchMapping("/edit-name/{memberId}")
+    public ResponseEntity<?> editName(@PathVariable String memberId, @RequestBody Map<String, String> request) {
+        String newName = request.get("name");
+
+        boolean isUpdated = memberService.editMemberName(memberId, newName);
+
+        if (isUpdated) {
+            return ResponseEntity.ok("이름이 성공적으로 변경되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보를 찾을 수 없습니다.");
         }
     }
 

@@ -145,8 +145,22 @@
         WHERE member_id = #{memberId}::UUID
     </update>
 
-    <insert id="insertCompleteRecord">
-        INSERT INTO complete (challenge_no, member_id, complete_url)
-        VALUES (#{challengeNo}, #{memberId}, #{completeUrl})
+    <insert id="insertCompleteRecord" parameterType="map">
+        INSERT INTO completeData (member_id, challenge_no, data_url, complete_time)
+        VALUES (#{memberId}, #{challengeNo}, #{completeUrl}, #{completeTime})
     </insert>
+
+    <select id="findCompletedChallenges" resultType="map">
+        SELECT challenge_no AS challengeno,
+        TO_CHAR(complete_time, 'YYYY-MM') AS date
+        FROM complete
+        WHERE member_id = #{memberId}::UUID
+        ORDER BY challenge_no ASC
+    </select>
+
+    <update id="updateMemberName">
+        UPDATE member
+        SET member_name = #{newName}
+        WHERE member_id = #{memberId}::UUID
+    </update>
 </mapper>

@@ -5,11 +5,9 @@ import com.peerfect.vo.member.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.peerfect.db.DBManger.sqlSessionFactory;
 @Slf4j
@@ -336,17 +334,23 @@ public class MemberDBManger {
         SqlSession session = sqlSessionFactory.openSession();
 
         try {
+            LocalDateTime time = LocalDateTime.now(); // 현재 시간 초기화
+            Timestamp timestamp = Timestamp.valueOf(time); // LocalDateTime → Timestamp 변환
+
             for (String fileUrl : fileUrls) {
                 Map<String, Object> params = new HashMap<>();
                 params.put("memberId", memberId);
                 params.put("challengeNo", challengeNo);
                 params.put("completeUrl", fileUrl);
+                params.put("completeTime", timestamp); // 변환된 Timestamp 적용
 
                 session.insert("member.insertCompleteRecord", params);
                 result++;
             }
             session.commit();
-            log.info("챌린지 파일 업데이트 완료: challengeNo={}, memberId={}, files={}", challengeNo, memberId, fileUrls);
+
+            log.info("챌린지 파일 업데이트 완료: challengeNo={}, memberId={}, files={}, completeTime={}",
+                    challengeNo, memberId, fileUrls, time);
         } catch (Exception e) {
             log.error("챌린지 파일 업데이트 실패: {}", e.getMessage());
             session.rollback();
@@ -357,4 +361,38 @@ public class MemberDBManger {
         return result;
     }
 
+
+    public static List<Map<String, Object>> findCompletedChallenges(String memberId) {
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        SqlSession session = sqlSessionFactory.openSession();
+
+        try {
+            resultList = session.selectList("member.findCompletedChallenges", memberId);
+        } catch (Exception e) {
+            log.error("챌린지 기록 조회 실패: {}", e.getMessage());
+        } finally {
+            session.close();
+        }
+
+        return resultList;
+    }
+
+    public static int updateMemberName(String memberId, String newName) {
+        SqlSession session = sqlSessionFactory.openSession();
+        int result = 0;
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("memberId", memberId);
+            params.put("newName", newName);
+
+            result = session.update("member.updateMemberName", params);
+            session.commit();
+        } catch (Exception e) {
+            session.rollback();
+            log.error("이름 변경 실패: {}", e.getMessage());
+        } finally {
+            session.close();
+        }
+        return result;
+    }
 }

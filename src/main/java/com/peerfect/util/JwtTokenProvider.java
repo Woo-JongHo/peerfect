@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
 
@@ -27,10 +28,14 @@ public class JwtTokenProvider {
 
     private static final ZoneId KOREA_ZONE = ZoneId.of("Asia/Seoul");
 
-    // Access Token 생성 (한국 시간 기준)
+
     public String generateAccessToken(String memberId) {
         ZonedDateTime now = ZonedDateTime.now(KOREA_ZONE);
         ZonedDateTime expiry = now.plusSeconds(ACCESS_TOKEN_VALIDITY);
+
+        // 로그 출력 (JWT 생성 시각 및 만료 시각 확인)
+        log.info("🕒 [JWT 생성] 현재 시간(한국 기준): {}", now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        log.info("🕒 [JWT 생성] 만료 시간(한국 기준): {}", expiry.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         return Jwts.builder()
                 .setSubject(memberId)
@@ -56,7 +61,6 @@ public class JwtTokenProvider {
     // Refresh Token 검증
     public boolean validateRefreshToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
         if (refreshToken == null || refreshToken.isEmpty()) {
-            log.error("❌ Refresh token is missing in cookies!");
             return false;
         }
 

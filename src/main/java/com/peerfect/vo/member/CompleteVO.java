@@ -2,13 +2,15 @@ package com.peerfect.vo.member;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class CompleteVO {
     private int completeNo;
-    private int memberNo;
-    private int missionNo;
-    private Date completeTime;
+    private int challengeNo;
+    private String completeUrl;
+    private UUID memberId;
+    private LocalDateTime completeTime;
 
 }
