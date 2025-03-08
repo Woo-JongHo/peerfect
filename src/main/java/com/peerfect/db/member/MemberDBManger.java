@@ -275,7 +275,6 @@ public class MemberDBManger {
             int updatedRows = session.update("member.stopMemberChallenge", params);
 
             session.commit(); // 트랜잭션 커밋
-
             result = (updatedRows > 0) ? "success" : "fail";
 
         } catch (Exception e) {

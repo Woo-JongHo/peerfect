@@ -159,13 +159,10 @@ public class MemberController {
 
     @PostMapping("/regenerate-access")
     public ResponseEntity<?> regenerateAccessToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
-
-
         if (refreshToken == null || refreshToken.isEmpty()) {
             log.error("❌ RefreshToken이 쿠키에 없음!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token missing");
         }
-
         log.info("🔹 Received RefreshToken from Cookie: {}", refreshToken);
 
         /*
@@ -173,7 +170,6 @@ public class MemberController {
             log.error("❌ RefreshToken이 유효하지 않음!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
         }*/
-
         //String memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
         memberAccessToken = tokenService.regenerateAccessToken(refreshToken);
 
@@ -196,21 +192,16 @@ public class MemberController {
 
         log.info(email);
         if (memberService.authenticate(email)) {
-
             memberId = memberService.getMemberId(email);
-
             log.info("memberId: {}", memberId);
-
             String accessToken = jwtTokenProvider.generateAccessToken(memberId);
             String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
-
             TokenVO tokenVO = new TokenVO(memberId, accessToken, refreshToken);
-            tokenService.saveToken(tokenVO);
 
+            tokenService.saveToken(tokenVO);
             Map<String, String> response = new HashMap<>();
             response.put("memberId", memberId);
             response.put("accessToken", accessToken);
-
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
@@ -269,35 +260,14 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token, HttpServletResponse response) {
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
         if (token != null && token.startsWith("Bearer ")) {
             String accessToken = token.substring(7); // "Bearer " 제거
             tokenService.logout(accessToken);
-
-            // Access Token 쿠키 삭제
-            ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", null)
-                    .httpOnly(true)
-                    .secure(true)
-                    .path("/")
-                    .maxAge(0) // 쿠키 즉시 삭제
-                    .sameSite("Strict")
-                    .build();
-
-            // Refresh Token 쿠키 삭제
-            ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", null)
-                    .httpOnly(true)
-                    .secure(true)
-                    .path("/")
-                    .maxAge(0) // 쿠키 즉시 삭제
-                    .sameSite("Strict")
-                    .build();
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
-                    .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                    .body(Map.of("message", "로그아웃 성공, refresh, access 삭제"));
+            return ResponseEntity.ok("DB에서 쿠키 삭제 완료");
+        } else{
+            return ResponseEntity.ok("DB에서 쿠키 삭제 실패");
         }
-        return ResponseEntity.badRequest().body("유효하지 않은 토큰");
     }
 
 
