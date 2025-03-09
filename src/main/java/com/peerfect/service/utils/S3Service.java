@@ -60,7 +60,6 @@ public class S3Service {
 
         for (MultipartFile file : files) {
             String fileName = folderName + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
-
             try {
                 PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
@@ -69,7 +68,6 @@ public class S3Service {
                         .build();
 
                 PutObjectResponse response = s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
-
                 if (response.sdkHttpResponse().isSuccessful()) {
                     String fileUrl = "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + fileName;
                     uploadedUrls.add(fileUrl);

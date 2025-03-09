@@ -52,7 +52,6 @@ public class ChallengeController {
         return ResponseEntity.ok(list);
     }
 
-
     @GetMapping("{challengeNo}/upload")
     public ResponseEntity<?> getUpload(@PathVariable String challengeNo){
         return ResponseEntity.ok("missionList");
