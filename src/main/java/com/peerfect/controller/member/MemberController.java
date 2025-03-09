@@ -83,8 +83,11 @@ public class MemberController {
             memberId = memberService.getMemberId(memberEmail);
             memberNickName = memberService.getMemberNickName(memberEmail);
 
-            memberAccessToken = tokenService.getAccessToken(memberId);
-            memberRefreshToken = tokenService.getRefreshToken(memberId);
+            String accessToken = jwtTokenProvider.generateAccessToken(memberId);
+            String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
+            TokenVO tokenVO = new TokenVO(memberId, accessToken, refreshToken);
+
+            tokenService.saveToken(tokenVO);
 
             response.put("status", "success");
             response.put("message", "회원입니다.");
