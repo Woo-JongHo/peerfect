@@ -189,24 +189,50 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> loginData) {
         String email = loginData.get("email");
-
         log.info(email);
+
         if (memberService.authenticate(email)) {
-            memberId = memberService.getMemberId(email);
+            String memberId = memberService.getMemberId(email);
             log.info("memberId: {}", memberId);
+
             String accessToken = jwtTokenProvider.generateAccessToken(memberId);
             String refreshToken = jwtTokenProvider.generateRefreshToken(memberId);
             TokenVO tokenVO = new TokenVO(memberId, accessToken, refreshToken);
 
             tokenService.saveToken(tokenVO);
+
+            // HttpOnly 쿠키로 Refresh Token 설정
+            ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+                    .httpOnly(true)              // HttpOnly 속성
+                    .secure(true)                // HTTPS 환경에서만 사용 (로컬 환경에서는 false로 설정 가능)
+                    .path("/")                   // 쿠키의 유효 경로
+                    .maxAge(30 * 24 * 60 * 60)    // 쿠키 만료 시간 (30일)
+                    .sameSite("Strict")          // CSRF 보호를 위한 SameSite 설정
+                    .build();
+
+            // HttpOnly 쿠키로 Access Token 설정
+            ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
+                    .httpOnly(true)              // HttpOnly 속성
+                    .secure(true)                // HTTPS 환경에서만 사용 (로컬 환경에서는 false로 설정 가능)
+                    .path("/")                   // 쿠키의 유효 경로
+                    .maxAge(30 * 60)             // 쿠키 만료 시간 (30분)
+                    .sameSite("Strict")          // CSRF 보호를 위한 SameSite 설정
+                    .build();
+
             Map<String, String> response = new HashMap<>();
             response.put("memberId", memberId);
-            response.put("accessToken", accessToken);
-            return ResponseEntity.ok(response);
+
+            // Access Token을 헤더에 추가 및 쿠키 추가
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                    .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
+                    .body(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
         }
     }
+
+
 
     @GetMapping("/{memberId}/main")
     public ResponseEntity<List<MemberChallengeDTO>> getMemberMain(@PathVariable String memberId) {
@@ -348,14 +374,17 @@ public class MemberController {
             @RequestParam("challenge_no") String challengeNo,
             @RequestParam("member_id") String memberId) {
 
+
+        //01 제목
+        //02 작업물 링크
+        //03 사용한 툴
+        //04 contents을 같이 받아서 db에 넣을 준비
         if (files.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "파일이 업로드되지 않았습니다.", "status", "fail"));
         }
 
         try {
             List<String> uploadedUrls = s3Service.challengeFileUpload(memberId, challengeNo, files);
-
-
             return ResponseEntity.ok(Map.of(
                     "message", "업로드 완료",
                     "uploadedUrls", uploadedUrls,
